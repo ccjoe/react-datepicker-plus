@@ -1,0 +1,29 @@
+{
+  "name": "react-datepicker-plus",
+  "version": "0.0.0",
+  "description": "react-datepicker-plus",
+  "main": "dist/react-datepicker-plus.min.js",
+  "homepage": "https://github.com/ccjoe/react-datepicker-plus",
+  "authors": [
+    "ccjoe"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "react",
+    "react-component"
+  ],
+  "license": "MIT",
+  "ignore": [
+    ".editorconfig",
+    ".gitignore",
+    "package.json",
+    "src",
+    "node_modules",
+    "example",
+    "test"
+  ]
+}
