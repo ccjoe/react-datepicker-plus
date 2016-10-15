@@ -5,7 +5,7 @@ __COMPONENT DESCRIPTION GOES HERE__
 
 ## Demo & Examples
 
-Live demo: [ccjoe.github.io/react-datepicker](http://ccjoe.github.io/react-datepicker/)
+Live demo: [https://ccjoe.github.io/react-datepicker-plus/example/dist/](https://ccjoe.github.io/react-datepicker-plus/example/dist/)
 
 To build the examples locally, run:
 
