@@ -1,5 +1,15 @@
-.date-picker{
+.date-picker-block{
 	position: absolute;
+}
+.date-multi{
+	.date-picker:first-child{
+		.date-next{display: none;}
+	}		
+	.date-picker:last-child{
+		.date-prev{display: none;}
+	}
+}
+.date-picker{
 	display: inline-block;
 	border: 1px solid #eee;
 	box-shadow: 0 1px 3px #eee;
@@ -29,7 +39,8 @@
 		font-size: 11px;
 	}
 	.date-header{
-		border-bottom: 1px solid #e1e1e1;
+		border-bottom: 1px solid #e8e8e8;
+		background-color: #e8e8e8;
 	}
 	.date-week{
 		&-0{
