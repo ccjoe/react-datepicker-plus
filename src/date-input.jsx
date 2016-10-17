@@ -50,7 +50,14 @@ var DateInput = React.createClass({
         return ReactDOM.findDOMNode(this)
 	},	
 	handlePosition(){
-        return this.getInput().getBoundingClientRect()
+		// Fix for IE8-'s Element.getBoundingClientRect()
+	  if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
+	    Object.defineProperties(TextRectangle.prototype, {
+	      'width': { get: function() { return this.right - this.left; } },
+	      'height': { get: function() { return this.bottom - this.top; } }
+	    });
+	  }
+      return this.getInput().getBoundingClientRect()
 	},
 	
 	render () {

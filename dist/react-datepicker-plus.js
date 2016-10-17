@@ -88,7 +88,8 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 		var left = size.left;
 		var top = size.top;
 		var height = size.height;
-		top += height + document.body.scrollTop;
+		top += height + (document.body.scrollTop || document.documentElement.scrollTop);
+
 		var onFocus = this.props.onFocus;
 
 		this.show(true, { left: left, top: top }, true, status);
@@ -235,7 +236,7 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 			);
 			pickerInBody = _react2['default'].createElement(
 				DateInBody,
-				{ classList: 'date-picker-wrapper', ref: 'insDateInBody' },
+				{ classes: 'date-picker-wrapper', ref: 'insDateInBody' },
 				picker
 			);
 		}
@@ -616,12 +617,12 @@ var DateInBody = _react2["default"].createClass({
   displayName: "DateInBody",
 
   propTypes: {
-    classList: _react2["default"].PropTypes.string, //class split by spacing
+    classes: _react2["default"].PropTypes.string, //class split by spacing
     offset: _react2["default"].PropTypes.object
   },
   componentDidMount: function componentDidMount() {
     this.popup = document.createElement("div");
-    this.popup.classList = this.props.classList;
+    this.popup.className = this.props.classes;
     document.body.appendChild(this.popup);
     this.renderLayer();
   },
@@ -727,6 +728,17 @@ var DateInput = _react2['default'].createClass({
 		return _reactDom2['default'].findDOMNode(this);
 	},
 	handlePosition: function handlePosition() {
+		// Fix for IE8-'s Element.getBoundingClientRect()
+		if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
+			Object.defineProperties(TextRectangle.prototype, {
+				'width': { get: function get() {
+						return this.right - this.left;
+					} },
+				'height': { get: function get() {
+						return this.bottom - this.top;
+					} }
+			});
+		}
 		return this.getInput().getBoundingClientRect();
 	},
 
@@ -901,7 +913,7 @@ var DateMonth = React.createClass({
 		    line = 0,
 		    temp = [],
 		    isfill = this.props.isfill;
-		console.time('计算一月所用时间');
+		// console.time('计算一月所用时间')
 		var prevMDay = new Date(y, m, 0),
 		    prevMDayLast = prevMDay.getDate(); //prev Month Last Day
 		var nextMDay = new Date(y, m + 1, 0),
@@ -943,7 +955,7 @@ var DateMonth = React.createClass({
 				}
 			}
 		}
-		console.timeEnd('计算一月所用时间');
+		//console.timeEnd('计算一月所用时间')
 		return temp;
 	},
 

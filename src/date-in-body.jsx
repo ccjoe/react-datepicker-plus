@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from "react-dom"
 var DateInBody = React.createClass({ 
   propTypes: {
-    classList: React.PropTypes.string, //class split by spacing
+    classes: React.PropTypes.string, //class split by spacing
     offset: React.PropTypes.object,
   },
   componentDidMount() {
     this.popup = document.createElement("div")
-    this.popup.classList = this.props.classList
+    this.popup.className = this.props.classes
     document.body.appendChild(this.popup)
     this.renderLayer()
   },

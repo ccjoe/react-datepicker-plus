@@ -16,7 +16,7 @@ var DateMonth = React.createClass({
 		let y = this.props.date.getFullYear();
 	    let m = this.props.date.getMonth();
 		var dateday, line=0, temp=[], isfill = this.props.isfill;
-		console.time('计算一月所用时间')
+		// console.time('计算一月所用时间')
         var prevMDay = new Date(y, m, 0), prevMDayLast = prevMDay.getDate();    //prev Month Last Day
         var nextMDay = new Date(y, m+1, 0), currMDayLast = nextMDay.getDate();  //current Month Last Day
         var currMDay = new Date(y, m+0, 1), currMDayFirst= currMDay.getDay();   //current Month First Day Week
@@ -53,7 +53,7 @@ var DateMonth = React.createClass({
 	       		}
 	        }
         }
-        console.timeEnd('计算一月所用时间')
+        //console.timeEnd('计算一月所用时间')
         return temp;
 	},
 

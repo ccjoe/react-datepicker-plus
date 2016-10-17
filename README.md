@@ -1,6 +1,6 @@
 # react-datepicker-plus
 
-__react datepicker for salar and lunar, for props and callback to config, do everything__
+__react datepicker for salar and lunar, for props and callback to config, ie8 && ie8+__
 
 
 ## Demo & Examples
@@ -46,6 +46,7 @@ var ReactDatepickerPlus = require('react-datepicker-plus');
 
 __ADDITIONAL USAGE NOTES__
 
+## for ie8 support, pls add es5-shim and es5 sham
 
 ## Development (`src`, `lib` and the build process)
 

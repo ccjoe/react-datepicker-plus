@@ -61,7 +61,8 @@ var ReactDatepickerPlus = React.createClass({
 		} 
 		let status = input.props.status; selected = status?this.state[status]:selected;
 		let size = input.handlePosition()
-		let {left, top, height} = size; top += (height+document.body.scrollTop)
+		let {left, top, height} = size;  top += (height+ (document.body.scrollTop || document.documentElement.scrollTop))
+
 		let {onFocus} = this.props
 		
 		this.show(true, {left, top}, true, status)
@@ -158,7 +159,7 @@ var ReactDatepickerPlus = React.createClass({
 		if(show){
 			pickers = this.pickers(status)
 			picker = <div className={months>1?'date-multi':''}>{pickers}</div>
-			pickerInBody = <DateInBody classList="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
+			pickerInBody = <DateInBody classes="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
 		}
 		let didom = start && end ? <div className="date-inputs">{di(start, 'start')}{di(end, 'end')}</div> : di()
 		return <div className="date-components">

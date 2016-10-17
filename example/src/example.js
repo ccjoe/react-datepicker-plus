@@ -43,10 +43,6 @@ var App = React.createClass({
 					<Datepicker isfill={this.props.isfill} onChange={this.doChange}/>
 				</div>
 
-				<div className="demo-item">
-					<h5>datepicker disabled</h5>
-					<Datepicker disabled={true}/>
-				</div>
 
 				<h3>demo part of below with inline for easy look</h3>
 				<div className="demo-item">
@@ -94,6 +90,11 @@ var App = React.createClass({
 				<div className="demo-item">
 					<h5>datepicker with lunar(lunar include term)</h5>
 					<Datepicker inline haslunar={true}  isfill={true} festival={true}/>
+				</div>
+
+				<div className="demo-item">
+					<h5>datepicker disabled</h5>
+					<Datepicker disabled={true}/>
 				</div>
 			</div>
 		);

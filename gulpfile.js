@@ -30,7 +30,9 @@ var taskConfig = {
 			'.gitignore'
 		],
 		scripts: [
-			'example.js'
+			'example.js',
+			'es5-shim.min.js',
+			'es5-sham.min.js'
 		],
 		less: [
 			'example.less'
