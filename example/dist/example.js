@@ -4,7 +4,10 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Datepicker = require('react-datepicker-plus');
-var now = new Date('2016/10/01');
+var now = new Date('2016/10/15');
+var min = new Date('2016/10/10');
+var max = new Date('2016/10/20');
+
 var App = React.createClass({
 	displayName: 'App',
 
@@ -67,6 +70,11 @@ var App = React.createClass({
 				React.createElement(Datepicker, { isfill: this.props.isfill, onChange: this.doChange })
 			),
 			React.createElement(
+				'h3',
+				null,
+				'demo part of below with inline for easy look'
+			),
+			React.createElement(
 				'div',
 				{ className: 'demo-item' },
 				React.createElement(
@@ -75,6 +83,46 @@ var App = React.createClass({
 					'inline datepicker'
 				),
 				React.createElement(Datepicker, { inline: true })
+			),
+			React.createElement(
+				'div',
+				{ className: 'demo-item' },
+				React.createElement(
+					'h5',
+					null,
+					'datepicker with min and max range'
+				),
+				React.createElement(Datepicker, { inline: true, min: min, max: max })
+			),
+			React.createElement(
+				'div',
+				{ className: 'demo-item demo-full' },
+				React.createElement(
+					'h5',
+					null,
+					'bi-datepicker with start and end range'
+				),
+				React.createElement(Datepicker, { start: min, end: max })
+			),
+			React.createElement(
+				'div',
+				{ className: 'demo-item demo-full' },
+				React.createElement(
+					'h5',
+					null,
+					'bi-datepicker with start and end range, and show 2 months '
+				),
+				React.createElement(Datepicker, { start: min, end: max, months: 2 })
+			),
+			React.createElement(
+				'div',
+				{ className: 'demo-item demo-full' },
+				React.createElement(
+					'h5',
+					null,
+					'bi-datepicker with start and end range'
+				),
+				React.createElement(Datepicker, { start: min, end: max, inline: true })
 			),
 			React.createElement(
 				'div',
@@ -115,6 +163,16 @@ var App = React.createClass({
 					'datepicker with lunar(lunar include term)'
 				),
 				React.createElement(Datepicker, { inline: true, haslunar: true, isfill: true, festival: true })
+			),
+			React.createElement(
+				'div',
+				{ className: 'demo-item' },
+				React.createElement(
+					'h5',
+					null,
+					'datepicker disabled'
+				),
+				React.createElement(Datepicker, { disabled: true })
 			)
 		);
 	}

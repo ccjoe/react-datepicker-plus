@@ -66,9 +66,15 @@ var DateDay = _react2['default'].createClass({
     //获取某天的所有信息 m+1才是显示用的月分
     getDayInfo: function getDayInfo() {
         var _props = this.props;
-        var selected = _props.selected;
         var date = _props.date;
         var edate = _props.edate;
+        var min = _props.min;
+        var max = _props.max;
+        var start = _props.start;
+        var end = _props.end;
+        var selected = _props.selected;
+        var selecting = _props.selecting;
+        var status = _props.status;
         //selected date, render date, each date
         var sy = selected.getFullYear();
         var sm = selected.getMonth();
@@ -80,6 +86,10 @@ var DateDay = _react2['default'].createClass({
         var m = edate.getMonth();
         var d = edate.getDate();
 
+        var edataNo = +edate;
+        var range = function range(start, end) {
+            return edataNo >= +start && edataNo <= +end;
+        };
         var dayinfo = {
             date: edate,
             lunar: (0, _dateLunar.toLunarDate)(edate),
@@ -88,8 +98,12 @@ var DateDay = _react2['default'].createClass({
             currentMonth: m === cm,
             currentDay: y === sy && m === sm && d === sd
         };
+        if (min || max) dayinfo.disabled = !range(min, max); //是否在限制的范围内
+        if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
+        if (selecting && status) dayinfo.inselect = status === 'start' ? range(selecting, end) : range(start, selecting);
+
         dayinfo.lunarfest = _dateHolidays.lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
-        // console.log(dayinfo)
+        // console.log(dayinfo, edataNo, start, end, 'startend')
         return dayinfo;
     },
     zero: function zero(n) {
@@ -97,9 +111,13 @@ var DateDay = _react2['default'].createClass({
     },
 
     setDate: function setDate(dateinfo) {
+        if (dateinfo.disabled) return;
         this.props.onChange(dateinfo);
     },
-    setMouseEnter: function setMouseEnter() {},
+    setMouseEnter: function setMouseEnter(dateinfo) {
+        if (dateinfo.disabled) return;
+        this.props.onMouseEnter(dateinfo);
+    },
     render: function render() {
         var info = this.getDayInfo();
         var date = info.date;
@@ -109,6 +127,9 @@ var DateDay = _react2['default'].createClass({
         var lunar = info.lunar;
         var currentDay = info.currentDay;
         var currentMonth = info.currentMonth;
+        var disabled = info.disabled;
+        var inrange = info.inrange;
+        var inselect = info.inselect;
         var festDom = undefined;var _props2 = this.props;
         var festival = _props2.festival;
         var haslunar = _props2.haslunar;
@@ -141,9 +162,9 @@ var DateDay = _react2['default'].createClass({
         }
         return _react2['default'].createElement(
             'div',
-            { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentDay ? 'date-selected' : ""),
+            { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentDay ? 'date-selected' : "") + (disabled ? ' date-disabled' : "") + (inrange ? ' date-range' : "") + (inselect ? ' date-hover' : ""),
                 onMouseDown: this.setDate.bind(this, info),
-                onMouseEnter: this.setMouseEnter },
+                onMouseEnter: this.setMouseEnter.bind(this, info) },
             festDom
         );
     }
@@ -328,12 +349,12 @@ var DateInBody = _react2["default"].createClass({
   displayName: "DateInBody",
 
   propTypes: {
-    classList: _react2["default"].PropTypes.string, //class split by spacing
+    classes: _react2["default"].PropTypes.string, //class split by spacing
     offset: _react2["default"].PropTypes.object
   },
   componentDidMount: function componentDidMount() {
     this.popup = document.createElement("div");
-    this.popup.classList = this.props.classList;
+    this.popup.className = this.props.classes;
     document.body.appendChild(this.popup);
     this.renderLayer();
   },
@@ -347,7 +368,7 @@ var DateInBody = _react2["default"].createClass({
   },
   removePicker: function removePicker(current) {
     this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0];
-    console.log(this.popup, 'popup');
+    // console.log(this.popup, 'popup')
     if (this.popup) {
       _reactDom2["default"].unmountComponentAtNode(this.popup);
       document.body.removeChild(this.popup);
@@ -395,6 +416,11 @@ var DateInput = _react2['default'].createClass({
 		onFocus: _react2['default'].PropTypes.func,
 		onChange: _react2['default'].PropTypes.func
 	},
+	getDefaultProps: function getDefaultProps() {
+		return {
+			status: ''
+		};
+	},
 	/*	getInitialState () {
  	    return {
  	      // value:  this.dateString()
@@ -417,10 +443,10 @@ var DateInput = _react2['default'].createClass({
 		return format ? (0, _dateFormat.dateFormat)(selected, format) : selected;
 	},
 	handleBlur: function handleBlur(event) {
-		this.props.onBlur(event);
+		this.props.onBlur(event, this);
 	},
 	handleFocus: function handleFocus(event) {
-		this.props.onFocus(event);
+		this.props.onFocus(event, this);
 	},
 	focus: function focus() {
 		this.refs.input.focus();
@@ -432,13 +458,26 @@ var DateInput = _react2['default'].createClass({
 		return _reactDom2['default'].findDOMNode(this);
 	},
 	handlePosition: function handlePosition() {
+		// Fix for IE8-'s Element.getBoundingClientRect()
+		if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
+			Object.defineProperties(TextRectangle.prototype, {
+				'width': { get: function get() {
+						return this.right - this.left;
+					} },
+				'height': { get: function get() {
+						return this.bottom - this.top;
+					} }
+			});
+		}
 		return this.getInput().getBoundingClientRect();
 	},
 
 	render: function render() {
-		var customInput = this.props.customInput;
+		var _props2 = this.props;
+		var customInput = _props2.customInput;
+		var disabled = _props2.disabled;
 
-		return _react2['default'].createElement('input', { ref: 'input', type: 'text', value: this.dateString(), onFocus: this.handleFocus, onBlur: this.handleBlur, onChange: this.handleChange });
+		return _react2['default'].createElement('input', { ref: 'input', type: 'text', disabled: disabled, value: this.dateString(), onFocus: this.handleFocus, onBlur: this.handleBlur, onChange: this.handleChange });
 	}
 });
 
@@ -588,12 +627,12 @@ var DateMonth = React.createClass({
 	/*propTypes: {
  	date: React.PropTypes.object.isRequired,
  	format: React.PropTypes.string
- },
- getInitialState() {
-     return {
-     	
-     }
  },*/
+	getInitialState: function getInitialState() {
+		return {
+			selecting: null
+		};
+	},
 	getMonthInfo: function getMonthInfo() {
 		// console.log(this.props.date, 'datemonth')
 		var y = this.props.date.getFullYear();
@@ -602,7 +641,7 @@ var DateMonth = React.createClass({
 		    line = 0,
 		    temp = [],
 		    isfill = this.props.isfill;
-		console.time('计算一月所用时间');
+		// console.time('计算一月所用时间')
 		var prevMDay = new Date(y, m, 0),
 		    prevMDayLast = prevMDay.getDate(); //prev Month Last Day
 		var nextMDay = new Date(y, m + 1, 0),
@@ -638,13 +677,13 @@ var DateMonth = React.createClass({
 		if (isfill) {
 			for (j = 1; j < 12; j++) {
 				if (line < 6) {
-					console.log(line, 'line');
+					// console.log(line, 'line')
 					dateday = new Date(y, m + 1, j);
 					calcLine(dateday);
 				}
 			}
 		}
-		console.timeEnd('计算一月所用时间');
+		//console.timeEnd('计算一月所用时间')
 		return temp;
 	},
 
@@ -664,9 +703,23 @@ var DateMonth = React.createClass({
 		var days = [],
 		    that = this;
 		week.map(function (day, dkey) {
-			days.push(React.createElement(DateDay, _extends({}, that.props, { edate: day, key: dkey })));
+			days.push(React.createElement(DateDay, _extends({}, that.props, { onMouseEnter: that.onMouseEnter, selecting: that.state.selecting, edate: day, key: dkey })));
 		});
 		return days;
+	},
+	onMouseEnter: function onMouseEnter(dateinfo) {
+		var _props = this.props;
+		var start = _props.start;
+		var end = _props.end;
+
+		if (start && end) this.setState({ selecting: dateinfo.date });
+	},
+	onMouseLeave: function onMouseLeave() {
+		var _props2 = this.props;
+		var start = _props2.start;
+		var end = _props2.end;
+
+		if (start && end) this.setState({ selecting: null });
 	},
 	render: function render() {
 		// console.log('render times')
@@ -674,7 +727,7 @@ var DateMonth = React.createClass({
 		    that = this;
 		return React.createElement(
 			'div',
-			{ className: 'date-month' },
+			{ className: "date-month" + (that.state.selecting ? " date-selecting " : " "), onMouseLeave: this.onMouseLeave },
 			this.weeks(months)
 		);
 	}
@@ -783,29 +836,43 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 	displayName: 'ReactDatepickerPlus',
 
 	propTypes: {
-		selected: _react2['default'].PropTypes.any, //default date
+		selected: _react2['default'].PropTypes.object, //default date
 		format: _react2['default'].PropTypes.string, //format date
 		isfill: _react2['default'].PropTypes.bool, //show prefix-prev prefix-next month
 		months: _react2['default'].PropTypes.number,
 		time: _react2['default'].PropTypes.bool, //show time select?
+		min: _react2['default'].PropTypes.object, //select date range min
+		max: _react2['default'].PropTypes.object, //select date range max
+		disabled: _react2['default'].PropTypes.bool, //input can't change
+
+		start: _react2['default'].PropTypes.object, //selected time is a range, start date
+		end: _react2['default'].PropTypes.object, //selected time is a range, start date
+
+		autoHide: _react2['default'].PropTypes.bool, //selected auto hide
+		inline: _react2['default'].PropTypes.bool, //inline
+
 		festival: _react2['default'].PropTypes.bool, //show festival
 		haslunar: _react2['default'].PropTypes.bool, //show lunar
+
 		onChange: _react2['default'].PropTypes.func,
 		onFocus: _react2['default'].PropTypes.func,
-		onBlur: _react2['default'].PropTypes.func,
-		autoHide: _react2['default'].PropTypes.bool, //selected auto hide
-		inline: _react2['default'].PropTypes.bool //inline
+		onBlur: _react2['default'].PropTypes.func
+
 	},
 	getInitialState: function getInitialState() {
 		return {
-			date: now,
-			selected: this.props.selected,
+			date: now, //render month by date
 			show: this.props.inline ? true : false,
 			focus: false, //focus state
-			offset: {} //datepicker position
-		};
+			offset: {}, //datepicker position
+			selected: this.props.selected,
+			start: this.props.start,
+			end: this.props.end,
+			status: '' };
 	},
 
+	//React.PropTypes.oneOf(['start', 'end', ''])
+	//'start' and 'end' use by bi-datepicker range value, and '' use by single datepicker single date
 	getDefaultProps: function getDefaultProps() {
 		return {
 			isfill: false,
@@ -814,28 +881,30 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 			months: 1
 		};
 	},
-	onFocus: function onFocus(event) {
+	onFocus: function onFocus(event, input) {
 		var _state = this.state;
 		var show = _state.show;
 		var focus = _state.focus;
+		var selected = _state.selected;
 
 		if (show && !focus) {
 			this.state.focus = true; //just change state not trigger render
 			return;
 		}
-		var size = this.refs.insDateInput.handlePosition();
+		var status = input.props.status;selected = status ? this.state[status] : selected;
+		var size = input.handlePosition();
 		var left = size.left;
 		var top = size.top;
 		var height = size.height;
-
-		top += height + document.body.scrollTop;
-		this.show(true, { left: left, top: top }, true);
+		top += height + (document.body.scrollTop || document.documentElement.scrollTop);
 
 		var onFocus = this.props.onFocus;
 
+		this.show(true, { left: left, top: top }, true, status);
 		if (onFocus) onFocus(event);
+		if (status) this.setState({ date: selected });
 	},
-	onBlur: function onBlur(event) {
+	onBlur: function onBlur(event, input) {
 		var _state2 = this.state;
 		var show = _state2.show;
 		var focus = _state2.focus;
@@ -845,7 +914,7 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 
 		if (!show) return;
 		if (!focus) {
-			this.refs.insDateInput.focus(); //when show && !focus, trigger focus 
+			input.focus(); //when show && !focus, trigger focus 
 		} else if (!inline) {
 				focus && this.removePicker();
 				onBlur && onBlur(event);
@@ -856,8 +925,8 @@ var ReactDatepickerPlus = _react2['default'].createClass({
   		event.preventDefault()*/
 	},
 	onInputChange: function onInputChange(event) {},
-	show: function show(_show, offset, focus) {
-		this.setState({ show: _show, offset: offset, focus: focus });
+	show: function show(_show, offset, focus, status) {
+		this.setState({ show: _show, offset: offset, focus: focus, status: status });
 	},
 	updateMonth: function updateMonth(num) {
 		var date = this.state.date;
@@ -866,7 +935,7 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 		this.updateDate({ date: cdate }, true);
 	},
 	numMonth: function numMonth(date, num) {
-		return new Date(date.getFullYear(), date.getMonth() + num, 1);
+		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
 	},
 	updateDay: function updateDay(dateinfo) {
 		this.updateDate(dateinfo);
@@ -875,8 +944,13 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 		var _props2 = this.props;
 		var onChange = _props2.onChange;
 		var autoHide = _props2.autoHide;
+		var _state3 = this.state;
+		var status = _state3.status;
+		var selected = _state3.selected;
 
-		this.setState({ show: true, date: dateinfo.date, selected: !isMonth ? dateinfo.date : this.state.selected, focus: false });
+		var getSelected = !isMonth ? dateinfo.date : this.state[status ? status : 'selected'];
+		var temp = {};temp[status] = getSelected;
+		this.setState(_extends({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, temp));
 		onChange && onChange(dateinfo);
 		!isMonth && autoHide && this.removePicker();
 	},
@@ -900,28 +974,30 @@ var ReactDatepickerPlus = _react2['default'].createClass({
     shouldComponentUpdate(nextProps){
     	console.log(nextProps, this.state.show, 'nextProps')
     	// if(nextProps.date === this.props.date) return false
-    	return true
+    	return true 
     },
      */
-	pickers: function pickers() {
+	pickers: function pickers(status) {
 		var $pickers = [],
 		    offsets = [],
 		    dh = undefined,
 		    dc = undefined,
 		    idate = undefined;
-		var _state3 = this.state;
-		var date = _state3.date;
-		var selected = _state3.selected;
-		var offset = _state3.offset;
+		var _state4 = this.state;
+		var date = _state4.date;
+		var start = _state4.start;
+		var end = _state4.end;
+		var offset = _state4.offset;
 		var _props3 = this.props;
 		var inline = _props3.inline;
 		var months = _props3.months;
 
+		var selected = this.state[status ? status : 'selected'];
 		for (var i = 0; i < months; i++) {
 			offsets.push({ left: i * 215 + offset.left, top: offset.top });
 			idate = this.numMonth(date, i);
 			dh = _react2['default'].createElement(DateHeader, { date: idate, updateMonth: this.updateMonth });
-			dc = _react2['default'].createElement(DateCalendar, _extends({}, this.props, { date: idate, selected: selected, onChange: this.updateDay }));
+			dc = _react2['default'].createElement(DateCalendar, _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay }));
 			$pickers.push(inline ? _react2['default'].createElement(
 				'div',
 				{ className: 'date-picker date-picker-inline', key: i },
@@ -929,7 +1005,7 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 				dc
 			) : _react2['default'].createElement(
 				'div',
-				{ className: 'date-picker date-picker-block', style: offsets[i], onMouseDown: this.onMouseDown, key: i },
+				{ className: 'date-picker date-picker-block', style: offsets[i], key: i },
 				dh,
 				dc
 			));
@@ -937,23 +1013,30 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 		return $pickers;
 	},
 	render: function render() {
-		var _state4 = this.state;
-		var date = _state4.date;
-		var show = _state4.show;
-		var selected = _state4.selected;
+		var _this = this;
+
+		var _state5 = this.state;
+		var show = _state5.show;
+		var selected = _state5.selected;
+		var start = _state5.start;
+		var end = _state5.end;
+		var status = _state5.status;
 		var _props4 = this.props;
 		var format = _props4.format;
 		var inline = _props4.inline;
 		var months = _props4.months;
+		var disabled = _props4.disabled;
 
 		var picker = undefined,
 		    pickers = undefined,
 		    pickerInBody = undefined;
-		var dh = _react2['default'].createElement(DateHeader, { date: date, updateMonth: this.updateMonth });
-		var dc = _react2['default'].createElement(DateCalendar, _extends({}, this.props, { date: date, selected: selected, onChange: this.updateDay }));
-
+		var di = function di(val, stat) {
+			return _react2['default'].createElement(DateInput, { selected: !val ? selected : val, format: format, disabled: disabled,
+				onFocus: _this.onFocus, onBlur: _this.onBlur, onChange: _this.onInputChange, status: stat,
+				ref: 'insDateInput' });
+		};
 		if (show) {
-			pickers = this.pickers();
+			pickers = this.pickers(status);
 			picker = _react2['default'].createElement(
 				'div',
 				{ className: months > 1 ? 'date-multi' : '' },
@@ -961,17 +1044,20 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 			);
 			pickerInBody = _react2['default'].createElement(
 				DateInBody,
-				{ classList: 'date-picker-wrapper', ref: 'insDateInBody' },
+				{ classes: 'date-picker-wrapper', ref: 'insDateInBody' },
 				picker
 			);
 		}
-		// console.log(inline, show, datepicker, 'datepicker')
+		var didom = start && end ? _react2['default'].createElement(
+			'div',
+			{ className: 'date-inputs' },
+			di(start, 'start'),
+			di(end, 'end')
+		) : di();
 		return _react2['default'].createElement(
 			'div',
 			{ className: 'date-components' },
-			_react2['default'].createElement(DateInput, { selected: selected, format: format,
-				onFocus: this.onFocus, onBlur: this.onBlur, onChange: this.onInputChange,
-				ref: 'insDateInput' }),
+			didom,
 			inline ? picker : pickerInBody
 		);
 	}
