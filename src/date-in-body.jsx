@@ -21,7 +21,7 @@ var DateInBody = React.createClass({
   },
   removePicker(current){
     this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0]
-    console.log(this.popup, 'popup')
+    // console.log(this.popup, 'popup')
     if(this.popup){
       ReactDOM.unmountComponentAtNode(this.popup)
       document.body.removeChild(this.popup)

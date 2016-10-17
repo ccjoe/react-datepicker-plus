@@ -5,12 +5,12 @@ var DateMonth = React.createClass({
 	/*propTypes: {
 		date: React.PropTypes.object.isRequired,
 		format: React.PropTypes.string
-	},
+	},*/
 	getInitialState() {
 	    return {
-	    	
+	    	selecting: null
 	    }
-	},*/
+	},
 	getMonthInfo () {	
 		// console.log(this.props.date, 'datemonth')
 		let y = this.props.date.getFullYear();
@@ -47,7 +47,7 @@ var DateMonth = React.createClass({
         if(isfill){
 	        for (j=1; j < 12; j++) {
 	        	if(line<6){
-	        		console.log(line, 'line')
+	        		// console.log(line, 'line')
 		            dateday =  new Date(y, m+1, j);
 		            calcLine(dateday)
 	       		}
@@ -69,14 +69,22 @@ var DateMonth = React.createClass({
 	days(week){
 		var days = [], that = this;
 		week.map(function(day, dkey){
-			days.push( <DateDay {...that.props} edate={day} key={dkey}/> ) 
+			days.push( <DateDay {...that.props} onMouseEnter={that.onMouseEnter} selecting={that.state.selecting} edate={day} key={dkey}/> ) 
 		})
 		return days
+	},
+	onMouseEnter(dateinfo){
+		let {start, end} = this.props
+		if(start && end) this.setState({selecting: dateinfo.date})
+	},
+	onMouseLeave(){
+		let {start, end} = this.props
+		if(start && end) this.setState({selecting: null})
 	},
 	render () {
 		// console.log('render times')
 		const months = this.getMonthInfo(), that=this;
-		return <div className="date-month"> 
+		return <div className={"date-month" + (that.state.selecting ? " date-selecting " : " ")} onMouseLeave={this.onMouseLeave}> 
 				{this.weeks(months)}
 			</div>
 	}

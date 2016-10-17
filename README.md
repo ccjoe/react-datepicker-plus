@@ -1,6 +1,6 @@
-# react-datepicker
+# react-datepicker-plus
 
-__COMPONENT DESCRIPTION GOES HERE__
+__react datepicker for salar and lunar, for props and callback to config, do everything__
 
 
 ## Demo & Examples
@@ -19,12 +19,12 @@ Then open [`localhost:8000`](http://localhost:8000) in a browser.
 
 ## Installation
 
-The easiest way to use react-datepicker is to install it from NPM and include it in your own React build process (using [Browserify](http://browserify.org), [Webpack](http://webpack.github.io/), etc).
+The easiest way to use react-datepicker-plus is to install it from NPM and include it in your own React build process (using [Browserify](http://browserify.org), [Webpack](http://webpack.github.io/), etc).
 
-You can also use the standalone build by including `dist/react-datepicker.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.
+You can also use the standalone build by including `dist/react-datepicker-plus.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.
 
 ```
-npm install react-datepicker --save
+npm install react-datepicker-plus --save
 ```
 
 
@@ -33,7 +33,7 @@ npm install react-datepicker --save
 __EXPLAIN USAGE HERE__
 
 ```
-var ReactDatepickerPlus = require('react-datepicker');
+var ReactDatepickerPlus = require('react-datepicker-plus');
 
 <ReactDatepickerPlus>Example</ReactDatepickerPlus>
 ```

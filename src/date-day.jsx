@@ -11,10 +11,12 @@ var DateDay = React.createClass({
     },*/
     //获取某天的所有信息 m+1才是显示用的月分
     getDayInfo: function(){
-        const { selected, date, edate } = this.props //selected date, render date, each date
+        const {date, edate, min, max, start, end, selected, selecting, status } = this.props //selected date, render date, each date
         const [sy, sm, sd] = [selected.getFullYear(), selected.getMonth(), selected.getDate()]
         const [cy, cm, cd] = [date.getFullYear(), date.getMonth(), date.getDate()]
         const [y, m, d] = [edate.getFullYear(), edate.getMonth(), edate.getDate()]
+        let edataNo = +edate
+        let range = (start, end) => edataNo >= +start && edataNo <= +end
         var dayinfo = {
             date: edate,
             lunar: toLunarDate(edate),
@@ -23,8 +25,12 @@ var DateDay = React.createClass({
             currentMonth: m === cm,
             currentDay: y === sy && m === sm && d === sd
         };
+        if(min || max) dayinfo.disabled = !range(min, max)    //是否在限制的范围内
+        if(start && end) dayinfo.inrange = range(start, end) //是否在选择结果的范围内
+        if(selecting && status) dayinfo.inselect = status==='start' ? range(selecting, end) : range(start, selecting)
+
         dayinfo.lunarfest = lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
-        // console.log(dayinfo)
+        // console.log(dayinfo, edataNo, start, end, 'startend')
         return dayinfo;
     },
     zero (n) {
@@ -32,14 +38,16 @@ var DateDay = React.createClass({
     },
 
     setDate(dateinfo) {
+        if(dateinfo.disabled) return;
         this.props.onChange(dateinfo);
     },
-    setMouseEnter(){
-
+    setMouseEnter(dateinfo){
+        if(dateinfo.disabled) return;
+        this.props.onMouseEnter(dateinfo);
     },
-    render () {
+    render(){
         let info = this.getDayInfo()
-        let { date, salarfest, lunarfest, term, lunar, currentDay, currentMonth} = info
+        let { date, salarfest, lunarfest, term, lunar, currentDay, currentMonth, disabled, inrange, inselect} = info
         let festDom, {festival, haslunar} = this.props
 
         if(festival && (salarfest||lunarfest)){
@@ -50,9 +58,13 @@ var DateDay = React.createClass({
         if(haslunar){   //has lunar and must has term
             festDom = <div className="date-day-sets">{festDom}<span className="date-lunar">{term ? term : toLunarDay(lunar.day)}</span></div>
         }
-        return <div className={"date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentDay ? 'date-selected' : "")}
+        return <div className={"date-day" + (!currentMonth ? " date-nocurrent " : " ")
+                                          + (currentDay ? 'date-selected' : "")
+                                          + (disabled ? ' date-disabled' : "") 
+                                          + (inrange ? ' date-range' : "")
+                                          + (inselect ? ' date-hover' : "") }
                     onMouseDown={ this.setDate.bind(this, info) }
-                    onMouseEnter={this.setMouseEnter}>
+                    onMouseEnter={this.setMouseEnter.bind(this, info)}>
             {festDom}
         </div>
     }

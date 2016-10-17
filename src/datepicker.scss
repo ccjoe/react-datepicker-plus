@@ -1,3 +1,7 @@
+//react- datepicker-plus css
+.date-inputs input{
+	float: left;
+}
 .date-picker-block{
 	position: absolute;
 }
@@ -54,12 +58,24 @@
 		width: 25px;
 		text-align: center;
 	}
-	.date-nocurrent{
-		color: #999;
+	.date-nocurrent, .date-disabled{
+		color: #ccc;
 	}
-	.date-selected{
+
+	.date-range, .date-hover{
 		background-color: #f3eaa1;
 	}
+
+	.date-selected{
+		background-color: #E4D132;
+	}
+	
+	.date-selecting{
+		.date-range:not(.date-hover){
+			background-color: #e8e8e8;
+		}
+	}
+
 	.date-day{
 		cursor: pointer;
 		.date-d{font-size: 13px;}

@@ -9,7 +9,12 @@ var DateInput = React.createClass({
 	    disabled: React.PropTypes.bool,
 	    onBlur: React.PropTypes.func,
 	    onFocus: React.PropTypes.func,
-	    onChange: React.PropTypes.func,
+	    onChange: React.PropTypes.func
+	},
+	getDefaultProps() {
+	    return {
+	        status: ''  
+	    };
 	},
 /*	getInitialState () {
 	    return {
@@ -30,10 +35,10 @@ var DateInput = React.createClass({
 		return format ? dateFormat(selected, format) : selected
 	},
 	handleBlur(event){
-		this.props.onBlur(event)
+		this.props.onBlur(event, this)
 	},	
 	handleFocus(event){
-		this.props.onFocus(event)
+		this.props.onFocus(event, this)
 	},
 	focus () {
 	    this.refs.input.focus()
@@ -49,8 +54,8 @@ var DateInput = React.createClass({
 	},
 	
 	render () {
-		const { customInput } = this.props
-		return <input ref="input" type="text" value={this.dateString()} onFocus={this.handleFocus} onBlur={this.handleBlur} onChange={this.handleChange} />
+		const { customInput, disabled } = this.props
+		return <input ref="input" type="text" disabled={disabled} value={this.dateString()} onFocus={this.handleFocus} onBlur={this.handleBlur} onChange={this.handleChange} />
 	}
 });
 
