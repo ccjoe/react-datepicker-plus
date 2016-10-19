@@ -48,8 +48,9 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 
 		onChange: _react2['default'].PropTypes.func,
 		onFocus: _react2['default'].PropTypes.func,
-		onBlur: _react2['default'].PropTypes.func
+		onBlur: _react2['default'].PropTypes.func,
 
+		lang: _react2['default'].PropTypes.oneOf(['cn', 'en'])
 	},
 	getInitialState: function getInitialState() {
 		return {
@@ -70,7 +71,8 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 			isfill: false,
 			format: 'yyyy-MM-dd',
 			selected: now,
-			months: 1
+			months: 1,
+			lang: 'en'
 		};
 	},
 	onFocus: function onFocus(event, input) {
@@ -183,12 +185,14 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 		var _props3 = this.props;
 		var inline = _props3.inline;
 		var months = _props3.months;
+		var lang = _props3.lang;
+		var haslunar = _props3.haslunar;
 
 		var selected = this.state[status ? status : 'selected'];
 		for (var i = 0; i < months; i++) {
 			offsets.push({ left: i * 215 + offset.left, top: offset.top });
 			idate = this.numMonth(date, i);
-			dh = _react2['default'].createElement(DateHeader, { date: idate, updateMonth: this.updateMonth });
+			dh = _react2['default'].createElement(DateHeader, { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth });
 			dc = _react2['default'].createElement(DateCalendar, _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay }));
 			$pickers.push(inline ? _react2['default'].createElement(
 				'div',
@@ -231,7 +235,7 @@ var ReactDatepickerPlus = _react2['default'].createClass({
 			pickers = this.pickers(status);
 			picker = _react2['default'].createElement(
 				'div',
-				{ className: months > 1 ? 'date-multi' : '' },
+				{ className: months > 1 ? 'date-multi clearfix' : '' },
 				pickers
 			);
 			pickerInBody = _react2['default'].createElement(
@@ -501,10 +505,11 @@ Object.defineProperty(exports, '__esModule', {
 });
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var chars = {
-	weeksHan: ['日', '一', '二', '三', '四', '五', '六'],
-	weeksEng: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-	monthsHan: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-	monthsEng: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+	weeksCn: ['日', '一', '二', '三', '四', '五', '六'],
+	weeksEnF: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+	weeksEnS: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+	monthsCn: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+	monthsEn: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 };
 var dateHeader = React.createClass({
 	displayName: 'dateHeader',
@@ -519,6 +524,13 @@ var dateHeader = React.createClass({
 		this.props.updateMonth(num);
 	},
 	render: function render() {
+		var lang = this.props.lang;
+
+		var cn = lang === 'cn';
+		var year = this.getDate().getFullYear(),
+		    month = this.getDate().getMonth() + 1;
+
+		var monthstr = cn ? year + ' ' + month + '月' : chars.monthsEn[month - 1] + ' ' + year;
 		return React.createElement(
 			'div',
 			{ className: 'date-header' },
@@ -529,17 +541,14 @@ var dateHeader = React.createClass({
 				React.createElement(
 					'span',
 					{ className: 'date-m' },
-					this.getDate().getFullYear(),
-					' ',
-					this.getDate().getMonth() + 1,
-					'月'
+					monthstr
 				),
 				React.createElement('span', { className: 'date-next', onMouseDown: this.changeMonth.bind(this, 1) })
 			),
 			React.createElement(
 				'div',
 				{ className: 'date-wtitle' },
-				chars.weeksHan.map(function (week, key) {
+				chars[cn ? 'weeksCn' : 'weeksEnS'].map(function (week, key) {
 					return React.createElement(
 						'span',
 						{ key: key },

@@ -30,6 +30,7 @@ var ReactDatepickerPlus = React.createClass({
 		onFocus: React.PropTypes.func,
 		onBlur: React.PropTypes.func,
 
+		lang: React.PropTypes.oneOf(['cn', 'en']) 
 	},
 	getInitialState() {
 	    return {
@@ -50,7 +51,8 @@ var ReactDatepickerPlus = React.createClass({
 	        isfill: false,
 	        format: 'yyyy-MM-dd',
 	        selected: now,
-	        months: 1
+	        months: 1,
+	        lang: 'en'
 	    };
 	},
 	onFocus(event, input){
@@ -136,12 +138,12 @@ var ReactDatepickerPlus = React.createClass({
     pickers(status) {
 		let $pickers = [], offsets = [], dh, dc, idate
 		let {date,  start, end, offset} = this.state
-		let {inline, months} = this.props
+		let {inline, months, lang, haslunar} = this.props
 		let selected = this.state[status?status:'selected']
 		for(var i=0; i<months; i++){
 			offsets.push({left: i*215+offset.left, top: offset.top})
 			idate = this.numMonth(date, i)
-			dh = <DateHeader date={idate} updateMonth={this.updateMonth}/>
+			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth}/>
 			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay}/>
 			$pickers.push(inline ?
 					 <div className="date-picker date-picker-inline" key={i}>{dh}{dc}</div> :
@@ -158,7 +160,7 @@ var ReactDatepickerPlus = React.createClass({
 							   ref="insDateInput" />
 		if(show){
 			pickers = this.pickers(status)
-			picker = <div className={months>1?'date-multi':''}>{pickers}</div>
+			picker = <div className={months>1?'date-multi clearfix':''}>{pickers}</div>
 			pickerInBody = <DateInBody classes="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
 		}
 		let didom = start && end ? <div className="date-inputs">{di(start, 'start')}{di(end, 'end')}</div> : di()

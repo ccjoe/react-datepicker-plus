@@ -56,24 +56,48 @@ label {
 	color: #999;
 }
  .clearfix { overflow: hidden; }
-
-.demo-item{
-	height: 330px;
-	width: 50%;
-	float: left;
-	input{
-		display: block;
+body{
+	background-color: #f0f0f0;
+}
+.container{
+	background-color: #fff;
+}
+.demo-list{
+	font-family: MicroSoft Yahei;
+	h5{
+		font-size: 15px;
+		font-weight: bold;
+		color: #666;
+		margin: 10px 0;
 	}
+	.demo-item{
+		width: 45%;
+		margin: 200px 5% 50px 0;
+		float: left;
+		input{
+			display: block;
+		}
+	}
+	.demo-full{
+		width: 100%;
+	}
+	.demo-code{
+		background-color: #f0f0f0;
+		padding: 10px;
+		// border: 1px solid #ccc;
+		color: #666;
+	}
+	.date-components{float: left;}
 }
-.demo-full{
-	width: 100%;
-}
-.date-components{float: left;}
-
 
 //react- datepicker-plus css
-.date-inputs input{
-	float: left;
+.date-components{
+	.date-inputs input{
+		float: left;
+	}
+	input{
+		padding: 5px;
+	}
 }
 .date-picker-block{
 	position: absolute;
@@ -88,11 +112,12 @@ label {
 }
 .date-picker{
 	display: inline-block;
-	border: 1px solid #eee;
-	box-shadow: 0 1px 3px #eee;
+	// border: 1px solid #eee;
+	box-shadow: 0 1px 3px #ccc;
 	.date-title{
 		position: relative;
 		text-align: center;
+		margin: 5px 0;
 		.date-prev, .date-next{
 		    text-align: center;
 		    cursor: pointer;
