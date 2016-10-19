@@ -55,22 +55,45 @@ label {
 .clearfix {
   overflow: hidden;
 }
-.demo-item {
-  height: 330px;
-  width: 50%;
+body {
+  background-color: #f0f0f0;
+}
+.container {
+  background-color: #fff;
+}
+.demo-list {
+  font-family: MicroSoft Yahei;
+}
+.demo-list h5 {
+  font-size: 15px;
+  font-weight: bold;
+  color: #666;
+  margin: 10px 0;
+}
+.demo-list .demo-item {
+  width: 45%;
+  margin: 200px 5% 50px 0;
   float: left;
 }
-.demo-item input {
+.demo-list .demo-item input {
   display: block;
 }
-.demo-full {
+.demo-list .demo-full {
   width: 100%;
 }
-.date-components {
+.demo-list .demo-code {
+  background-color: #f0f0f0;
+  padding: 10px;
+  color: #666;
+}
+.demo-list .date-components {
   float: left;
 }
-.date-inputs input {
+.date-components .date-inputs input {
   float: left;
+}
+.date-components input {
+  padding: 5px;
 }
 .date-picker-block {
   position: absolute;
@@ -83,12 +106,12 @@ label {
 }
 .date-picker {
   display: inline-block;
-  border: 1px solid #eee;
-  box-shadow: 0 1px 3px #eee;
+  box-shadow: 0 1px 3px #ccc;
 }
 .date-picker .date-title {
   position: relative;
   text-align: center;
+  margin: 5px 0;
 }
 .date-picker .date-title .date-prev,
 .date-picker .date-title .date-next {
