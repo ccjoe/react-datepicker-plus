@@ -1,6 +1,18 @@
-//react- datepicker-plus css
-.date-inputs input{
-	float: left;
+//=============================react- datepicker-plus css
+@selectColor: #589DE2;
+@selectLighter: lighten(@selectColor, 10%);
+@borderColor: #ccc;
+@borderLighter: lighten(@borderColor, 10%);
+@borderDarker: darken(@borderColor, 10%);
+@gap: 5px;
+
+.date-components{
+	.date-inputs input{
+		float: left;
+	}
+	input{
+		padding: @gap;
+	}
 }
 .date-picker-block{
 	position: absolute;
@@ -15,11 +27,11 @@
 }
 .date-picker{
 	display: inline-block;
-	border: 1px solid #eee;
-	box-shadow: 0 1px 3px #eee;
+	box-shadow: 0 1px 3px @borderColor;
 	.date-title{
 		position: relative;
 		text-align: center;
+		margin: @gap 0;
 		.date-prev, .date-next{
 		    text-align: center;
 		    cursor: pointer;
@@ -30,21 +42,22 @@
 		}
 		.date-prev{
 			left: 0;
-    		border-right-color: #ccc;
+    		border-right-color: @borderColor;
 		}
 		.date-next{
 			right: 0;
-			border-left-color: #ccc;
+			border-left-color: @borderColor;
 		}
 	}
 	.date-header, .date-calendar{
 		background-color: #f9f9f9;
-		padding: 5px 5px 0;
+		// padding: 5px 5px 0;
 		font-size: 11px;
 	}
 	.date-header{
-		border-bottom: 1px solid #e8e8e8;
-		background-color: #e8e8e8;
+		border-bottom: 1px solid @borderLighter;
+		background-color: @borderLighter;
+		padding: @gap 0;
 	}
 	.date-week{
 		&-0{
@@ -54,33 +67,34 @@
 	.date-wtitle > span,
 	.date-day{
 		display:inline-block;
-		padding: 5px 2px;
+		padding:8px @gap;
 		width: 25px;
 		text-align: center;
 	}
 	.date-nocurrent, .date-disabled{
-		color: #ccc;
+		color: @borderColor;
 	}
 
-	.date-range, .date-hover{
-		background-color: #f3eaa1;
+	.date-range, .date-hover, .date-day:hover{
+		background-color: @selectLighter;
 	}
 
 	.date-selected{
-		background-color: #E4D132;
+		background-color: @selectColor;
 	}
 	
 	.date-selecting{
 		.date-range:not(.date-hover){
-			background-color: #e8e8e8;
+			background-color: @borderLighter;
 		}
 	}
 
 	.date-day{
+		position: relative;
 		cursor: pointer;
 		.date-d{font-size: 13px;}
 		.date-lunar{
-			color: #bebebe;
+			color: @borderDarker;
 			font-size: 10px;
 		}
 	}
@@ -89,11 +103,18 @@
 	}
 	.date-time{
 		text-align: center;
-		padding: 5px 0;
-		background-color: #e1e1e1;
+		padding: @gap 0;
+		background-color: @borderLighter;
 	}
 	.date-fest{ 
 		font-size: 11px;
 		letter-spacing: 0;
+	}
+}
+
+.date-picker-lunar{
+	.date-wtitle > span,
+	.date-day{
+		padding: @gap;
 	}
 }

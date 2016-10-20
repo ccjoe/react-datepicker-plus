@@ -11,7 +11,7 @@ var DateDay = React.createClass({
     },*/
     //获取某天的所有信息 m+1才是显示用的月分
     getDayInfo: function(){
-        const {date, edate, min, max, start, end, selected, selecting, status } = this.props //selected date, render date, each date
+        const {date, edate, min, max, start, end, selected, selecting, status, dayAddon } = this.props //selected date, render date, each date
         const [sy, sm, sd] = [selected.getFullYear(), selected.getMonth(), selected.getDate()]
         const [cy, cm, cd] = [date.getFullYear(), date.getMonth(), date.getDate()]
         const [y, m, d] = [edate.getFullYear(), edate.getMonth(), edate.getDate()]
@@ -29,6 +29,9 @@ var DateDay = React.createClass({
         if(start && end) dayinfo.inrange = range(start, end) //是否在选择结果的范围内
         if(selecting && status) dayinfo.inselect = status==='start' ? range(selecting, end) : range(start, selecting)
 
+        if(dayAddon){
+            dayinfo.addon = dayAddon(dayinfo)
+        }
         dayinfo.lunarfest = lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
         // console.log(dayinfo, edataNo, start, end, 'startend')
         return dayinfo;
@@ -45,15 +48,16 @@ var DateDay = React.createClass({
         if(dateinfo.disabled) return;
         this.props.onMouseEnter(dateinfo);
     },
+
     render(){
         let info = this.getDayInfo()
-        let { date, salarfest, lunarfest, term, lunar, currentDay, currentMonth, disabled, inrange, inselect} = info
+        let { date, salarfest, lunarfest, term, lunar, currentDay, currentMonth, disabled, inrange, inselect, addon} = info
         let festDom, {festival, haslunar} = this.props
 
         if(festival && (salarfest||lunarfest)){
           festDom = <span className="date-fest">{(salarfest?salarfest:'') + (lunarfest?lunarfest:'')}</span>
         }else{
-          festDom = <span className="date-d">{date.getDate()}</span>
+          festDom = <div><span className="date-d">{date.getDate()}</span>{addon}</div>
         }
         if(haslunar){   //has lunar and must has term
             festDom = <div className="date-day-sets">{festDom}<span className="date-lunar">{term ? term : toLunarDay(lunar.day)}</span></div>

@@ -1,4 +1,4 @@
-var React = require('react')
+import React from 'react'
 const chars = {
 	weeksCn:['日', '一', '二', '三', '四', '五', '六'],
     weeksEnF: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],

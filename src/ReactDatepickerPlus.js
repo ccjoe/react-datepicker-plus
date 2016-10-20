@@ -1,36 +1,41 @@
 import React from 'react'
 import ReactDOM from "react-dom"
-var DateHeader = require('./date-header.jsx')
-var DateCalendar = require('./date-calendar.jsx')
-var DateInput = require('./date-input.jsx')
-var DateInBody = require('./date-in-body.jsx')
+import DateHeader from './date-header.jsx'
+import DateCalendar from './date-calendar.jsx'
+import DateInput from './date-input.jsx'
+import DateInBody from './date-in-body.jsx'
 
 var now = new Date()
 var ReactDatepickerPlus = React.createClass({
 	propTypes: {
 		selected: React.PropTypes.object,	//default date
-		format: React.PropTypes.string, //format date
-		isfill: React.PropTypes.bool,	//show prefix-prev prefix-next month 
-		months: React.PropTypes.number,
-		time: React.PropTypes.bool,     //show time select?
-		min: React.PropTypes.object,    //select date range min
-		max: React.PropTypes.object,    //select date range max
-		disabled: React.PropTypes.bool,  //input can't change
+		format: React.PropTypes.string,     //format date
+		isfill: React.PropTypes.bool,	    //show prefix-prev prefix-next month 
+		months: React.PropTypes.number,		//show multi-panes by months
 
-		start: React.PropTypes.object,	 //selected time is a range, start date
-		end: React.PropTypes.object,	 //selected time is a range, start date
+		time: React.PropTypes.bool,         //show time select @todo
 
-		autoHide: React.PropTypes.bool,  //selected auto hide
-		inline: React.PropTypes.bool,    //inline
+		min: React.PropTypes.object,        //select date range min
+		max: React.PropTypes.object,        //select date range max
 
-		festival: React.PropTypes.bool, //show festival
-		haslunar: React.PropTypes.bool, //show lunar
+		start: React.PropTypes.object,	    //selected time is a range, start date
+		end: React.PropTypes.object,	    //selected time is a range, start date
 
-		onChange: React.PropTypes.func,
-		onFocus: React.PropTypes.func,
-		onBlur: React.PropTypes.func,
+		className: React.PropTypes.string,  // custom class
+		disabled: React.PropTypes.bool,     //input can't change
+		autoHide: React.PropTypes.bool,     //selected auto hide
+		inline: React.PropTypes.bool,       //inline
+		lang: React.PropTypes.oneOf(['cn', 'en']),
 
-		lang: React.PropTypes.oneOf(['cn', 'en']) 
+		festival: React.PropTypes.bool, 	//show festival
+		haslunar: React.PropTypes.bool, 	//show lunar
+
+		onFocus: React.PropTypes.func,		//args (event, picker)
+		onBlur: React.PropTypes.func,		//args (event, picker)
+		onChange: React.PropTypes.func,		//args (dayinfo, picker)
+		dayAddon: React.PropTypes.func 		//args (dayinfo)
+		//dayAddon, add data for day, and need to return dom, 
+		//the return value will be insert to day each element. pls see last demo
 	},
 	getInitialState() {
 	    return {
@@ -68,7 +73,7 @@ var ReactDatepickerPlus = React.createClass({
 		let {onFocus} = this.props
 		
 		this.show(true, {left, top}, true, status)
-		if(onFocus) onFocus(event)
+		onFocus && onFocus(event, this)
 		if(status) this.setState({date: selected})
 	},
 	onBlur(event, input){
@@ -78,16 +83,9 @@ var ReactDatepickerPlus = React.createClass({
 		if (!focus) {
 	      	input.focus()	//when show && !focus, trigger focus   
 	    } else if(!inline) {
+	      onBlur && onBlur(event, this)
 	      focus && this.removePicker()
-	      onBlur && onBlur(event)
 	    } 
-	},
-	onMouseDown(event){
-/*		event.stopPropagation()
-		event.preventDefault()*/
-	},
-	onInputChange(event){
-
 	},
 	show (show, offset, focus, status) {
 	    this.setState({ show, offset, focus, status})
@@ -107,9 +105,9 @@ var ReactDatepickerPlus = React.createClass({
 		let {onChange, autoHide} = this.props
 		let {status, selected} = this.state
 		let getSelected = !isMonth ? dateinfo.date : this.state[status?status:'selected']
-		let temp = {}; temp[status] = getSelected
-		this.setState(Object.assign({show: true, date: dateinfo.date, selected: getSelected, focus: false}, temp))
-		onChange && onChange(dateinfo)
+		// let temp = {}; temp[status] = getSelected
+		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
+		onChange && onChange(dateinfo, this)
 		!isMonth && autoHide && this.removePicker()
 	},
 	removePicker(){
@@ -117,37 +115,21 @@ var ReactDatepickerPlus = React.createClass({
 		this.refs.insDateInBody && this.refs.insDateInBody.removePicker(true)
 	},
 
- /*
-	componentWillMount(){
-		// ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this.refs.insDateInBody))
-	},
-	componentDidMount() {
-	  this.setState({
-	    styles: offset
-	  }) 
-	}*/
-	/* componentWillReceiveProps(nextProps) {
-        console.log(nextProps, 'componentWillReceiveProps')
-    },
-    shouldComponentUpdate(nextProps){
-    	console.log(nextProps, this.state.show, 'nextProps')
-    	// if(nextProps.date === this.props.date) return false
-    	return true 
-    },
-     */
     pickers(status) {
 		let $pickers = [], offsets = [], dh, dc, idate
 		let {date,  start, end, offset} = this.state
-		let {inline, months, lang, haslunar} = this.props
+		let {inline, months, lang, haslunar, className} = this.props
 		let selected = this.state[status?status:'selected']
+		let classes = `date-picker date-picker-${inline?'inline':'block'} ${className?className:''} ${haslunar?'date-picker-lunar':''}`
 		for(var i=0; i<months; i++){
 			offsets.push({left: i*215+offset.left, top: offset.top})
 			idate = this.numMonth(date, i)
 			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth}/>
 			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay}/>
+			 
 			$pickers.push(inline ?
-					 <div className="date-picker date-picker-inline" key={i}>{dh}{dc}</div> :
-					 <div className="date-picker date-picker-block" style={offsets[i]} key={i}>{dh}{dc}</div>)
+					 <div className={classes} key={i}>{dh}{dc}</div> :
+					 <div className={classes} style={offsets[i]} key={i}>{dh}{dc}</div>)
 		}
 		return $pickers
     },
@@ -156,8 +138,7 @@ var ReactDatepickerPlus = React.createClass({
 		let {format, inline, months, disabled} = this.props
 		let picker, pickers, pickerInBody
 		let di = (val, stat) => <DateInput selected={!val ? selected : val} format={format} disabled={disabled}
-							   onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onInputChange}　status={stat}
-							   ref="insDateInput" />
+							   onFocus={this.onFocus} onBlur={this.onBlur} status={stat}/>
 		if(show){
 			pickers = this.pickers(status)
 			picker = <div className={months>1?'date-multi clearfix':''}>{pickers}</div>

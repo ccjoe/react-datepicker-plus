@@ -15,7 +15,6 @@ var taskConfig = {
 	component: {
 		name: 'ReactDatepickerPlus',
 		dependencies: [
-			'classnames',
 			'react',
 			'react-dom'
 		],

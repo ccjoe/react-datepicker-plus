@@ -1,5 +1,5 @@
-var React = require('react')
-var DateDay = require('./date-day.jsx')
+import React from 'react'
+import DateDay from './date-day.jsx'
 
 var DateMonth = React.createClass({
 	/*propTypes: {

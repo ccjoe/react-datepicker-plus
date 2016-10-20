@@ -23,7 +23,7 @@ a:hover {
 .container {
 	margin-left: auto;
 	margin-right: auto;
-	max-width: 720px;
+	max-width: 1000px;
 	padding: 1em;
 }
 
@@ -62,41 +62,22 @@ body{
 .container{
 	background-color: #fff;
 }
-.demo-list{
-	font-family: MicroSoft Yahei;
-	h5{
-		font-size: 15px;
-		font-weight: bold;
-		color: #666;
-		margin: 10px 0;
-	}
-	.demo-item{
-		width: 45%;
-		margin: 200px 5% 50px 0;
-		float: left;
-		input{
-			display: block;
-		}
-	}
-	.demo-full{
-		width: 100%;
-	}
-	.demo-code{
-		background-color: #f0f0f0;
-		padding: 10px;
-		// border: 1px solid #ccc;
-		color: #666;
-	}
-	.date-components{float: left;}
-}
 
-//react- datepicker-plus css
+
+//=============================react- datepicker-plus css
+@selectColor: #589DE2;
+@selectLighter: lighten(@selectColor, 10%);
+@borderColor: #ccc;
+@borderLighter: lighten(@borderColor, 10%);
+@borderDarker: darken(@borderColor, 10%);
+@gap: 5px;
+
 .date-components{
 	.date-inputs input{
 		float: left;
 	}
 	input{
-		padding: 5px;
+		padding: @gap;
 	}
 }
 .date-picker-block{
@@ -112,12 +93,11 @@ body{
 }
 .date-picker{
 	display: inline-block;
-	// border: 1px solid #eee;
-	box-shadow: 0 1px 3px #ccc;
+	box-shadow: 0 1px 3px @borderColor;
 	.date-title{
 		position: relative;
 		text-align: center;
-		margin: 5px 0;
+		margin: @gap 0;
 		.date-prev, .date-next{
 		    text-align: center;
 		    cursor: pointer;
@@ -128,21 +108,22 @@ body{
 		}
 		.date-prev{
 			left: 0;
-    		border-right-color: #ccc;
+    		border-right-color: @borderColor;
 		}
 		.date-next{
 			right: 0;
-			border-left-color: #ccc;
+			border-left-color: @borderColor;
 		}
 	}
 	.date-header, .date-calendar{
 		background-color: #f9f9f9;
-		padding: 5px 5px 0;
+		// padding: 5px 5px 0;
 		font-size: 11px;
 	}
 	.date-header{
-		border-bottom: 1px solid #e8e8e8;
-		background-color: #e8e8e8;
+		border-bottom: 1px solid @borderLighter;
+		background-color: @borderLighter;
+		padding: @gap 0;
 	}
 	.date-week{
 		&-0{
@@ -152,33 +133,34 @@ body{
 	.date-wtitle > span,
 	.date-day{
 		display:inline-block;
-		padding: 5px 2px;
+		padding:8px @gap;
 		width: 25px;
 		text-align: center;
 	}
 	.date-nocurrent, .date-disabled{
-		color: #ccc;
+		color: @borderColor;
 	}
 
-	.date-range, .date-hover{
-		background-color: #f3eaa1;
+	.date-range, .date-hover, .date-day:hover{
+		background-color: @selectLighter;
 	}
 
 	.date-selected{
-		background-color: #E4D132;
+		background-color: @selectColor;
 	}
 	
 	.date-selecting{
 		.date-range:not(.date-hover){
-			background-color: #e8e8e8;
+			background-color: @borderLighter;
 		}
 	}
 
 	.date-day{
+		position: relative;
 		cursor: pointer;
 		.date-d{font-size: 13px;}
 		.date-lunar{
-			color: #bebebe;
+			color: @borderDarker;
 			font-size: 10px;
 		}
 	}
@@ -187,11 +169,75 @@ body{
 	}
 	.date-time{
 		text-align: center;
-		padding: 5px 0;
-		background-color: #e1e1e1;
+		padding: @gap 0;
+		background-color: @borderLighter;
 	}
 	.date-fest{ 
 		font-size: 11px;
 		letter-spacing: 0;
+	}
+}
+
+.date-picker-lunar{
+	.date-wtitle > span,
+	.date-day{
+		padding: @gap;
+	}
+}
+
+//=================================demo
+
+.demo-list{
+	font-family: MicroSoft Yahei;
+	h5{
+		font-size: 15px;
+		font-weight: bold;
+		color: #666;
+		margin: 10px 0;
+	}
+	.demo-item{
+		width: 45%;
+		margin: 30px 5% 50px 0;
+		float: left;
+		input{
+			display: block;
+		}
+	}
+	.demo-full{
+		width: 100%;
+	}
+	.demo-code{
+		background-color: #f0f0f0;
+		padding: 10px;
+		// border: 1px solid @borderColor;
+		color: #666;
+	}
+	.date-components{float: left;}
+	.date-day-rest{
+		background-color: #D47878;
+		color: #fff;
+		position: absolute;
+		top: 0; right: 0;
+	}
+}
+.date-picker-demo{
+	.date-wtitle > span,
+	.date-day{
+		padding: 5px!important;
+		width: 45px;
+	}
+	.date-day{
+		border-right: 1px solid @borderColor;
+		border-bottom: 1px solid @borderColor;
+	}
+	.date-week{
+		.date-day:last-child{
+			border-right: 0;
+		} 
+	}
+	.date-day-price{
+		color: #038DF3;
+		font-size: 15px;
+		letter-spacing: -1px
 	}
 }
