@@ -1,0 +1,218 @@
+/* 
+// Examples Stylesheet
+// -------------------
+*/
+body {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+a {
+  color: #08c;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
+  padding: 1em;
+}
+.footer {
+  margin-top: 50px;
+  border-top: 1px solid #eee;
+  padding: 20px 0;
+  font-size: 12px;
+  color: #999;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #222;
+  font-weight: 100;
+  margin: 0.5em 0;
+}
+label {
+  color: #999;
+  display: inline-block;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin: 1em 0;
+  text-transform: uppercase;
+}
+.hint {
+  margin: 15px 0;
+  font-style: italic;
+  color: #999;
+}
+.clearfix {
+  overflow: hidden;
+}
+body {
+  background-color: #f0f0f0;
+}
+.container {
+  background-color: #fff;
+}
+.date-components .date-inputs input {
+  float: left;
+}
+.date-components input {
+  padding: 5px;
+}
+.date-picker-block {
+  position: absolute;
+}
+.date-multi .date-picker:first-child .date-next {
+  display: none;
+}
+.date-multi .date-picker:last-child .date-prev {
+  display: none;
+}
+.date-picker {
+  display: inline-block;
+  box-shadow: 0 1px 3px #ccc;
+}
+.date-picker .date-title {
+  position: relative;
+  text-align: center;
+  margin: 5px 0;
+}
+.date-picker .date-title .date-prev,
+.date-picker .date-title .date-next {
+  text-align: center;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  width: 0;
+  border: 0.45rem solid transparent;
+}
+.date-picker .date-title .date-prev {
+  left: 0;
+  border-right-color: #ccc;
+}
+.date-picker .date-title .date-next {
+  right: 0;
+  border-left-color: #ccc;
+}
+.date-picker .date-header,
+.date-picker .date-calendar {
+  background-color: #f9f9f9;
+  font-size: 11px;
+}
+.date-picker .date-header {
+  border-bottom: 1px solid #e6e6e6;
+  background-color: #e6e6e6;
+  padding: 5px 0;
+}
+.date-picker .date-week-0 {
+  text-align: right;
+}
+.date-picker .date-wtitle > span,
+.date-picker .date-day {
+  display: inline-block;
+  padding: 8px 5px;
+  width: 25px;
+  text-align: center;
+}
+.date-picker .date-nocurrent,
+.date-picker .date-disabled {
+  color: #ccc;
+}
+.date-picker .date-range,
+.date-picker .date-hover,
+.date-picker .date-day:hover {
+  background-color: #83b6ea;
+}
+.date-picker .date-selected {
+  background-color: #589DE2;
+}
+.date-picker .date-selecting .date-range:not(.date-hover) {
+  background-color: #e6e6e6;
+}
+.date-picker .date-day {
+  position: relative;
+  cursor: pointer;
+}
+.date-picker .date-day .date-d {
+  font-size: 13px;
+}
+.date-picker .date-day .date-lunar {
+  color: #b3b3b3;
+  font-size: 10px;
+}
+.date-picker .date-day-sets span {
+  display: block;
+}
+.date-picker .date-time {
+  text-align: center;
+  padding: 5px 0;
+  background-color: #e6e6e6;
+}
+.date-picker .date-fest {
+  font-size: 11px;
+  letter-spacing: 0;
+}
+.date-picker-lunar .date-wtitle > span,
+.date-picker-lunar .date-day {
+  padding: 5px;
+}
+.demo-list {
+  font-family: MicroSoft Yahei;
+}
+.demo-list h5 {
+  font-size: 15px;
+  font-weight: bold;
+  color: #666;
+  margin: 10px 0;
+}
+.demo-list .demo-item {
+  width: 45%;
+  margin: 30px 5% 50px 0;
+  float: left;
+}
+.demo-list .demo-item input {
+  display: block;
+}
+.demo-list .demo-full {
+  width: 100%;
+}
+.demo-list .demo-code {
+  background-color: #f0f0f0;
+  padding: 10px;
+  color: #666;
+}
+.demo-list .date-components {
+  float: left;
+}
+.demo-list .date-day-rest {
+  background-color: #D47878;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.date-picker-demo .date-wtitle > span,
+.date-picker-demo .date-day {
+  padding: 5px!important;
+  width: 45px;
+}
+.date-picker-demo .date-day {
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.date-picker-demo .date-week .date-day:last-child {
+  border-right: 0;
+}
+.date-picker-demo .date-day-price {
+  color: #038DF3;
+  font-size: 15px;
+  letter-spacing: -1px;
+}
