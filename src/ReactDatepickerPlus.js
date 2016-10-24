@@ -46,8 +46,8 @@ var ReactDatepickerPlus = React.createClass({
 	    	selected: this.props.selected,
 	        start: this.props.start,
 			end: this.props.end,
-	       	status: '', 	//React.PropTypes.oneOf(['start', 'end', '']) 
-	       					//'start' and 'end' use by bi-datepicker range value, and '' use by single datepicker single date
+	       	//status: undefined, 	//React.PropTypes.oneOf(['start', 'end']) 
+	       					//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 	    };
 	},
 
@@ -67,9 +67,8 @@ var ReactDatepickerPlus = React.createClass({
 			return
 		} 
 		let status = input.props.status; selected = status?this.state[status]:selected;
-		let size = input.handlePosition()
-		let {left, top, height} = size;  top += (height+ (document.body.scrollTop || document.documentElement.scrollTop))
-
+		let {left, top, height} = input.handlePosition();  
+			top += (height+ (document.body.scrollTop || document.documentElement.scrollTop))
 		let {onFocus} = this.props
 		
 		this.show(true, {left, top}, true, status)
@@ -103,8 +102,8 @@ var ReactDatepickerPlus = React.createClass({
 	},
 	updateDate(dateinfo, isMonth){
 		let {onChange, autoHide} = this.props
-		let {status, selected} = this.state
-		let getSelected = !isMonth ? dateinfo.date : this.state[status?status:'selected']
+		let {status='selected', selected} = this.state
+		let getSelected = !isMonth ? dateinfo.date : this.state[status]
 		// let temp = {}; temp[status] = getSelected
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
 		onChange && onChange(dateinfo, this)
