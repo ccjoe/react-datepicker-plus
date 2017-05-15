@@ -5,7 +5,7 @@ __react dependency migrate react from v0.12 to v15.3, then below ie9 is not supp
 
 ## Demo & Examples
 
-Live demo: [https://ccjoe.github.io/react-datepicker-plus/example/dist/](https://ccjoe.github.io/react-datepicker-plus/example/dist/)
+Live demo: [https://ccjoe.github.io/react-datepicker-plus](https://ccjoe.github.io/react-datepicker-plus)
 
 To build the examples locally, run:
 
