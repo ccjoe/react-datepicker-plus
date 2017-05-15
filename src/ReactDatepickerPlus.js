@@ -1,65 +1,58 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from "react-dom"
-import DateHeader from './date-header.jsx'
-import DateCalendar from './date-calendar.jsx'
-import DateInput from './date-input.jsx'
-import DateInBody from './date-in-body.jsx'
+import DateHeader from './date-header.js'
+import DateCalendar from './date-calendar.js'
+import DateInput from './date-input.js'
+import DateInBody from './date-in-body.js'
 
 var now = new Date()
-var ReactDatepickerPlus = React.createClass({
-	propTypes: {
-		selected: React.PropTypes.object,	//default date
-		format: React.PropTypes.string,     //format date
-		isfill: React.PropTypes.bool,	    //show prefix-prev prefix-next month 
-		months: React.PropTypes.number,		//show multi-panes by months
 
-		time: React.PropTypes.bool,         //show time select @todo
+class ReactDatepickerPlus extends Component {
+	// propTypes: {
+	// 	selected: React.PropTypes.object,	//default date
+	// 	format: React.PropTypes.string,     //format date
+	// 	isfill: React.PropTypes.bool,	    //show prefix-prev prefix-next month 
+	// 	months: React.PropTypes.number,		//show multi-panes by months
 
-		min: React.PropTypes.object,        //select date range min
-		max: React.PropTypes.object,        //select date range max
+	// 	time: React.PropTypes.bool,         //show time select @todo
 
-		start: React.PropTypes.object,	    //selected time is a range, start date
-		end: React.PropTypes.object,	    //selected time is a range, start date
+	// 	min: React.PropTypes.object,        //select date range min
+	// 	max: React.PropTypes.object,        //select date range max
 
-		className: React.PropTypes.string,  // custom class
-		disabled: React.PropTypes.bool,     //input can't change
-		autoHide: React.PropTypes.bool,     //selected auto hide
-		inline: React.PropTypes.bool,       //inline
-		lang: React.PropTypes.oneOf(['cn', 'en']),
+	// 	start: React.PropTypes.object,	    //selected time is a range, start date
+	// 	end: React.PropTypes.object,	    //selected time is a range, start date
 
-		festival: React.PropTypes.bool, 	//show festival
-		haslunar: React.PropTypes.bool, 	//show lunar
+	// 	className: React.PropTypes.string,  // custom class
+	// 	disabled: React.PropTypes.bool,     //input can't change
+	// 	autoHide: React.PropTypes.bool,     //selected auto hide
+	// 	inline: React.PropTypes.bool,       //inline
+	// 	lang: React.PropTypes.oneOf(['cn', 'en']),
 
-		onFocus: React.PropTypes.func,		//args (event, picker)
-		onBlur: React.PropTypes.func,		//args (event, picker)
-		onChange: React.PropTypes.func,		//args (dayinfo, picker)
-		dayAddon: React.PropTypes.func 		//args (dayinfo)
-		//dayAddon, add data for day, and need to return dom, 
-		//the return value will be insert to day each element. pls see last demo
-	},
-	getInitialState() {
-	    return {
-	    	date: now,		//render month by date
-	        show: this.props.inline ? true : false,
-	        focus: false,	//focus state
-	        offset: {},		//datepicker position
-	    	selected: this.props.selected,
-	        start: this.props.start,
-			end: this.props.end,
-	       	//status: undefined, 	//React.PropTypes.oneOf(['start', 'end']) 
-	       					//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
-	    };
-	},
+	// 	festival: React.PropTypes.bool, 	//show festival
+	// 	haslunar: React.PropTypes.bool, 	//show lunar
 
-	getDefaultProps() {
-	    return {
-	        isfill: false,
-	        format: 'yyyy-MM-dd',
-	        selected: now,
-	        months: 1,
-	        lang: 'en'
-	    };
-	},
+	// 	onFocus: React.PropTypes.func,		//args (event, picker)
+	// 	onBlur: React.PropTypes.func,		//args (event, picker)
+	// 	onChange: React.PropTypes.func,		//args (dayinfo, picker)
+	// 	dayAddon: React.PropTypes.func 		//args (dayinfo)
+	// 	//dayAddon, add data for day, and need to return dom, 
+	// 	//the return value will be insert to day each element. pls see last demo
+	// }
+	 constructor(props) {
+        super(props);
+        this.state = {
+				date: now,		//render month by date
+				show: props.inline ? true : false,
+				focus: false,	//focus state
+				offset: {},		//datepicker position
+				selected: props.selected,
+				start: props.start,
+				end: props.end,
+				status: ''   	//React.PropTypes.oneOf(['start', 'end']) 
+				//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
+		}
+    }
+		
 	onFocus(event, input){
 		let {show, focus, selected} = this.state
 		if(show && !focus){
@@ -74,7 +67,8 @@ var ReactDatepickerPlus = React.createClass({
 		this.show(true, {left, top}, true, status)
 		onFocus && onFocus(event, this)
 		if(status) this.setState({date: selected})
-	},
+	}
+
 	onBlur(event, input){
 		const {show, focus} = this.state
 		const {inline, onBlur} = this.props
@@ -85,21 +79,25 @@ var ReactDatepickerPlus = React.createClass({
 	      onBlur && onBlur(event, this)
 	      focus && this.removePicker()
 	    } 
-	},
+	}
+
 	show (show, offset, focus, status) {
 	    this.setState({ show, offset, focus, status})
-	},
+	}
+
 	updateMonth(num){
 		const {date} = this.state
 		const cdate = this.numMonth(date, num)
 		this.updateDate({date: cdate}, true)
-	},
+	}
+
 	numMonth(date, num){
 		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate())
-	},
+	}
+
 	updateDay(dateinfo){
 		this.updateDate(dateinfo)
-	},
+	}
 	updateDate(dateinfo, isMonth){
 		let {onChange, autoHide} = this.props
 		let {status='selected', selected} = this.state
@@ -108,11 +106,12 @@ var ReactDatepickerPlus = React.createClass({
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
 		onChange && onChange(dateinfo, this)
 		!isMonth && autoHide && this.removePicker()
-	},
+	}
+
 	removePicker(){
 		this.show(false)
 		this.refs.insDateInBody && this.refs.insDateInBody.removePicker(true)
-	},
+	}
 
     pickers(status) {
 		let $pickers = [], offsets = [], dh, dc, idate
@@ -124,24 +123,24 @@ var ReactDatepickerPlus = React.createClass({
 			offsets.push({left: i*215+offset.left, top: offset.top})
 			idate = this.numMonth(date, i)
 			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth}/>
-			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay}/>
+			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay.bind(this)}/>
 			 
 			$pickers.push(inline ?
 					 <div className={classes} key={i}>{dh}{dc}</div> :
 					 <div className={classes} style={offsets[i]} key={i}>{dh}{dc}</div>)
 		}
 		return $pickers
-    },
+    }
 	render () {
 		let {show, selected, start, end, status} = this.state
 		let {format, inline, months, disabled} = this.props
 		let picker, pickers, pickerInBody
 		let di = (val, stat) => <DateInput selected={!val ? selected : val} format={format} disabled={disabled}
-							   onFocus={this.onFocus} onBlur={this.onBlur} status={stat}/>
+							   onFocus={this.onFocus.bind(this)} onBlur={this.onBlur.bind(this)} status={stat}/>
 		if(show){
 			pickers = this.pickers(status)
 			picker = <div className={months>1?'date-multi clearfix':''}>{pickers}</div>
-			pickerInBody = <DateInBody classes="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
+			pickerInBody = <DateInBody className="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
 		}
 		let didom = start && end ? <div className="date-inputs">{di(start, 'start')}{di(end, 'end')}</div> : di()
 		return <div className="date-components">
@@ -149,6 +148,14 @@ var ReactDatepickerPlus = React.createClass({
 					{inline ? picker : pickerInBody}
 				</div>
 	}
-});
+};
+
+ReactDatepickerPlus.defaultProps = {
+	isfill: false,
+	format: 'yyyy-MM-dd',
+	selected: now,
+	months: 1,
+	lang: 'en'
+}
 
 export default ReactDatepickerPlus;

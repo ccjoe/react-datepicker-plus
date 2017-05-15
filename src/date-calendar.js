@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-import DateMonth from './date-month.jsx'
-import DateTime from './date-time.jsx';
-
-var DateCalendar = React.createClass({ 
+import DateMonth from './date-month.js'
+import DateTime from './date-time.js';
+class DateCalendar extends Component {
 	render () {
 		const datecld  = <DateMonth {...this.props} />
 		const datetime = <DateTime {...this.props} />
@@ -12,6 +11,6 @@ var DateCalendar = React.createClass({
 			{picker}
 		</div>
 	}
-});
+};
 
 export default DateCalendar

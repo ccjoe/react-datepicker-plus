@@ -1,17 +1,15 @@
-import React from 'react'
-import DateDay from './date-day.jsx'
-
-var DateMonth = React.createClass({
+import React, { Component } from 'react'
+import DateDay from './date-day.js'
+class DateMonth extends Component { 
 	/*propTypes: {
 		date: React.PropTypes.object.isRequired,
 		format: React.PropTypes.string
-	},*/
-	getInitialState() {
-	    return {
-	    	selecting: null
-	    }
-	},
-	getMonthInfo () {	
+	}*/
+	constructor(props) {
+        super(props);
+		this.state = {selecting: props.selecting};
+	 }
+	getMonthInfo () {
 		// console.log(this.props.date, 'datemonth')
 		let y = this.props.date.getFullYear();
 	    let m = this.props.date.getMonth();
@@ -20,8 +18,8 @@ var DateMonth = React.createClass({
         var prevMDay = new Date(y, m, 0), prevMDayLast = prevMDay.getDate();    //prev Month Last Day
         var nextMDay = new Date(y, m+1, 0), currMDayLast = nextMDay.getDate();  //current Month Last Day
         var currMDay = new Date(y, m+0, 1), currMDayFirst= currMDay.getDay();   //current Month First Day Week
-       
-       temp[line]=[]; 
+
+       temp[line]=[];
 
         function calcLine(date){
 	    	var weekno = date.getDay();   //week
@@ -39,7 +37,7 @@ var DateMonth = React.createClass({
                 k++
             }
         }
-        
+
         for(var i=1; i <= currMDayLast; i++) { //current month
         	dateday = new Date(y, m, i)
         	calcLine(dateday)
@@ -55,7 +53,7 @@ var DateMonth = React.createClass({
         }
         //console.timeEnd('计算一月所用时间')
         return temp;
-	},
+	}
 
 	weeks(months){
 		var weeks = [], that = this;
@@ -63,31 +61,35 @@ var DateMonth = React.createClass({
 			weeks.push(<div className={"date-week date-week-"+wkey} key={wkey}>
 				{that.days(week)}
 			</div>)
-		}) 
+		})
 		return weeks
-	},
+	}
 	days(week){
 		var days = [], that = this;
 		week.map(function(day, dkey){
-			days.push( <DateDay {...that.props} onMouseEnter={that.onMouseEnter} selecting={that.state.selecting} edate={day} key={dkey}/> ) 
+			days.push( <DateDay {...that.props} onMouseEnter={that.onMouseEnter.bind(this)} selecting={that.state.selecting} edate={day} key={dkey}/> )
 		})
 		return days
-	},
+	}
 	onMouseEnter(dateinfo){
 		let {start, end} = this.props
 		if(start && end) this.setState({selecting: dateinfo.date})
-	},
+	}
 	onMouseLeave(){
 		let {start, end} = this.props
 		if(start && end) this.setState({selecting: null})
-	},
+	}
 	render () {
 		// console.log('render times')
 		const months = this.getMonthInfo(), that=this;
-		return <div className={"date-month" + (that.state.selecting ? " date-selecting " : " ")} onMouseLeave={this.onMouseLeave}> 
+		return <div className={"date-month" + (that.state.selecting ? " date-selecting " : " ")} onMouseLeave={this.onMouseLeave.bind(this)}>
 				{this.weeks(months)}
 			</div>
 	}
-})
+}
+
+DateMonth.defaultProps = {
+	selecting: null
+}
 
 export default DateMonth

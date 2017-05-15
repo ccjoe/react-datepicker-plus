@@ -1,16 +1,19 @@
-import  React from 'react'
+import React, { Component } from 'react'
 import {toLunarDate, toLunarDay} from './date-lunar'
 import {getSolarTermIndex, getMonthSolarTerms} from './date-term'
 import {salarHolidays, lunarHolidays} from'./date-holidays'
-//render month 
-//current month 
-var DateDay = React.createClass({
+//render month
+//current month
+class DateDay extends Component {
     /*propTypes: {
         date: React.PropTypes.object,
         format: React.PropTypes.string,
-    },*/
+    }*/
+    constructor(props) {
+        super(props);
+    }
     //获取某天的所有信息 m+1才是显示用的月分
-    getDayInfo: function(){
+    getDayInfo(){
         const {date, edate, min, max, start, end, selected, selecting, status, dayAddon } = this.props //selected date, render date, each date
         const [sy, sm, sd] = [selected.getFullYear(), selected.getMonth(), selected.getDate()]
         const [cy, cm, cd] = [date.getFullYear(), date.getMonth(), date.getDate()]
@@ -35,19 +38,19 @@ var DateDay = React.createClass({
         dayinfo.lunarfest = lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
         // console.log(dayinfo, edataNo, start, end, 'startend')
         return dayinfo;
-    },
+    }
     zero (n) {
         return n<10 ? '0'+n : n
-    },
+    }
 
     setDate(dateinfo) {
         if(dateinfo.disabled) return;
         this.props.onChange(dateinfo);
-    },
+    }
     setMouseEnter(dateinfo){
         if(dateinfo.disabled) return;
-        this.props.onMouseEnter(dateinfo);
-    },
+        this.props.onMouseEnter.bind(this, dateinfo);
+    }
 
     render(){
         let info = this.getDayInfo()
@@ -64,7 +67,7 @@ var DateDay = React.createClass({
         }
         return <div className={"date-day" + (!currentMonth ? " date-nocurrent " : " ")
                                           + (currentDay ? 'date-selected' : "")
-                                          + (disabled ? ' date-disabled' : "") 
+                                          + (disabled ? ' date-disabled' : "")
                                           + (inrange ? ' date-range' : "")
                                           + (inselect ? ' date-hover' : "") }
                     onMouseDown={ this.setDate.bind(this, info) }
@@ -72,8 +75,6 @@ var DateDay = React.createClass({
             {festDom}
         </div>
     }
-});
+};
 
 export default DateDay
-
-        

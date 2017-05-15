@@ -1,21 +1,18 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from "react-dom"
 import {dateFormat} from './date-format'
-
-var DateInput = React.createClass({
-	 propTypes: {
-	    // element: React.PropTypes.element,
-	    selected: React.PropTypes.any,
-	    disabled: React.PropTypes.bool,
-	    onBlur: React.PropTypes.func,
-	    onFocus: React.PropTypes.func,
-	    onChange: React.PropTypes.func
-	},
-	getDefaultProps() {
-	    return {
-	        status: ''  
-	    };
-	},
+class DateInput extends Component { 
+	//  propTypes: {
+	//     // element: React.PropTypes.element,
+	//     selected: React.PropTypes.any,
+	//     disabled: React.PropTypes.bool,
+	//     onBlur: React.PropTypes.func,
+	//     onFocus: React.PropTypes.func,
+	//     onChange: React.PropTypes.func
+	// }
+	 constructor(props) {
+        super(props);
+	 }
 /*	getInitialState () {
 	    return {
 	      // value:  this.dateString()
@@ -24,31 +21,31 @@ var DateInput = React.createClass({
 		      left: 0
 		    }
 	    }
-	},
+	}
 	componentDidMount() {
 	  this.setState({
 	    // styles: 
 	  })
-	},*/
+	}*/
 	dateString(){
 		const {format, selected} = this.props
 		return format ? dateFormat(selected, format) : selected
-	},
+	}
 	handleBlur(event){
 		this.props.onBlur(event, this)
-	},	
+	}	
 	handleFocus(event){
 		this.props.onFocus(event, this)
-	},
+	}
 	focus () {
 	    this.refs.input.focus()
-	},
+	}
 	handleChange(event){
 		this.props.onChange(event)
-	},
+	}
 	getInput(){
         return ReactDOM.findDOMNode(this)
-	},	
+	}	
 	handlePosition(){
 		// Fix for IE8-'s Element.getBoundingClientRect()
 	  if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
@@ -58,12 +55,16 @@ var DateInput = React.createClass({
 	    });
 	  }
       return this.getInput().getBoundingClientRect()
-	},
+	}
 	
 	render () {
 		const { customInput, disabled } = this.props
-		return <input ref="input" type="text" disabled={disabled} value={this.dateString()} onFocus={this.handleFocus} onBlur={this.handleBlur} onChange={this.handleChange} />
+		return <input ref="input" type="text" disabled={disabled} value={this.dateString()} onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)} onChange={this.handleChange.bind(this)} />
 	}
-});
+};
+
+DateInput.defaultProps = {
+	status: ''  
+}
 
 export default DateInput

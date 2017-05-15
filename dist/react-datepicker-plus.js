@@ -8,9 +8,17 @@ Object.defineProperty(exports, '__esModule', {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
@@ -20,247 +28,278 @@ var _reactDom = require("react-dom");
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _dateHeaderJsx = require('./date-header.jsx');
+var _dateHeaderJs = require('./date-header.js');
 
-var _dateHeaderJsx2 = _interopRequireDefault(_dateHeaderJsx);
+var _dateHeaderJs2 = _interopRequireDefault(_dateHeaderJs);
 
-var _dateCalendarJsx = require('./date-calendar.jsx');
+var _dateCalendarJs = require('./date-calendar.js');
 
-var _dateCalendarJsx2 = _interopRequireDefault(_dateCalendarJsx);
+var _dateCalendarJs2 = _interopRequireDefault(_dateCalendarJs);
 
-var _dateInputJsx = require('./date-input.jsx');
+var _dateInputJs = require('./date-input.js');
 
-var _dateInputJsx2 = _interopRequireDefault(_dateInputJsx);
+var _dateInputJs2 = _interopRequireDefault(_dateInputJs);
 
-var _dateInBodyJsx = require('./date-in-body.jsx');
+var _dateInBodyJs = require('./date-in-body.js');
 
-var _dateInBodyJsx2 = _interopRequireDefault(_dateInBodyJsx);
+var _dateInBodyJs2 = _interopRequireDefault(_dateInBodyJs);
 
 var now = new Date();
-var ReactDatepickerPlus = _react2['default'].createClass({
-	displayName: 'ReactDatepickerPlus',
 
-	propTypes: {
-		selected: _react2['default'].PropTypes.object, //default date
-		format: _react2['default'].PropTypes.string, //format date
-		isfill: _react2['default'].PropTypes.bool, //show prefix-prev prefix-next month
-		months: _react2['default'].PropTypes.number, //show multi-panes by months
+var ReactDatepickerPlus = (function (_Component) {
+	_inherits(ReactDatepickerPlus, _Component);
 
-		time: _react2['default'].PropTypes.bool, //show time select @todo
+	// propTypes: {
+	// 	selected: React.PropTypes.object,	//default date
+	// 	format: React.PropTypes.string,     //format date
+	// 	isfill: React.PropTypes.bool,	    //show prefix-prev prefix-next month
+	// 	months: React.PropTypes.number,		//show multi-panes by months
 
-		min: _react2['default'].PropTypes.object, //select date range min
-		max: _react2['default'].PropTypes.object, //select date range max
+	// 	time: React.PropTypes.bool,         //show time select @todo
 
-		start: _react2['default'].PropTypes.object, //selected time is a range, start date
-		end: _react2['default'].PropTypes.object, //selected time is a range, start date
+	// 	min: React.PropTypes.object,        //select date range min
+	// 	max: React.PropTypes.object,        //select date range max
 
-		className: _react2['default'].PropTypes.string, // custom class
-		disabled: _react2['default'].PropTypes.bool, //input can't change
-		autoHide: _react2['default'].PropTypes.bool, //selected auto hide
-		inline: _react2['default'].PropTypes.bool, //inline
-		lang: _react2['default'].PropTypes.oneOf(['cn', 'en']),
+	// 	start: React.PropTypes.object,	    //selected time is a range, start date
+	// 	end: React.PropTypes.object,	    //selected time is a range, start date
 
-		festival: _react2['default'].PropTypes.bool, //show festival
-		haslunar: _react2['default'].PropTypes.bool, //show lunar
+	// 	className: React.PropTypes.string,  // custom class
+	// 	disabled: React.PropTypes.bool,     //input can't change
+	// 	autoHide: React.PropTypes.bool,     //selected auto hide
+	// 	inline: React.PropTypes.bool,       //inline
+	// 	lang: React.PropTypes.oneOf(['cn', 'en']),
 
-		onFocus: _react2['default'].PropTypes.func, //args (event, picker)
-		onBlur: _react2['default'].PropTypes.func, //args (event, picker)
-		onChange: _react2['default'].PropTypes.func, //args (dayinfo, picker)
-		dayAddon: _react2['default'].PropTypes.func //args (dayinfo)
-		//dayAddon, add data for day, and need to return dom,
-		//the return value will be insert to day each element. pls see last demo
-	},
-	getInitialState: function getInitialState() {
-		return {
+	// 	festival: React.PropTypes.bool, 	//show festival
+	// 	haslunar: React.PropTypes.bool, 	//show lunar
+
+	// 	onFocus: React.PropTypes.func,		//args (event, picker)
+	// 	onBlur: React.PropTypes.func,		//args (event, picker)
+	// 	onChange: React.PropTypes.func,		//args (dayinfo, picker)
+	// 	dayAddon: React.PropTypes.func 		//args (dayinfo)
+	// 	//dayAddon, add data for day, and need to return dom,
+	// 	//the return value will be insert to day each element. pls see last demo
+	// }
+
+	function ReactDatepickerPlus(props) {
+		_classCallCheck(this, ReactDatepickerPlus);
+
+		_get(Object.getPrototypeOf(ReactDatepickerPlus.prototype), 'constructor', this).call(this, props);
+		this.state = {
 			date: now, //render month by date
-			show: this.props.inline ? true : false,
+			show: props.inline ? true : false,
 			focus: false, //focus state
 			offset: {}, //datepicker position
-			selected: this.props.selected,
-			start: this.props.start,
-			end: this.props.end,
-			status: '' };
-	},
-
-	//React.PropTypes.oneOf(['start', 'end', ''])
-	//'start' and 'end' use by bi-datepicker range value, and '' use by single datepicker single date
-	getDefaultProps: function getDefaultProps() {
-		return {
-			isfill: false,
-			format: 'yyyy-MM-dd',
-			selected: now,
-			months: 1,
-			lang: 'en'
+			selected: props.selected,
+			start: props.start,
+			end: props.end,
+			status: '' //React.PropTypes.oneOf(['start', 'end'])
+			//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		};
-	},
-	onFocus: function onFocus(event, input) {
-		var _state = this.state;
-		var show = _state.show;
-		var focus = _state.focus;
-		var selected = _state.selected;
-
-		if (show && !focus) {
-			this.state.focus = true; //just change state not trigger render
-			return;
-		}
-		var status = input.props.status;selected = status ? this.state[status] : selected;
-		var size = input.handlePosition();
-		var left = size.left;
-		var top = size.top;
-		var height = size.height;
-		top += height + (document.body.scrollTop || document.documentElement.scrollTop);
-
-		var onFocus = this.props.onFocus;
-
-		this.show(true, { left: left, top: top }, true, status);
-		onFocus && onFocus(event, this);
-		if (status) this.setState({ date: selected });
-	},
-	onBlur: function onBlur(event, input) {
-		var _state2 = this.state;
-		var show = _state2.show;
-		var focus = _state2.focus;
-		var _props = this.props;
-		var inline = _props.inline;
-		var onBlur = _props.onBlur;
-
-		if (!show) return;
-		if (!focus) {
-			input.focus(); //when show && !focus, trigger focus 
-		} else if (!inline) {
-				onBlur && onBlur(event, this);
-				focus && this.removePicker();
-			}
-	},
-	show: function show(_show, offset, focus, status) {
-		this.setState({ show: _show, offset: offset, focus: focus, status: status });
-	},
-	updateMonth: function updateMonth(num) {
-		var date = this.state.date;
-
-		var cdate = this.numMonth(date, num);
-		this.updateDate({ date: cdate }, true);
-	},
-	numMonth: function numMonth(date, num) {
-		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
-	},
-	updateDay: function updateDay(dateinfo) {
-		this.updateDate(dateinfo);
-	},
-	updateDate: function updateDate(dateinfo, isMonth) {
-		var _props2 = this.props;
-		var onChange = _props2.onChange;
-		var autoHide = _props2.autoHide;
-		var _state3 = this.state;
-		var status = _state3.status;
-		var selected = _state3.selected;
-
-		var getSelected = !isMonth ? dateinfo.date : this.state[status ? status : 'selected'];
-		// let temp = {}; temp[status] = getSelected
-		this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
-		onChange && onChange(dateinfo, this);
-		!isMonth && autoHide && this.removePicker();
-	},
-	removePicker: function removePicker() {
-		this.show(false);
-		this.refs.insDateInBody && this.refs.insDateInBody.removePicker(true);
-	},
-
-	pickers: function pickers(status) {
-		var $pickers = [],
-		    offsets = [],
-		    dh = undefined,
-		    dc = undefined,
-		    idate = undefined;
-		var _state4 = this.state;
-		var date = _state4.date;
-		var start = _state4.start;
-		var end = _state4.end;
-		var offset = _state4.offset;
-		var _props3 = this.props;
-		var inline = _props3.inline;
-		var months = _props3.months;
-		var lang = _props3.lang;
-		var haslunar = _props3.haslunar;
-		var className = _props3.className;
-
-		var selected = this.state[status ? status : 'selected'];
-		var classes = 'date-picker date-picker-' + (inline ? 'inline' : 'block') + ' ' + (className ? className : '') + ' ' + (haslunar ? 'date-picker-lunar' : '');
-		for (var i = 0; i < months; i++) {
-			offsets.push({ left: i * 215 + offset.left, top: offset.top });
-			idate = this.numMonth(date, i);
-			dh = _react2['default'].createElement(_dateHeaderJsx2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth });
-			dc = _react2['default'].createElement(_dateCalendarJsx2['default'], _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay }));
-
-			$pickers.push(inline ? _react2['default'].createElement(
-				'div',
-				{ className: classes, key: i },
-				dh,
-				dc
-			) : _react2['default'].createElement(
-				'div',
-				{ className: classes, style: offsets[i], key: i },
-				dh,
-				dc
-			));
-		}
-		return $pickers;
-	},
-	render: function render() {
-		var _this = this;
-
-		var _state5 = this.state;
-		var show = _state5.show;
-		var selected = _state5.selected;
-		var start = _state5.start;
-		var end = _state5.end;
-		var status = _state5.status;
-		var _props4 = this.props;
-		var format = _props4.format;
-		var inline = _props4.inline;
-		var months = _props4.months;
-		var disabled = _props4.disabled;
-
-		var picker = undefined,
-		    pickers = undefined,
-		    pickerInBody = undefined;
-		var di = function di(val, stat) {
-			return _react2['default'].createElement(_dateInputJsx2['default'], { selected: !val ? selected : val, format: format, disabled: disabled,
-				onFocus: _this.onFocus, onBlur: _this.onBlur, status: stat });
-		};
-		if (show) {
-			pickers = this.pickers(status);
-			picker = _react2['default'].createElement(
-				'div',
-				{ className: months > 1 ? 'date-multi clearfix' : '' },
-				pickers
-			);
-			pickerInBody = _react2['default'].createElement(
-				_dateInBodyJsx2['default'],
-				{ classes: 'date-picker-wrapper', ref: 'insDateInBody' },
-				picker
-			);
-		}
-		var didom = start && end ? _react2['default'].createElement(
-			'div',
-			{ className: 'date-inputs' },
-			di(start, 'start'),
-			di(end, 'end')
-		) : di();
-		return _react2['default'].createElement(
-			'div',
-			{ className: 'date-components' },
-			didom,
-			inline ? picker : pickerInBody
-		);
 	}
-});
+
+	_createClass(ReactDatepickerPlus, [{
+		key: 'onFocus',
+		value: function onFocus(event, input) {
+			var _state = this.state;
+			var show = _state.show;
+			var focus = _state.focus;
+			var selected = _state.selected;
+
+			if (show && !focus) {
+				this.state.focus = true; //just change state not trigger render
+				return;
+			}
+			var status = input.props.status;selected = status ? this.state[status] : selected;
+
+			var _input$handlePosition = input.handlePosition();
+
+			var left = _input$handlePosition.left;
+			var top = _input$handlePosition.top;
+			var height = _input$handlePosition.height;
+
+			top += height + (document.body.scrollTop || document.documentElement.scrollTop);
+			var onFocus = this.props.onFocus;
+
+			this.show(true, { left: left, top: top }, true, status);
+			onFocus && onFocus(event, this);
+			if (status) this.setState({ date: selected });
+		}
+	}, {
+		key: 'onBlur',
+		value: function onBlur(event, input) {
+			var _state2 = this.state;
+			var show = _state2.show;
+			var focus = _state2.focus;
+			var _props = this.props;
+			var inline = _props.inline;
+			var onBlur = _props.onBlur;
+
+			if (!show) return;
+			if (!focus) {
+				input.focus(); //when show && !focus, trigger focus 
+			} else if (!inline) {
+					onBlur && onBlur(event, this);
+					focus && this.removePicker();
+				}
+		}
+	}, {
+		key: 'show',
+		value: function show(_show, offset, focus, status) {
+			this.setState({ show: _show, offset: offset, focus: focus, status: status });
+		}
+	}, {
+		key: 'updateMonth',
+		value: function updateMonth(num) {
+			var date = this.state.date;
+
+			var cdate = this.numMonth(date, num);
+			this.updateDate({ date: cdate }, true);
+		}
+	}, {
+		key: 'numMonth',
+		value: function numMonth(date, num) {
+			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
+		}
+	}, {
+		key: 'updateDay',
+		value: function updateDay(dateinfo) {
+			this.updateDate(dateinfo);
+		}
+	}, {
+		key: 'updateDate',
+		value: function updateDate(dateinfo, isMonth) {
+			var _props2 = this.props;
+			var onChange = _props2.onChange;
+			var autoHide = _props2.autoHide;
+			var _state3 = this.state;
+			var _state3$status = _state3.status;
+			var status = _state3$status === undefined ? 'selected' : _state3$status;
+			var selected = _state3.selected;
+
+			var getSelected = !isMonth ? dateinfo.date : this.state[status];
+			// let temp = {}; temp[status] = getSelected
+			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
+			onChange && onChange(dateinfo, this);
+			!isMonth && autoHide && this.removePicker();
+		}
+	}, {
+		key: 'removePicker',
+		value: function removePicker() {
+			this.show(false);
+			this.refs.insDateInBody && this.refs.insDateInBody.removePicker(true);
+		}
+	}, {
+		key: 'pickers',
+		value: function pickers(status) {
+			var $pickers = [],
+			    offsets = [],
+			    dh = undefined,
+			    dc = undefined,
+			    idate = undefined;
+			var _state4 = this.state;
+			var date = _state4.date;
+			var start = _state4.start;
+			var end = _state4.end;
+			var offset = _state4.offset;
+			var _props3 = this.props;
+			var inline = _props3.inline;
+			var months = _props3.months;
+			var lang = _props3.lang;
+			var haslunar = _props3.haslunar;
+			var className = _props3.className;
+
+			var selected = this.state[status ? status : 'selected'];
+			var classes = 'date-picker date-picker-' + (inline ? 'inline' : 'block') + ' ' + (className ? className : '') + ' ' + (haslunar ? 'date-picker-lunar' : '');
+			for (var i = 0; i < months; i++) {
+				offsets.push({ left: i * 215 + offset.left, top: offset.top });
+				idate = this.numMonth(date, i);
+				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth });
+				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
+
+				$pickers.push(inline ? _react2['default'].createElement(
+					'div',
+					{ className: classes, key: i },
+					dh,
+					dc
+				) : _react2['default'].createElement(
+					'div',
+					{ className: classes, style: offsets[i], key: i },
+					dh,
+					dc
+				));
+			}
+			return $pickers;
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this = this;
+
+			var _state5 = this.state;
+			var show = _state5.show;
+			var selected = _state5.selected;
+			var start = _state5.start;
+			var end = _state5.end;
+			var status = _state5.status;
+			var _props4 = this.props;
+			var format = _props4.format;
+			var inline = _props4.inline;
+			var months = _props4.months;
+			var disabled = _props4.disabled;
+
+			var picker = undefined,
+			    pickers = undefined,
+			    pickerInBody = undefined;
+			var di = function di(val, stat) {
+				return _react2['default'].createElement(_dateInputJs2['default'], { selected: !val ? selected : val, format: format, disabled: disabled,
+					onFocus: _this.onFocus.bind(_this), onBlur: _this.onBlur.bind(_this), status: stat });
+			};
+			if (show) {
+				pickers = this.pickers(status);
+				picker = _react2['default'].createElement(
+					'div',
+					{ className: months > 1 ? 'date-multi clearfix' : '' },
+					pickers
+				);
+				pickerInBody = _react2['default'].createElement(
+					_dateInBodyJs2['default'],
+					{ className: 'date-picker-wrapper', ref: 'insDateInBody' },
+					picker
+				);
+			}
+			var didom = start && end ? _react2['default'].createElement(
+				'div',
+				{ className: 'date-inputs' },
+				di(start, 'start'),
+				di(end, 'end')
+			) : di();
+			return _react2['default'].createElement(
+				'div',
+				{ className: 'date-components' },
+				didom,
+				inline ? picker : pickerInBody
+			);
+		}
+	}]);
+
+	return ReactDatepickerPlus;
+})(_react.Component);
+
+;
+
+ReactDatepickerPlus.defaultProps = {
+	isfill: false,
+	format: 'yyyy-MM-dd',
+	selected: now,
+	months: 1,
+	lang: 'en'
+};
 
 exports['default'] = ReactDatepickerPlus;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./date-calendar.jsx":2,"./date-header.jsx":5,"./date-in-body.jsx":7,"./date-input.jsx":8,"react-dom":undefined}],2:[function(require,module,exports){
+},{"./date-calendar.js":2,"./date-header.js":5,"./date-in-body.js":7,"./date-input.js":8,"react-dom":undefined}],2:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -268,40 +307,61 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _dateMonthJsx = require('./date-month.jsx');
+var _dateMonthJs = require('./date-month.js');
 
-var _dateMonthJsx2 = _interopRequireDefault(_dateMonthJsx);
+var _dateMonthJs2 = _interopRequireDefault(_dateMonthJs);
 
-var _dateTimeJsx = require('./date-time.jsx');
+var _dateTimeJs = require('./date-time.js');
 
-var _dateTimeJsx2 = _interopRequireDefault(_dateTimeJsx);
+var _dateTimeJs2 = _interopRequireDefault(_dateTimeJs);
 
-var DateCalendar = _react2['default'].createClass({
-	displayName: 'DateCalendar',
+var DateCalendar = (function (_Component) {
+	_inherits(DateCalendar, _Component);
 
-	render: function render() {
-		var datecld = _react2['default'].createElement(_dateMonthJsx2['default'], this.props);
-		var datetime = _react2['default'].createElement(_dateTimeJsx2['default'], this.props);
-		var picker = this.props.time ? datecld + datetime : datecld;
-		return _react2['default'].createElement(
-			'div',
-			{ className: 'date-calendar animated infinite fadeInRight' },
-			picker
-		);
+	function DateCalendar() {
+		_classCallCheck(this, DateCalendar);
+
+		_get(Object.getPrototypeOf(DateCalendar.prototype), 'constructor', this).apply(this, arguments);
 	}
-});
+
+	_createClass(DateCalendar, [{
+		key: 'render',
+		value: function render() {
+			var datecld = _react2['default'].createElement(_dateMonthJs2['default'], this.props);
+			var datetime = _react2['default'].createElement(_dateTimeJs2['default'], this.props);
+			var picker = this.props.time ? datecld + datetime : datecld;
+			return _react2['default'].createElement(
+				'div',
+				{ className: 'date-calendar animated infinite fadeInRight' },
+				picker
+			);
+		}
+	}]);
+
+	return DateCalendar;
+})(_react.Component);
+
+;
 
 exports['default'] = DateCalendar;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./date-month.jsx":10,"./date-time.jsx":12}],3:[function(require,module,exports){
+},{"./date-month.js":10,"./date-time.js":12}],3:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -309,7 +369,15 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
@@ -323,130 +391,152 @@ var _dateHolidays = require('./date-holidays');
 
 //render month
 //current month
-var DateDay = _react2['default'].createClass({
-    displayName: 'DateDay',
+
+var DateDay = (function (_Component) {
+    _inherits(DateDay, _Component);
 
     /*propTypes: {
         date: React.PropTypes.object,
         format: React.PropTypes.string,
-    },*/
-    //获取某天的所有信息 m+1才是显示用的月分
-    getDayInfo: function getDayInfo() {
-        var _props = this.props;
-        var date = _props.date;
-        var edate = _props.edate;
-        var min = _props.min;
-        var max = _props.max;
-        var start = _props.start;
-        var end = _props.end;
-        var selected = _props.selected;
-        var selecting = _props.selecting;
-        var status = _props.status;
-        var dayAddon = _props.dayAddon;
-        //selected date, render date, each date
-        var sy = selected.getFullYear();
-        var sm = selected.getMonth();
-        var sd = selected.getDate();
-        var cy = date.getFullYear();
-        var cm = date.getMonth();
-        var cd = date.getDate();
-        var y = edate.getFullYear();
-        var m = edate.getMonth();
-        var d = edate.getDate();
+    }*/
 
-        var edataNo = +edate;
-        var range = function range(start, end) {
-            return edataNo >= +start && edataNo <= +end;
-        };
-        var dayinfo = {
-            date: edate,
-            lunar: (0, _dateLunar.toLunarDate)(edate),
-            term: (0, _dateTerm.getMonthSolarTerms)(y, m)[d],
-            salarfest: _dateHolidays.salarHolidays[this.zero(m + 1) + this.zero(d)], //这里的月份用的是视图的
-            currentMonth: m === cm,
-            currentDay: y === sy && m === sm && d === sd
-        };
-        if (min || max) dayinfo.disabled = !range(min, max); //是否在限制的范围内
-        if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
-        if (selecting && status) dayinfo.inselect = status === 'start' ? range(selecting, end) : range(start, selecting);
+    function DateDay(props) {
+        _classCallCheck(this, DateDay);
 
-        if (dayAddon) {
-            dayinfo.addon = dayAddon(dayinfo);
-        }
-        dayinfo.lunarfest = _dateHolidays.lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
-        // console.log(dayinfo, edataNo, start, end, 'startend')
-        return dayinfo;
-    },
-    zero: function zero(n) {
-        return n < 10 ? '0' + n : n;
-    },
-
-    setDate: function setDate(dateinfo) {
-        if (dateinfo.disabled) return;
-        this.props.onChange(dateinfo);
-    },
-    setMouseEnter: function setMouseEnter(dateinfo) {
-        if (dateinfo.disabled) return;
-        this.props.onMouseEnter(dateinfo);
-    },
-
-    render: function render() {
-        var info = this.getDayInfo();
-        var date = info.date;
-        var salarfest = info.salarfest;
-        var lunarfest = info.lunarfest;
-        var term = info.term;
-        var lunar = info.lunar;
-        var currentDay = info.currentDay;
-        var currentMonth = info.currentMonth;
-        var disabled = info.disabled;
-        var inrange = info.inrange;
-        var inselect = info.inselect;
-        var addon = info.addon;
-        var festDom = undefined;var _props2 = this.props;
-        var festival = _props2.festival;
-        var haslunar = _props2.haslunar;
-
-        if (festival && (salarfest || lunarfest)) {
-            festDom = _react2['default'].createElement(
-                'span',
-                { className: 'date-fest' },
-                (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
-            );
-        } else {
-            festDom = _react2['default'].createElement(
-                'div',
-                null,
-                _react2['default'].createElement(
-                    'span',
-                    { className: 'date-d' },
-                    date.getDate()
-                ),
-                addon
-            );
-        }
-        if (haslunar) {
-            //has lunar and must has term
-            festDom = _react2['default'].createElement(
-                'div',
-                { className: 'date-day-sets' },
-                festDom,
-                _react2['default'].createElement(
-                    'span',
-                    { className: 'date-lunar' },
-                    term ? term : (0, _dateLunar.toLunarDay)(lunar.day)
-                )
-            );
-        }
-        return _react2['default'].createElement(
-            'div',
-            { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentDay ? 'date-selected' : "") + (disabled ? ' date-disabled' : "") + (inrange ? ' date-range' : "") + (inselect ? ' date-hover' : ""),
-                onMouseDown: this.setDate.bind(this, info),
-                onMouseEnter: this.setMouseEnter.bind(this, info) },
-            festDom
-        );
+        _get(Object.getPrototypeOf(DateDay.prototype), 'constructor', this).call(this, props);
     }
-});
+
+    //获取某天的所有信息 m+1才是显示用的月分
+
+    _createClass(DateDay, [{
+        key: 'getDayInfo',
+        value: function getDayInfo() {
+            var _props = this.props;
+            var date = _props.date;
+            var edate = _props.edate;
+            var min = _props.min;
+            var max = _props.max;
+            var start = _props.start;
+            var end = _props.end;
+            var selected = _props.selected;
+            var selecting = _props.selecting;
+            var status = _props.status;
+            var dayAddon = _props.dayAddon;
+            //selected date, render date, each date
+            var sy = selected.getFullYear();
+            var sm = selected.getMonth();
+            var sd = selected.getDate();
+            var cy = date.getFullYear();
+            var cm = date.getMonth();
+            var cd = date.getDate();
+            var y = edate.getFullYear();
+            var m = edate.getMonth();
+            var d = edate.getDate();
+
+            var edataNo = +edate;
+            var range = function range(start, end) {
+                return edataNo >= +start && edataNo <= +end;
+            };
+            var dayinfo = {
+                date: edate,
+                lunar: (0, _dateLunar.toLunarDate)(edate),
+                term: (0, _dateTerm.getMonthSolarTerms)(y, m)[d],
+                salarfest: _dateHolidays.salarHolidays[this.zero(m + 1) + this.zero(d)], //这里的月份用的是视图的
+                currentMonth: m === cm,
+                currentDay: y === sy && m === sm && d === sd
+            };
+            if (min || max) dayinfo.disabled = !range(min, max); //是否在限制的范围内
+            if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
+            if (selecting && status) dayinfo.inselect = status === 'start' ? range(selecting, end) : range(start, selecting);
+
+            if (dayAddon) {
+                dayinfo.addon = dayAddon(dayinfo);
+            }
+            dayinfo.lunarfest = _dateHolidays.lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
+            // console.log(dayinfo, edataNo, start, end, 'startend')
+            return dayinfo;
+        }
+    }, {
+        key: 'zero',
+        value: function zero(n) {
+            return n < 10 ? '0' + n : n;
+        }
+    }, {
+        key: 'setDate',
+        value: function setDate(dateinfo) {
+            if (dateinfo.disabled) return;
+            this.props.onChange(dateinfo);
+        }
+    }, {
+        key: 'setMouseEnter',
+        value: function setMouseEnter(dateinfo) {
+            if (dateinfo.disabled) return;
+            this.props.onMouseEnter.bind(this, dateinfo);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var info = this.getDayInfo();
+            var date = info.date;
+            var salarfest = info.salarfest;
+            var lunarfest = info.lunarfest;
+            var term = info.term;
+            var lunar = info.lunar;
+            var currentDay = info.currentDay;
+            var currentMonth = info.currentMonth;
+            var disabled = info.disabled;
+            var inrange = info.inrange;
+            var inselect = info.inselect;
+            var addon = info.addon;
+            var festDom = undefined;var _props2 = this.props;
+            var festival = _props2.festival;
+            var haslunar = _props2.haslunar;
+
+            if (festival && (salarfest || lunarfest)) {
+                festDom = _react2['default'].createElement(
+                    'span',
+                    { className: 'date-fest' },
+                    (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
+                );
+            } else {
+                festDom = _react2['default'].createElement(
+                    'div',
+                    null,
+                    _react2['default'].createElement(
+                        'span',
+                        { className: 'date-d' },
+                        date.getDate()
+                    ),
+                    addon
+                );
+            }
+            if (haslunar) {
+                //has lunar and must has term
+                festDom = _react2['default'].createElement(
+                    'div',
+                    { className: 'date-day-sets' },
+                    festDom,
+                    _react2['default'].createElement(
+                        'span',
+                        { className: 'date-lunar' },
+                        term ? term : (0, _dateLunar.toLunarDay)(lunar.day)
+                    )
+                );
+            }
+            return _react2['default'].createElement(
+                'div',
+                { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentDay ? 'date-selected' : "") + (disabled ? ' date-disabled' : "") + (inrange ? ' date-range' : "") + (inselect ? ' date-hover' : ""),
+                    onMouseDown: this.setDate.bind(this, info),
+                    onMouseEnter: this.setMouseEnter.bind(this, info) },
+                festDom
+            );
+        }
+    }]);
+
+    return DateDay;
+})(_react.Component);
+
+;
 
 exports['default'] = DateDay;
 module.exports = exports['default'];
@@ -514,7 +604,15 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
@@ -527,54 +625,73 @@ var chars = {
 	monthsCn: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
 	monthsEn: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 };
-var dateHeader = _react2['default'].createClass({
-	displayName: 'dateHeader',
 
-	propTypes: {
-		updateMonth: _react2['default'].PropTypes.func
-	},
-	getDate: function getDate() {
-		return this.props.date;
-	},
-	changeMonth: function changeMonth(num) {
-		this.props.updateMonth(num);
-	},
-	render: function render() {
-		var lang = this.props.lang;
+var dateHeader = (function (_Component) {
+	_inherits(dateHeader, _Component);
 
-		var cn = lang === 'cn';
-		var year = this.getDate().getFullYear(),
-		    month = this.getDate().getMonth() + 1;
+	function dateHeader() {
+		_classCallCheck(this, dateHeader);
 
-		var monthstr = cn ? year + ' ' + month + '月' : chars.monthsEn[month - 1] + ' ' + year;
-		return _react2['default'].createElement(
-			'div',
-			{ className: 'date-header' },
-			_react2['default'].createElement(
-				'div',
-				{ className: 'date-title' },
-				_react2['default'].createElement('span', { className: 'date-prev', onMouseDown: this.changeMonth.bind(this, -1) }),
-				_react2['default'].createElement(
-					'span',
-					{ className: 'date-m' },
-					monthstr
-				),
-				_react2['default'].createElement('span', { className: 'date-next', onMouseDown: this.changeMonth.bind(this, 1) })
-			),
-			_react2['default'].createElement(
-				'div',
-				{ className: 'date-wtitle' },
-				chars[cn ? 'weeksCn' : 'weeksEnS'].map(function (week, key) {
-					return _react2['default'].createElement(
-						'span',
-						{ key: key },
-						week
-					);
-				})
-			)
-		);
+		_get(Object.getPrototypeOf(dateHeader.prototype), 'constructor', this).apply(this, arguments);
 	}
-});
+
+	_createClass(dateHeader, [{
+		key: 'getDate',
+
+		// propTypes: {
+		//     updateMonth: React.PropTypes.func
+		// },
+		value: function getDate() {
+			return this.props.date;
+		}
+	}, {
+		key: 'changeMonth',
+		value: function changeMonth(num) {
+			this.props.updateMonth(num);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var lang = this.props.lang;
+
+			var cn = lang === 'cn';
+			var year = this.getDate().getFullYear(),
+			    month = this.getDate().getMonth() + 1;
+
+			var monthstr = cn ? year + ' ' + month + '月' : chars.monthsEn[month - 1] + ' ' + year;
+			return _react2['default'].createElement(
+				'div',
+				{ className: 'date-header' },
+				_react2['default'].createElement(
+					'div',
+					{ className: 'date-title' },
+					_react2['default'].createElement('span', { className: 'date-prev', onMouseDown: this.changeMonth.bind(this, -1) }),
+					_react2['default'].createElement(
+						'span',
+						{ className: 'date-m' },
+						monthstr
+					),
+					_react2['default'].createElement('span', { className: 'date-next', onMouseDown: this.changeMonth.bind(this, 1) })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'date-wtitle' },
+					chars[cn ? 'weeksCn' : 'weeksEnS'].map(function (week, key) {
+						return _react2['default'].createElement(
+							'span',
+							{ key: key },
+							week
+						);
+					})
+				)
+			);
+		}
+	}]);
+
+	return dateHeader;
+})(_react.Component);
+
+;
 
 exports['default'] = dateHeader;
 module.exports = exports['default'];
@@ -628,7 +745,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
@@ -638,43 +763,62 @@ var _reactDom = require("react-dom");
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var DateInBody = _react2["default"].createClass({
-  displayName: "DateInBody",
+var DateInBody = (function (_Component) {
+  _inherits(DateInBody, _Component);
 
-  propTypes: {
-    classes: _react2["default"].PropTypes.string, //class split by spacing
-    offset: _react2["default"].PropTypes.object
-  },
-  componentDidMount: function componentDidMount() {
-    this.popup = document.createElement("div");
-    this.popup.className = this.props.classes;
-    document.body.appendChild(this.popup);
-    this.renderLayer();
-  },
+  function DateInBody() {
+    _classCallCheck(this, DateInBody);
 
-  componentDidUpdate: function componentDidUpdate() {
-    this.renderLayer();
-  },
-
-  componentWillMount: function componentWillMount() {
-    // this.removePicker()
-  },
-  removePicker: function removePicker(current) {
-    this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0];
-    // console.log(this.popup, 'popup')
-    if (this.popup) {
-      _reactDom2["default"].unmountComponentAtNode(this.popup);
-      document.body.removeChild(this.popup);
-    }
-  },
-  renderLayer: function renderLayer() {
-    if (this.props.children) _reactDom2["default"].render(this.props.children, this.popup);
-  },
-
-  render: function render() {
-    return _react2["default"].createElement("div", _extends({}, this.props, { children: null, style: this.props.offset }));
+    _get(Object.getPrototypeOf(DateInBody.prototype), "constructor", this).apply(this, arguments);
   }
-});
+
+  _createClass(DateInBody, [{
+    key: "componentDidMount",
+
+    // propTypes: {
+    //   classes: React.PropTypes.string, //class split by spacing
+    //   offset: React.PropTypes.object,
+    // }
+    value: function componentDidMount() {
+      this.popup = document.createElement("div");
+      // this.popup.className = this.props.classes
+      document.body.appendChild(this.popup);
+      this.renderLayer();
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      this.renderLayer();
+    }
+  }, {
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      // this.removePicker()
+    }
+  }, {
+    key: "removePicker",
+    value: function removePicker(current) {
+      this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0];
+      // console.log(this.popup, 'popup')
+      if (this.popup) {
+        _reactDom2["default"].unmountComponentAtNode(this.popup);
+        document.body.removeChild(this.popup);
+      }
+    }
+  }, {
+    key: "renderLayer",
+    value: function renderLayer() {
+      if (this.props.children) _reactDom2["default"].render(this.props.children, this.popup);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement("div", _extends({}, this.props, { children: null, style: this.props.offset }));
+    }
+  }]);
+
+  return DateInBody;
+})(_react.Component);
 
 exports["default"] = DateInBody;
 module.exports = exports["default"];
@@ -688,7 +832,15 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
@@ -700,22 +852,24 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _dateFormat = require('./date-format');
 
-var DateInput = _react2['default'].createClass({
-	displayName: 'DateInput',
+var DateInput = (function (_Component) {
+	_inherits(DateInput, _Component);
 
-	propTypes: {
-		// element: React.PropTypes.element,
-		selected: _react2['default'].PropTypes.any,
-		disabled: _react2['default'].PropTypes.bool,
-		onBlur: _react2['default'].PropTypes.func,
-		onFocus: _react2['default'].PropTypes.func,
-		onChange: _react2['default'].PropTypes.func
-	},
-	getDefaultProps: function getDefaultProps() {
-		return {
-			status: ''
-		};
-	},
+	//  propTypes: {
+	//     // element: React.PropTypes.element,
+	//     selected: React.PropTypes.any,
+	//     disabled: React.PropTypes.bool,
+	//     onBlur: React.PropTypes.func,
+	//     onFocus: React.PropTypes.func,
+	//     onChange: React.PropTypes.func
+	// }
+
+	function DateInput(props) {
+		_classCallCheck(this, DateInput);
+
+		_get(Object.getPrototypeOf(DateInput.prototype), 'constructor', this).call(this, props);
+	}
+
 	/*	getInitialState () {
  	    return {
  	      // value:  this.dateString()
@@ -724,57 +878,82 @@ var DateInput = _react2['default'].createClass({
  		      left: 0
  		    }
  	    }
- 	},
+ 	}
  	componentDidMount() {
  	  this.setState({
  	    // styles: 
  	  })
- 	},*/
-	dateString: function dateString() {
-		var _props = this.props;
-		var format = _props.format;
-		var selected = _props.selected;
+ 	}*/
 
-		return format ? (0, _dateFormat.dateFormat)(selected, format) : selected;
-	},
-	handleBlur: function handleBlur(event) {
-		this.props.onBlur(event, this);
-	},
-	handleFocus: function handleFocus(event) {
-		this.props.onFocus(event, this);
-	},
-	focus: function focus() {
-		this.refs.input.focus();
-	},
-	handleChange: function handleChange(event) {
-		this.props.onChange(event);
-	},
-	getInput: function getInput() {
-		return _reactDom2['default'].findDOMNode(this);
-	},
-	handlePosition: function handlePosition() {
-		// Fix for IE8-'s Element.getBoundingClientRect()
-		if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
-			Object.defineProperties(TextRectangle.prototype, {
-				'width': { get: function get() {
-						return this.right - this.left;
-					} },
-				'height': { get: function get() {
-						return this.bottom - this.top;
-					} }
-			});
+	_createClass(DateInput, [{
+		key: 'dateString',
+		value: function dateString() {
+			var _props = this.props;
+			var format = _props.format;
+			var selected = _props.selected;
+
+			return format ? (0, _dateFormat.dateFormat)(selected, format) : selected;
 		}
-		return this.getInput().getBoundingClientRect();
-	},
+	}, {
+		key: 'handleBlur',
+		value: function handleBlur(event) {
+			this.props.onBlur(event, this);
+		}
+	}, {
+		key: 'handleFocus',
+		value: function handleFocus(event) {
+			this.props.onFocus(event, this);
+		}
+	}, {
+		key: 'focus',
+		value: function focus() {
+			this.refs.input.focus();
+		}
+	}, {
+		key: 'handleChange',
+		value: function handleChange(event) {
+			this.props.onChange(event);
+		}
+	}, {
+		key: 'getInput',
+		value: function getInput() {
+			return _reactDom2['default'].findDOMNode(this);
+		}
+	}, {
+		key: 'handlePosition',
+		value: function handlePosition() {
+			// Fix for IE8-'s Element.getBoundingClientRect()
+			if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
+				Object.defineProperties(TextRectangle.prototype, {
+					'width': { get: function get() {
+							return this.right - this.left;
+						} },
+					'height': { get: function get() {
+							return this.bottom - this.top;
+						} }
+				});
+			}
+			return this.getInput().getBoundingClientRect();
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _props2 = this.props;
+			var customInput = _props2.customInput;
+			var disabled = _props2.disabled;
 
-	render: function render() {
-		var _props2 = this.props;
-		var customInput = _props2.customInput;
-		var disabled = _props2.disabled;
+			return _react2['default'].createElement('input', { ref: 'input', type: 'text', disabled: disabled, value: this.dateString(), onFocus: this.handleFocus.bind(this), onBlur: this.handleBlur.bind(this), onChange: this.handleChange.bind(this) });
+		}
+	}]);
 
-		return _react2['default'].createElement('input', { ref: 'input', type: 'text', disabled: disabled, value: this.dateString(), onFocus: this.handleFocus, onBlur: this.handleBlur, onChange: this.handleChange });
-	}
-});
+	return DateInput;
+})(_react.Component);
+
+;
+
+DateInput.defaultProps = {
+	status: ''
+};
 
 exports['default'] = DateInput;
 module.exports = exports['default'];
@@ -915,133 +1094,162 @@ Object.defineProperty(exports, '__esModule', {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _dateDayJsx = require('./date-day.jsx');
+var _dateDayJs = require('./date-day.js');
 
-var _dateDayJsx2 = _interopRequireDefault(_dateDayJsx);
+var _dateDayJs2 = _interopRequireDefault(_dateDayJs);
 
-var DateMonth = _react2['default'].createClass({
-	displayName: 'DateMonth',
+var DateMonth = (function (_Component) {
+	_inherits(DateMonth, _Component);
 
 	/*propTypes: {
  	date: React.PropTypes.object.isRequired,
  	format: React.PropTypes.string
- },*/
-	getInitialState: function getInitialState() {
-		return {
-			selecting: null
-		};
-	},
-	getMonthInfo: function getMonthInfo() {
-		// console.log(this.props.date, 'datemonth')
-		var y = this.props.date.getFullYear();
-		var m = this.props.date.getMonth();
-		var dateday,
-		    line = 0,
-		    temp = [],
-		    isfill = this.props.isfill;
-		// console.time('计算一月所用时间')
-		var prevMDay = new Date(y, m, 0),
-		    prevMDayLast = prevMDay.getDate(); //prev Month Last Day
-		var nextMDay = new Date(y, m + 1, 0),
-		    currMDayLast = nextMDay.getDate(); //current Month Last Day
-		var currMDay = new Date(y, m + 0, 1),
-		    currMDayFirst = currMDay.getDay(); //current Month First Day Week
+ }*/
 
-		temp[line] = [];
+	function DateMonth(props) {
+		_classCallCheck(this, DateMonth);
 
-		function calcLine(date) {
-			var weekno = date.getDay(); //week
-			if (weekno == 0) temp[line] = [];
-			temp[line].push(date);
-			weekno == 6 && line++;
-		}
+		_get(Object.getPrototypeOf(DateMonth.prototype), 'constructor', this).call(this, props);
+		this.state = { selecting: props.selecting };
+	}
 
-		// console.log(prevMDay, currMDay, prevMDayLast, currMDayLast, currMDayFirst)
-		if (currMDayFirst && isfill) {
-			//prev Month calendar row first
-			var k = prevMDayLast - currMDayFirst + 1;
-			for (var j = 0; j < currMDayFirst; j++) {
-				dateday = new Date(y, m - 1, k);
-				temp[line].push(dateday);
-				k++;
+	_createClass(DateMonth, [{
+		key: 'getMonthInfo',
+		value: function getMonthInfo() {
+			// console.log(this.props.date, 'datemonth')
+			var y = this.props.date.getFullYear();
+			var m = this.props.date.getMonth();
+			var dateday,
+			    line = 0,
+			    temp = [],
+			    isfill = this.props.isfill;
+			// console.time('计算一月所用时间')
+			var prevMDay = new Date(y, m, 0),
+			    prevMDayLast = prevMDay.getDate(); //prev Month Last Day
+			var nextMDay = new Date(y, m + 1, 0),
+			    currMDayLast = nextMDay.getDate(); //current Month Last Day
+			var currMDay = new Date(y, m + 0, 1),
+			    currMDayFirst = currMDay.getDay(); //current Month First Day Week
+
+			temp[line] = [];
+
+			function calcLine(date) {
+				var weekno = date.getDay(); //week
+				if (weekno == 0) temp[line] = [];
+				temp[line].push(date);
+				weekno == 6 && line++;
 			}
-		}
 
-		for (var i = 1; i <= currMDayLast; i++) {
-			//current month
-			dateday = new Date(y, m, i);
-			calcLine(dateday);
-		}
-		if (isfill) {
-			for (j = 1; j < 12; j++) {
-				if (line < 6) {
-					// console.log(line, 'line')
-					dateday = new Date(y, m + 1, j);
-					calcLine(dateday);
+			// console.log(prevMDay, currMDay, prevMDayLast, currMDayLast, currMDayFirst)
+			if (currMDayFirst && isfill) {
+				//prev Month calendar row first
+				var k = prevMDayLast - currMDayFirst + 1;
+				for (var j = 0; j < currMDayFirst; j++) {
+					dateday = new Date(y, m - 1, k);
+					temp[line].push(dateday);
+					k++;
 				}
 			}
+
+			for (var i = 1; i <= currMDayLast; i++) {
+				//current month
+				dateday = new Date(y, m, i);
+				calcLine(dateday);
+			}
+			if (isfill) {
+				for (j = 1; j < 12; j++) {
+					if (line < 6) {
+						// console.log(line, 'line')
+						dateday = new Date(y, m + 1, j);
+						calcLine(dateday);
+					}
+				}
+			}
+			//console.timeEnd('计算一月所用时间')
+			return temp;
 		}
-		//console.timeEnd('计算一月所用时间')
-		return temp;
-	},
+	}, {
+		key: 'weeks',
+		value: function weeks(months) {
+			var weeks = [],
+			    that = this;
+			months.map(function (week, wkey) {
+				weeks.push(_react2['default'].createElement(
+					'div',
+					{ className: "date-week date-week-" + wkey, key: wkey },
+					that.days(week)
+				));
+			});
+			return weeks;
+		}
+	}, {
+		key: 'days',
+		value: function days(week) {
+			var days = [],
+			    that = this;
+			week.map(function (day, dkey) {
+				days.push(_react2['default'].createElement(_dateDayJs2['default'], _extends({}, that.props, { onMouseEnter: that.onMouseEnter.bind(this), selecting: that.state.selecting, edate: day, key: dkey })));
+			});
+			return days;
+		}
+	}, {
+		key: 'onMouseEnter',
+		value: function onMouseEnter(dateinfo) {
+			var _props = this.props;
+			var start = _props.start;
+			var end = _props.end;
 
-	weeks: function weeks(months) {
-		var weeks = [],
-		    that = this;
-		months.map(function (week, wkey) {
-			weeks.push(_react2['default'].createElement(
+			if (start && end) this.setState({ selecting: dateinfo.date });
+		}
+	}, {
+		key: 'onMouseLeave',
+		value: function onMouseLeave() {
+			var _props2 = this.props;
+			var start = _props2.start;
+			var end = _props2.end;
+
+			if (start && end) this.setState({ selecting: null });
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			// console.log('render times')
+			var months = this.getMonthInfo(),
+			    that = this;
+			return _react2['default'].createElement(
 				'div',
-				{ className: "date-week date-week-" + wkey, key: wkey },
-				that.days(week)
-			));
-		});
-		return weeks;
-	},
-	days: function days(week) {
-		var days = [],
-		    that = this;
-		week.map(function (day, dkey) {
-			days.push(_react2['default'].createElement(_dateDayJsx2['default'], _extends({}, that.props, { onMouseEnter: that.onMouseEnter, selecting: that.state.selecting, edate: day, key: dkey })));
-		});
-		return days;
-	},
-	onMouseEnter: function onMouseEnter(dateinfo) {
-		var _props = this.props;
-		var start = _props.start;
-		var end = _props.end;
+				{ className: "date-month" + (that.state.selecting ? " date-selecting " : " "), onMouseLeave: this.onMouseLeave.bind(this) },
+				this.weeks(months)
+			);
+		}
+	}]);
 
-		if (start && end) this.setState({ selecting: dateinfo.date });
-	},
-	onMouseLeave: function onMouseLeave() {
-		var _props2 = this.props;
-		var start = _props2.start;
-		var end = _props2.end;
+	return DateMonth;
+})(_react.Component);
 
-		if (start && end) this.setState({ selecting: null });
-	},
-	render: function render() {
-		// console.log('render times')
-		var months = this.getMonthInfo(),
-		    that = this;
-		return _react2['default'].createElement(
-			'div',
-			{ className: "date-month" + (that.state.selecting ? " date-selecting " : " "), onMouseLeave: this.onMouseLeave },
-			this.weeks(months)
-		);
-	}
-});
+DateMonth.defaultProps = {
+	selecting: null
+};
 
 exports['default'] = DateMonth;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./date-day.jsx":3}],11:[function(require,module,exports){
+},{"./date-day.js":3}],11:[function(require,module,exports){
 // 农历二十四节气
 'use strict';
 
@@ -1092,27 +1300,50 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 
 var _react2 = _interopRequireDefault(_react);
 
-var DateTime = _react2['default'].createClass({
-	displayName: 'DateTime',
+var _dateDayJs = require('./date-day.js');
 
-	render: function render() {
-		return _react2['default'].createElement(
-			'div',
-			{ className: 'date-time' },
-			new Date().getHours() + ':' + new Date().getMinutes()
-		);
+var _dateDayJs2 = _interopRequireDefault(_dateDayJs);
+
+var DateTime = (function (_Component) {
+	_inherits(DateTime, _Component);
+
+	function DateTime() {
+		_classCallCheck(this, DateTime);
+
+		_get(Object.getPrototypeOf(DateTime.prototype), 'constructor', this).apply(this, arguments);
 	}
-});
+
+	_createClass(DateTime, [{
+		key: 'render',
+		value: function render() {
+			return _react2['default'].createElement(
+				'div',
+				{ className: 'date-time' },
+				new Date().getHours() + ':' + new Date().getMinutes()
+			);
+		}
+	}]);
+
+	return DateTime;
+})(_react.Component);
 
 exports['default'] = DateTime;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1])(1)
+},{"./date-day.js":3}]},{},[1])(1)
 });

@@ -1,4 +1,4 @@
-var React = require('react');
+import React, { Component } from 'react'
 var ReactDOM = require('react-dom');
 var Datepicker = require('react-datepicker-plus');
 var now = new Date('2016/10/15')
@@ -6,63 +6,58 @@ var min = new Date('2016/10/10')
 var max = new Date('2016/10/20')
 
 import {dateFormat} from '../../src/date-format'
-var App = React.createClass({
-	propTypes:{
-		date: React.PropTypes.object,
-		isfill: React.PropTypes.bool,
-		// addonData: React.PropTypes.object
-	},
-	getDefaultProps() {
-	    return {
-	        date: now,
-	        isfill: true,
-	    };
-	},
-	getInitialState() {
-	    return {
-	    	addonData: {
-	        	rest: {
-	        		'2016/01/01': '休',
-	        		'2016/10/01': '休',
-	        		'2016/10/02': '休',
-	        		'2016/10/03': '休',
-	        		'2016/10/04': '休',
-	        		'2016/10/05': '休',
-	        		'2016/10/06': '休',
-	        		'2016/10/07': '休'
-	        	},
-	        	price: {
-	        		'2016/10/01': '￥566',
-	        		'2016/10/02': '￥576',
-	        		'2016/10/03': '￥555',
-	        		'2016/10/04': '￥550',
-	        		'2016/10/05': '￥450',
-	        		'2016/10/06': '￥650',
-	        		'2016/10/07': '￥655',
-	        		'2016/10/08': '￥500',
-	        		'2016/10/09': '￥300',	        		
-	        		'2016/10/10': '￥566',
-	        		'2016/10/11': '￥576',
-	        		'2016/10/12': '￥555',
-	        		'2016/10/13': '￥550',
-	        		'2016/10/14': '￥450',
-	        		'2016/10/15': '￥650',
-	        		'2016/10/16': '￥655',
-	        		'2016/10/17': '￥500',
-	        		'2016/10/18': '￥300',
-	        	}
-	    	}
-	    }
-	},
+class App extends Component {
+	// propTypes:{
+	// 	date: React.PropTypes.object,
+	// 	isfill: React.PropTypes.bool,
+	// 	// addonData: React.PropTypes.object
+	// },
+	constructor(props) {
+        super(props);
+		this.state = {
+			addonData: {
+				rest: {
+					'2016/01/01': '休',
+					'2016/10/01': '休',
+					'2016/10/02': '休',
+					'2016/10/03': '休',
+					'2016/10/04': '休',
+					'2016/10/05': '休',
+					'2016/10/06': '休',
+					'2016/10/07': '休'
+				},
+				price: {
+					'2016/10/01': '￥566',
+					'2016/10/02': '￥576',
+					'2016/10/03': '￥555',
+					'2016/10/04': '￥550',
+					'2016/10/05': '￥450',
+					'2016/10/06': '￥650',
+					'2016/10/07': '￥655',
+					'2016/10/08': '￥500',
+					'2016/10/09': '￥300',	        		
+					'2016/10/10': '￥566',
+					'2016/10/11': '￥576',
+					'2016/10/12': '￥555',
+					'2016/10/13': '￥550',
+					'2016/10/14': '￥450',
+					'2016/10/15': '￥650',
+					'2016/10/16': '￥655',
+					'2016/10/17': '￥500',
+					'2016/10/18': '￥300',
+				}
+			}
+		}
+	}
 	onFocus(event){
 		console.log(event, 'onFocus')
-	},
+	}
 	onBlur(event){
 		console.log(event, 'onBlur')
-	},
+	}
 	onChange(dateinfo){
 		console.log(dateinfo, 'onChange')
-	},
+	}
 	dayAddon(dayinfo){
 		let {addonData} = this.state
 		let {date} = dayinfo
@@ -75,7 +70,7 @@ var App = React.createClass({
 			}
 		}
 		return doms
-	},
+	}
 	
 
 	render () {
@@ -217,7 +212,7 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 					<pre className="demo-code">
 						{`<Datepicker onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onChange} />`}
       				</pre>
-					<Datepicker onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onChange} />
+					<Datepicker onFocus={this.onFocus.bind(this)} onBlur={this.onBlur.bind(this)} onChange={this.onChange.bind(this)} />
 				</div>						
 
 				<div className="demo-item demo-full">
@@ -265,32 +260,30 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 					<h5>datepicker with cn holiday label('休')</h5>
 					<pre className="demo-code">
 						{`	
-getInitialState() {
-    return {
-    	addonData: {
-        	rest: {
-        		'2016/01/01': '休',
-        		'2016/10/01': '休',
-        		'2016/10/02': '休',
-        		'2016/10/03': '休',
-        		'2016/10/04': '休',
-        		'2016/10/05': '休',
-        		'2016/10/06': '休',
-        		'2016/10/07': '休'
-        	},
-        	price: {
-        		'2016/10/01': '566',
-        		'2016/10/02': '576',
-        		'2016/10/03': '555',
-        		'2016/10/04': '550',
-        		'2016/10/05': '450',
-        		'2016/10/06': '650',
-        		'2016/10/07': '655',
-        		'2016/10/08': '500',
-        		'2016/10/09': '300'
-        	}
-    	}
-    }
+static initialState() {
+	addonData: {
+		rest: {
+			'2016/01/01': '休',
+			'2016/10/01': '休',
+			'2016/10/02': '休',
+			'2016/10/03': '休',
+			'2016/10/04': '休',
+			'2016/10/05': '休',
+			'2016/10/06': '休',
+			'2016/10/07': '休'
+		},
+		price: {
+			'2016/10/01': '566',
+			'2016/10/02': '576',
+			'2016/10/03': '555',
+			'2016/10/04': '550',
+			'2016/10/05': '450',
+			'2016/10/06': '650',
+			'2016/10/07': '655',
+			'2016/10/08': '500',
+			'2016/10/09': '300'
+		}
+	}
 },
 dayAddon(dayinfo){
 	let {addonData} = this.state
@@ -307,11 +300,18 @@ dayAddon(dayinfo){
 },
 <Datepicker  className="date-picker-demo" inline  selected={now} haslunar={true}  isfill={true} festival={true}/> dayAddon={this.dayAddon}`}
       				</pre>
-					<Datepicker className="date-picker-demo" inline selected={now} haslunar={true}  isfill={true} festival={true} dayAddon={this.dayAddon}/>
+					<Datepicker className="date-picker-demo" inline selected={now} haslunar={true}  isfill={true} festival={true} dayAddon={this.dayAddon.bind(this)}/>
 				</div>
 			</div>
 		);
 	}
-});
- 
+}
+
+App.defaultProps = {
+	date: now,
+	isfill: true
+}
+
+
+
 ReactDOM.render(<App />, document.getElementById('app'));

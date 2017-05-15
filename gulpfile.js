@@ -18,7 +18,7 @@ var taskConfig = {
 			'react',
 			'react-dom'
 		],
-		lib: 'lib'
+		// lib: 'lib'
 	},
 
 	example: {
