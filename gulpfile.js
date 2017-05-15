@@ -18,6 +18,10 @@ var taskConfig = {
 			'react',
 			'react-dom'
 		],
+		less:{
+			path: 'src',
+			entry: 'datepicker.less'
+		}
 		// lib: 'lib'
 	},
 
