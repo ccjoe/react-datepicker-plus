@@ -27,7 +27,6 @@ You can also use the standalone build by including `dist/react-datepicker-plus.j
 npm install react-datepicker-plus --save
 ```
 
-
 ## Usage
 
 __EXPLAIN USAGE HERE__
@@ -40,11 +39,8 @@ var ReactDatepickerPlus = require('react-datepicker-plus');
 
 ### Properties
 
-* __DOCUMENT PROPERTIES HERE__
-
 ### Notes
 
-__ADDITIONAL USAGE NOTES__
 
 ## for ie8 support, pls add es5-shim and es5 sham
 
@@ -56,6 +52,5 @@ To build, watch and serve the examples (which will also watch the component sour
 
 ## License
 
-__PUT LICENSE HERE__
 
 Copyright (c) 2016 ccjoe.
