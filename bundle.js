@@ -30,10 +30,10 @@ var _dateTimeJs2 = _interopRequireDefault(_dateTimeJs);
 var DateCalendar = (function (_Component) {
 	_inherits(DateCalendar, _Component);
 
-	function DateCalendar() {
+	function DateCalendar(props) {
 		_classCallCheck(this, DateCalendar);
 
-		_get(Object.getPrototypeOf(DateCalendar.prototype), 'constructor', this).apply(this, arguments);
+		_get(Object.getPrototypeOf(DateCalendar.prototype), 'constructor', this).call(this, props);
 	}
 
 	_createClass(DateCalendar, [{
@@ -100,6 +100,7 @@ var DateDay = (function (_Component) {
         _classCallCheck(this, DateDay);
 
         _get(Object.getPrototypeOf(DateDay.prototype), 'constructor', this).call(this, props);
+        // console.log(this.props.selected, props.selected, 'selected')
     }
 
     //获取某天的所有信息 m+1才是显示用的月分
@@ -323,18 +324,18 @@ var chars = {
 var dateHeader = (function (_Component) {
 	_inherits(dateHeader, _Component);
 
-	function dateHeader() {
+	// propTypes: {
+	//     updateMonth: React.PropTypes.func
+	// },
+
+	function dateHeader(props) {
 		_classCallCheck(this, dateHeader);
 
-		_get(Object.getPrototypeOf(dateHeader.prototype), 'constructor', this).apply(this, arguments);
+		_get(Object.getPrototypeOf(dateHeader.prototype), 'constructor', this).call(this, props);
 	}
 
 	_createClass(dateHeader, [{
 		key: 'getDate',
-
-		// propTypes: {
-		//     updateMonth: React.PropTypes.func
-		// },
 		value: function getDate() {
 			return this.props.date;
 		}
@@ -458,19 +459,19 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 var DateInBody = (function (_Component) {
   _inherits(DateInBody, _Component);
 
-  function DateInBody() {
+  // propTypes: {
+  //   classes: React.PropTypes.string, //class split by spacing
+  //   offset: React.PropTypes.object,
+  // }
+
+  function DateInBody(props) {
     _classCallCheck(this, DateInBody);
 
-    _get(Object.getPrototypeOf(DateInBody.prototype), "constructor", this).apply(this, arguments);
+    _get(Object.getPrototypeOf(DateInBody.prototype), "constructor", this).call(this, props);
   }
 
   _createClass(DateInBody, [{
     key: "componentDidMount",
-
-    // propTypes: {
-    //   classes: React.PropTypes.string, //class split by spacing
-    //   offset: React.PropTypes.object,
-    // }
     value: function componentDidMount() {
       this.popup = document.createElement("div");
       // this.popup.className = this.props.classes
@@ -640,10 +641,6 @@ var DateInput = (function (_Component) {
 })(_react.Component);
 
 ;
-
-DateInput.defaultProps = {
-	status: ''
-};
 
 exports['default'] = DateInput;
 module.exports = exports['default'];
@@ -1031,6 +1028,7 @@ exports['default'] = DateTime;
 module.exports = exports['default'];
 
 },{"./date-day.js":2,"react":undefined}],"react-datepicker-plus":[function(require,module,exports){
+// import './datepicker.less'
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1116,20 +1114,20 @@ var ReactDatepickerPlus = (function (_Component) {
 
 		_get(Object.getPrototypeOf(ReactDatepickerPlus.prototype), 'constructor', this).call(this, props);
 		this.state = {
-			date: now, //render month by date
+			date: props.selected, //render month by date
 			show: props.inline ? true : false,
 			focus: false, //focus state
 			offset: {}, //datepicker position
 			selected: props.selected,
 			start: props.start,
-			end: props.end,
-			status: '' //React.PropTypes.oneOf(['start', 'end'])
-			//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
+			end: props.end
 		};
 	}
 
 	_createClass(ReactDatepickerPlus, [{
 		key: 'onFocus',
+		// status: ''   	//React.PropTypes.oneOf(['start', 'end'])
+		//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		value: function onFocus(event, input) {
 			var _state = this.state;
 			var show = _state.show;
@@ -1244,7 +1242,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			for (var i = 0; i < months; i++) {
 				offsets.push({ left: i * 215 + offset.left, top: offset.top });
 				idate = this.numMonth(date, i);
-				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth });
+				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth.bind(this) });
 				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
 
 				$pickers.push(inline ? _react2['default'].createElement(
