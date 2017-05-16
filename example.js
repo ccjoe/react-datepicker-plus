@@ -126,6 +126,186 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'h5',
 						null,
+						'datepicker with 12 month popup'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker months={12} isfill={true} inline/>'
+					),
+					_react2['default'].createElement(Datepicker, { months: 12, isfill: true, inline: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'dead simple datepicker'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker/>'
+					),
+					_react2['default'].createElement(Datepicker, null)
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with lang chinese'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker lang=\'cn\'/>'
+					),
+					_react2['default'].createElement(Datepicker, { lang: 'cn' })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with default date'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker selected={now}/>'
+					),
+					_react2['default'].createElement(Datepicker, { selected: now })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker autoHide when selected'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker autoHide={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, { autoHide: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker disabled'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker disabled={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, { disabled: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker isfill true'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker isfill={this.props.isfill}/>'
+					),
+					_react2['default'].createElement(Datepicker, { isfill: this.props.isfill })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'inline datepicker'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker inline />'
+					),
+					_react2['default'].createElement(Datepicker, { inline: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with min and max range'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker inline min={min} max={max} />'
+					),
+					_react2['default'].createElement(Datepicker, { inline: true, min: min, max: max })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'bi-datepicker with start and end range'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker start={min} end={max} />'
+					),
+					_react2['default'].createElement(Datepicker, { start: min, end: max })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'bi-datepicker with start and end range, and show 2 months '
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker start={min} end={max} months={2}  isfill={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, { start: min, end: max, months: 2, isfill: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker callbacks alert, pls check at console'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onChange} />'
+					),
+					_react2['default'].createElement(Datepicker, { onFocus: this.onFocus.bind(this), onBlur: this.onBlur.bind(this), onChange: this.onChange.bind(this) })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
 						'datepicker with 2 month inline'
 					),
 					_react2['default'].createElement(
@@ -133,7 +313,67 @@ var App = (function (_Component) {
 						{ className: 'demo-code' },
 						'<Datepicker months={2} inline isfill={true}/>'
 					),
+					_react2['default'].createElement(Datepicker, { months: 2, inline: true, isfill: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with 2 month popup'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker months={2} isfill={true}/>'
+					),
 					_react2['default'].createElement(Datepicker, { months: 2, isfill: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with 3 month popup'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker months={3} isfill={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, { months: 3, isfill: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with festival'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker inline festival={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, { inline: true, festival: true })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with lunar(lunar auto include term and lang is \'cn\')'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker inline haslunar={true}  isfill={true} festival={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, { inline: true, haslunar: true, isfill: true, festival: true })
 				),
 				_react2['default'].createElement(
 					'div',
