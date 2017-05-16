@@ -120,8 +120,9 @@ class ReactDatepickerPlus extends Component {
 		let {inline, months, lang, haslunar, className} = this.props
 		let selected = this.state[status?status:'selected']
 		let classes = `date-picker date-picker-${inline?'inline':'block'} ${className?className:''} ${haslunar?'date-picker-lunar':''}`
+		let pickerWidth = this.state.width || 215;
 		for(var i=0; i<months; i++){
-			offsets.push({left: i*215+offset.left, top: offset.top})
+			offsets.push({left: i*pickerWidth + offset.left, top: offset.top})
 			idate = this.numMonth(date, i)
 			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth.bind(this)}/>
 			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay.bind(this)}/>
@@ -132,6 +133,11 @@ class ReactDatepickerPlus extends Component {
 		}
 		return $pickers
     }
+
+    updateSize (w) {
+		!this.props.inline && this.setState({width: w})
+	}
+	
 	render () {
 		let {show, selected, start, end, status} = this.state
 		let {format, inline, months, disabled} = this.props
@@ -141,7 +147,7 @@ class ReactDatepickerPlus extends Component {
 		if(show){
 			pickers = this.pickers(status)
 			picker = <div className={months>1?'date-multi clearfix':''}>{pickers}</div>
-			pickerInBody = <DateInBody className="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
+			pickerInBody = <DateInBody  onUpdate={this.updateSize.bind(this)} className="date-picker-wrapper" ref="insDateInBody">{picker}</DateInBody>
 		}
 		let didom = start && end ? <div className="date-inputs">{di(start, 'start')}{di(end, 'end')}</div> : di()
 		return <div className="date-components">

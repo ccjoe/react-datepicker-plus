@@ -4,16 +4,21 @@ class DateInBody extends Component {
   // propTypes: {
   //   classes: React.PropTypes.string, //class split by spacing
   //   offset: React.PropTypes.object,
+  //   updateSize: React.PropTypes.function
   // }
-  constructor(props) {
-      super(props);
-  }
+  // constructor(props) {
+  //     super(props);
+  // }
 
   componentDidMount() {
     this.popup = document.createElement("div")
     // this.popup.className = this.props.classes
     document.body.appendChild(this.popup)
     this.renderLayer()
+    if(!this.props.inline){
+      let adjustSize = this.popup.getElementsByClassName('date-picker')[0].clientWidth
+      this.props.onUpdate && this.props.onUpdate(adjustSize);
+    }
   }
 
   componentDidUpdate() {
@@ -37,7 +42,7 @@ class DateInBody extends Component {
   }
 
   render() {
-    return <div {...this.props} children={null} style={this.props.offset}/>
+    return <div className={this.props.className} children={this.props.children} children={null} style={this.props.offset}/>
   }
 }
 
