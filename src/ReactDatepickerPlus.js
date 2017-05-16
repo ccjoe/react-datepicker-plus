@@ -1,3 +1,4 @@
+// import './datepicker.less'
 import React, { Component } from 'react'
 import ReactDOM from "react-dom"
 import DateHeader from './date-header.js'
@@ -41,14 +42,14 @@ class ReactDatepickerPlus extends Component {
 	 constructor(props) {
         super(props);
         this.state = {
-				date: now,		//render month by date
+				date: props.selected,		//render month by date
 				show: props.inline ? true : false,
 				focus: false,	//focus state
 				offset: {},		//datepicker position
 				selected: props.selected,
 				start: props.start,
 				end: props.end,
-				status: ''   	//React.PropTypes.oneOf(['start', 'end']) 
+				// status: ''   	//React.PropTypes.oneOf(['start', 'end']) 
 				//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		}
     }
@@ -122,7 +123,7 @@ class ReactDatepickerPlus extends Component {
 		for(var i=0; i<months; i++){
 			offsets.push({left: i*215+offset.left, top: offset.top})
 			idate = this.numMonth(date, i)
-			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth}/>
+			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth.bind(this)}/>
 			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay.bind(this)}/>
 			 
 			$pickers.push(inline ?

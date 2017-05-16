@@ -5,6 +5,10 @@ class DateInBody extends Component {
   //   classes: React.PropTypes.string, //class split by spacing
   //   offset: React.PropTypes.object,
   // }
+  constructor(props) {
+      super(props);
+  }
+
   componentDidMount() {
     this.popup = document.createElement("div")
     // this.popup.className = this.props.classes

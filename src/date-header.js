@@ -10,6 +10,9 @@ class dateHeader extends Component {
 	// propTypes: {
 	//     updateMonth: React.PropTypes.func
 	// },
+	constructor(props) {
+        super(props);
+    }
 	getDate(){
 		return this.props.date
 	}

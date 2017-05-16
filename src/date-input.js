@@ -63,8 +63,4 @@ class DateInput extends Component {
 	}
 };
 
-DateInput.defaultProps = {
-	status: ''  
-}
-
 export default DateInput

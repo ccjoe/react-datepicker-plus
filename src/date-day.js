@@ -11,6 +11,7 @@ class DateDay extends Component {
     }*/
     constructor(props) {
         super(props);
+        // console.log(this.props.selected, props.selected, 'selected')
     }
     //获取某天的所有信息 m+1才是显示用的月分
     getDayInfo(){
