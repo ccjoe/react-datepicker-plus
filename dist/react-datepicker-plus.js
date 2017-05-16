@@ -211,8 +211,9 @@ var ReactDatepickerPlus = (function (_Component) {
 
 			var selected = this.state[status ? status : 'selected'];
 			var classes = 'date-picker date-picker-' + (inline ? 'inline' : 'block') + ' ' + (className ? className : '') + ' ' + (haslunar ? 'date-picker-lunar' : '');
+			var pickerWidth = this.state.width || 215;
 			for (var i = 0; i < months; i++) {
-				offsets.push({ left: i * 215 + offset.left, top: offset.top });
+				offsets.push({ left: i * pickerWidth + offset.left, top: offset.top });
 				idate = this.numMonth(date, i);
 				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth.bind(this) });
 				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
@@ -230,6 +231,11 @@ var ReactDatepickerPlus = (function (_Component) {
 				));
 			}
 			return $pickers;
+		}
+	}, {
+		key: 'updateSize',
+		value: function updateSize(w) {
+			!this.props.inline && this.setState({ width: w });
 		}
 	}, {
 		key: 'render',
@@ -264,7 +270,7 @@ var ReactDatepickerPlus = (function (_Component) {
 				);
 				pickerInBody = _react2['default'].createElement(
 					_dateInBodyJs2['default'],
-					{ className: 'date-picker-wrapper', ref: 'insDateInBody' },
+					{ onUpdate: this.updateSize.bind(this), className: 'date-picker-wrapper', ref: 'insDateInBody' },
 					picker
 				);
 			}
@@ -745,8 +751,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -768,24 +772,33 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 var DateInBody = (function (_Component) {
   _inherits(DateInBody, _Component);
 
-  // propTypes: {
-  //   classes: React.PropTypes.string, //class split by spacing
-  //   offset: React.PropTypes.object,
-  // }
-
-  function DateInBody(props) {
+  function DateInBody() {
     _classCallCheck(this, DateInBody);
 
-    _get(Object.getPrototypeOf(DateInBody.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(DateInBody.prototype), "constructor", this).apply(this, arguments);
   }
 
   _createClass(DateInBody, [{
     key: "componentDidMount",
+
+    // propTypes: {
+    //   classes: React.PropTypes.string, //class split by spacing
+    //   offset: React.PropTypes.object,
+    //   updateSize: React.PropTypes.function
+    // }
+    // constructor(props) {
+    //     super(props);
+    // }
+
     value: function componentDidMount() {
       this.popup = document.createElement("div");
       // this.popup.className = this.props.classes
       document.body.appendChild(this.popup);
       this.renderLayer();
+      if (!this.props.inline) {
+        var adjustSize = this.popup.getElementsByClassName('date-picker')[0].clientWidth;
+        this.props.onUpdate && this.props.onUpdate(adjustSize);
+      }
     }
   }, {
     key: "componentDidUpdate",
@@ -815,7 +828,7 @@ var DateInBody = (function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react2["default"].createElement("div", _extends({}, this.props, { children: null, style: this.props.offset }));
+      return _react2["default"].createElement("div", { className: this.props.className, children: this.props.children, children: null, style: this.props.offset });
     }
   }]);
 
