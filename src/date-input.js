@@ -41,7 +41,7 @@ class DateInput extends Component {
 	    this.refs.input.focus()
 	}
 	handleChange(event){
-		this.props.onChange(event)
+		// this.props.onChange(event, this)
 	}
 	getInput(){
         return ReactDOM.findDOMNode(this)
@@ -57,9 +57,52 @@ class DateInput extends Component {
       return this.getInput().getBoundingClientRect()
 	}
 
+	recursiveMap(childs, inputElem) {
+		var copyHasChildElem = (child) =>  React.cloneElement(child, {
+				children: this.recursiveMap(child.props.children, inputElem)
+		});
+
+		if (childs.props && childs.props.children) {
+			return copyHasChildElem(childs)
+		}
+
+		return React.Children.map(childs, child => {
+			if (React.isValidElement(child)) {
+				return child.type !== 'input' ? child : inputElem;
+			}
+			if (child.props.children) {
+				child = copyHasChildElem(child)
+			}
+			return child;
+		})
+	}
+
+	setChildInput(children, inputElem){
+		if(children && children.props){
+			return <children>{this.setChildInput(children.props.children, inputElem)}</children>
+		}else{
+			return React.Children.map(children, child => {
+				return child.type === 'input' ? inputElem : child
+			})
+/* 			return <div>
+				{React.Children.map(children, child => {
+					return child.type === 'input' ? inputElem : child
+				})}
+			</div> */
+		}
+
+		// else if(children){
+		// 	return React.Children.map(children, child => {
+		// 		return child.type === 'input' ? inputElem : child
+		// 	})
+		// }
+
+	}
+
 	render () {
-		const { customInput, disabled } = this.props
-		return <input ref="input" type="text" disabled={disabled} value={this.dateString()} onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)} onChange={this.handleChange.bind(this)} />
+		const { customInput, disabled, placeholder, children } = this.props
+		const inputElem = <input ref="input" type="text" placeholder={placeholder} disabled={disabled} value={this.dateString()} onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)} onChange={this.handleChange.bind(this)} />
+		return children ? this.recursiveMap(children, inputElem) : inputElem
 	}
 };
 

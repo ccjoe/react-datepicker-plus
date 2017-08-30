@@ -38,6 +38,9 @@ class ReactDatepickerPlus extends Component {
 	// 	dayAddon: React.PropTypes.func 		//args (dayinfo)
 	// 	//dayAddon, add data for day, and need to return dom,
 	// 	//the return value will be insert to day each element. pls see last demo
+	//  placeholder
+	//  placeholderEnd
+	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
 	// }
 	 constructor(props) {
 		super(props);
@@ -142,12 +145,13 @@ class ReactDatepickerPlus extends Component {
 
 	render () {
 		let {show, selected, start, end, status} = this.state
-		let {format, inline, months, disabled} = this.props
+		let {format, inline, months, disabled, placeholder, placeholderEnd, children} = this.props
 		let picker, pickers, pickerInBody
 		let clsName = this.props.className || '', clsWrapperName = clsName?' '+clsName+'-panes': ''
 		let di = (val, stat) => <DateInput selected={!val ? selected : val}
 										   format={format} disabled={disabled}
-							   			   onFocus={this.onFocus.bind(this)}
+										   placeholder={stat=='end'?placeholderEnd:placeholder}  children={children}
+										   onFocus={this.onFocus.bind(this)}
 										   onBlur={this.onBlur.bind(this)} status={stat}/>
 		if(show){
 			pickers = this.pickers(status)

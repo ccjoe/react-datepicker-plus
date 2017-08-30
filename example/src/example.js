@@ -112,7 +112,8 @@ dayAddon: React.PropTypes.func 		//args (dayinfo)
 
 //dayAddon, add data for day, and need to return dom,
 //the return value will be insert to day each element. pls see last demo
-
+//  placeholder
+//  children
  \n
 ================================
 var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = new Date('2016/10/20')
@@ -136,11 +137,11 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 				</div>
 
 				<div className="demo-item">
-					<h5>datepicker with empty value</h5>
+					<h5>datepicker with empty value and placeholder</h5>
 					<pre className="demo-code">
-						{`<Datepicker selected=""/>`}
+						{`<Datepicker selected="" placeholder="pls input sth..."/>`}
       				</pre>
-					<Datepicker selected=""/>
+					<Datepicker selected="" placeholder="pls input sth..."/>
 				</div>
 
 				<div className="demo-item">
@@ -217,6 +218,49 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
       				</pre>
 					<Datepicker start={min} end={max} />
 				</div>
+
+				<div className="demo-item demo-full">
+					<h5>defined your input dom, {`<input/>`} element just placehold for real react input</h5>
+					<pre className="demo-code">
+						{`<Datepicker start={min} end={max}>
+	<div className="type_item"> <span className="ico_date"></span><input/> </div>
+</Datepicker>`}
+
+{`
+
+RENDER DOM IS:
+<div class="date-inputs">
+    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-10"></div>
+    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-20"></div>
+</div>`}
+      				</pre>
+
+					<Datepicker start={min} end={max} placeholder="departDate" placeholderEnd="arrivalDate">
+						<div className="type_item">
+							<span className="ico_date">icon</span>
+							<input/>
+						</div>
+					</Datepicker>
+					<style>{
+						`
+						.type_item {
+							display: inline-block;
+							position: relative;
+						}
+						.type_item input{
+							padding-left: 36px;
+						}
+						.ico_date {
+							position:absolute;
+							background-color: #dcc;
+							width: 30px; height:27px;line-height:27px;
+							border:1px solid #98e
+							text-aligh:center;
+						}
+						`}
+					</style>
+				</div>
+
 
 				<div className="demo-item demo-full">
 					<h5>bi-datepicker with start and end range, and show 2 months </h5>

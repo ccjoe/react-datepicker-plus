@@ -118,7 +118,7 @@ var App = (function (_Component) {
 				_react2['default'].createElement(
 					'pre',
 					{ className: 'demo-code' },
-					'\n--------------------------\nProps And CALLBACK OR APIs\n--------------------------\nselected: React.PropTypes.object,\t//default date, not defined, it will be now(), defined \'\' will be empty value\nformat: React.PropTypes.string,     //format date\nisfill: React.PropTypes.bool,\t    //show prefix-prev prefix-next month\nmonths: React.PropTypes.number,\t\t//show multi-panes by months\n\ntime: React.PropTypes.bool,         //show time select @todo\n\nmin: React.PropTypes.object,        //select date range min\nmax: React.PropTypes.object,        //select date range max\n\n\n\nstart: React.PropTypes.object,\t    //selected time is a range, start date\nend: React.PropTypes.object,\t    //selected time is a range, start date\n\nclassName: React.PropTypes.string,  // custom class\ndisabled: React.PropTypes.bool,     //input can\'t change\nautoHide: React.PropTypes.bool,     //selected auto hide\ninline: React.PropTypes.bool,       //inline\nlang: React.PropTypes.oneOf([\'cn\', \'en\'])\n\nfestival: React.PropTypes.bool, \t//show festival\nhaslunar: React.PropTypes.bool, \t//show lunar\n\nonFocus: React.PropTypes.func,\t\t//args (event, picker)\nonBlur: React.PropTypes.func,\t\t//args (event, picker)\nonChange: React.PropTypes.func,\t\t//args (dayinfo, picker)\ndayAddon: React.PropTypes.func \t\t//args (dayinfo)\n\n//dayAddon, add data for day, and need to return dom,\n//the return value will be insert to day each element. pls see last demo\n\n \n\n================================\nvar now = new Date(\'2016/10/15\')\nvar min = new Date(\'2016/10/10\')\nvar max = new Date(\'2016/10/20\')\n\t\t\t\t\t'
+					'\n--------------------------\nProps And CALLBACK OR APIs\n--------------------------\nselected: React.PropTypes.object,\t//default date, not defined, it will be now(), defined \'\' will be empty value\nformat: React.PropTypes.string,     //format date\nisfill: React.PropTypes.bool,\t    //show prefix-prev prefix-next month\nmonths: React.PropTypes.number,\t\t//show multi-panes by months\n\ntime: React.PropTypes.bool,         //show time select @todo\n\nmin: React.PropTypes.object,        //select date range min\nmax: React.PropTypes.object,        //select date range max\n\n\n\nstart: React.PropTypes.object,\t    //selected time is a range, start date\nend: React.PropTypes.object,\t    //selected time is a range, start date\n\nclassName: React.PropTypes.string,  // custom class\ndisabled: React.PropTypes.bool,     //input can\'t change\nautoHide: React.PropTypes.bool,     //selected auto hide\ninline: React.PropTypes.bool,       //inline\nlang: React.PropTypes.oneOf([\'cn\', \'en\'])\n\nfestival: React.PropTypes.bool, \t//show festival\nhaslunar: React.PropTypes.bool, \t//show lunar\n\nonFocus: React.PropTypes.func,\t\t//args (event, picker)\nonBlur: React.PropTypes.func,\t\t//args (event, picker)\nonChange: React.PropTypes.func,\t\t//args (dayinfo, picker)\ndayAddon: React.PropTypes.func \t\t//args (dayinfo)\n\n//dayAddon, add data for day, and need to return dom,\n//the return value will be insert to day each element. pls see last demo\n//  placeholder\n//  children\n \n\n================================\nvar now = new Date(\'2016/10/15\')\nvar min = new Date(\'2016/10/10\')\nvar max = new Date(\'2016/10/20\')\n\t\t\t\t\t'
 				),
 				_react2['default'].createElement(
 					'div',
@@ -156,14 +156,14 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'h5',
 						null,
-						'datepicker with empty value'
+						'datepicker with empty value and placeholder'
 					),
 					_react2['default'].createElement(
 						'pre',
 						{ className: 'demo-code' },
-						'<Datepicker selected=""/>'
+						'<Datepicker selected="" placeholder="pls input sth..."/>'
 					),
-					_react2['default'].createElement(Datepicker, { selected: '' })
+					_react2['default'].createElement(Datepicker, { selected: '', placeholder: 'pls input sth...' })
 				),
 				_react2['default'].createElement(
 					'div',
@@ -306,6 +306,42 @@ var App = (function (_Component) {
 						'<Datepicker start={min} end={max} />'
 					),
 					_react2['default'].createElement(Datepicker, { start: min, end: max })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'defined your input dom, ',
+						'<input/>',
+						' element just placehold for real react input'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker start={min} end={max}>\n\t<div className="type_item"> <span className="ico_date"></span><input/> </div>\n</Datepicker>',
+						'\n\nRENDER DOM IS:\n<div class="date-inputs">\n    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-10"></div>\n    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-20"></div>\n</div>'
+					),
+					_react2['default'].createElement(
+						Datepicker,
+						{ start: min, end: max, placeholder: 'departDate', placeholderEnd: 'arrivalDate' },
+						_react2['default'].createElement(
+							'div',
+							{ className: 'type_item' },
+							_react2['default'].createElement(
+								'span',
+								{ className: 'ico_date' },
+								'icon'
+							),
+							_react2['default'].createElement('input', null)
+						)
+					),
+					_react2['default'].createElement(
+						'style',
+						null,
+						'\n\t\t\t\t\t\t.type_item {\n\t\t\t\t\t\t\tdisplay: inline-block;\n\t\t\t\t\t\t\tposition: relative;\n\t\t\t\t\t\t}\n\t\t\t\t\t\t.type_item input{\n\t\t\t\t\t\t\tpadding-left: 36px;\n\t\t\t\t\t\t}\n\t\t\t\t\t\t.ico_date {\n\t\t\t\t\t\t\tposition:absolute;\n\t\t\t\t\t\t\tbackground-color: #dcc;\n\t\t\t\t\t\t\twidth: 30px; height:27px;line-height:27px;\n\t\t\t\t\t\t\tborder:1px solid #98e\n\t\t\t\t\t\t\ttext-aligh:center;\n\t\t\t\t\t\t}\n\t\t\t\t\t\t'
+					)
 				),
 				_react2['default'].createElement(
 					'div',
