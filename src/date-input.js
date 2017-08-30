@@ -59,7 +59,6 @@ class DateInput extends Component {
 
 	render () {
 		const { customInput, disabled } = this.props
-		console.log(this.dateString(), 'this.dateString()')
 		return <input ref="input" type="text" disabled={disabled} value={this.dateString()} onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)} onChange={this.handleChange.bind(this)} />
 	}
 };
