@@ -15,7 +15,8 @@ class DateDay extends Component {
     }
     //获取某天的所有信息 m+1才是显示用的月分
     getDayInfo(){
-        const {date, edate, min, max, start, end, selected, selecting, status, dayAddon } = this.props //selected date, render date, each date
+        var {date, edate, min, max, start, end, selected, selecting, status, dayAddon } = this.props //selected date, render date, each date
+        selected = selected || new Date()
         const [sy, sm, sd] = [selected.getFullYear(), selected.getMonth(), selected.getDate()]
         const [cy, cm, cd] = [date.getFullYear(), date.getMonth(), date.getDate()]
         const [y, m, d] = [edate.getFullYear(), edate.getMonth(), edate.getDate()]

@@ -4,21 +4,21 @@
  * @email icareu.joe@gmail.com
  */
 function dateFormat(date, format){
-  if(!date) return;  
+  if(!date) return '';
   var weeks = ['日','一','二','三','四','五','六'];
   if(format === undefined){
         format = date;
         date = new Date();
     }
-    date = typeof date === 'number' ? new Date(date) : date;
+    date = (typeof date === 'number' || typeof date==='string') ? new Date(date) : date;
     var map = {
-        "M": date.getMonth() + 1, //月份 
-        "d": date.getDate(), //日 
-        "h": date.getHours(), //小时 
-        "m": date.getMinutes(), //分 
-        "s": date.getSeconds(), //秒 
-        "q": Math.floor((date.getMonth() + 3) / 3), //季度 
-        "S": date.getMilliseconds(), //毫秒 
+        "M": date.getMonth() + 1, //月份
+        "d": date.getDate(), //日
+        "h": date.getHours(), //小时
+        "m": date.getMinutes(), //分
+        "s": date.getSeconds(), //秒
+        "q": Math.floor((date.getMonth() + 3) / 3), //季度
+        "S": date.getMilliseconds(), //毫秒
         "W": weeks[date.getDay()] //周
     };
     format = format.replace(/([yMdhmsqSW])+/g, function(all, t){
@@ -35,7 +35,7 @@ function dateFormat(date, format){
         }
         return all;
     });
-    return format; 
+    return format;
 }
 
 let todayStart = new Date().setHours(0,0,0,0)

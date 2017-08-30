@@ -1,7 +1,7 @@
 # react-datepicker-plus
 
-__react datepicker for salar and lunar, for props and callback to config, ie8 && ie8+__  
-__react dependency migrate react from v0.12 to v15.3, then below ie9 is not support__  
+__react datepicker for salar and lunar, for props and callback to config, ie8 && ie8+__
+__react dependency migrate react from v0.12 to v15.3, then below ie9 is not support__
 
 ## Demo & Examples
 
@@ -14,7 +14,7 @@ npm install
 npm start
 ```
 
-Then open [`localhost:8000`](http://localhost:8000) in a browser.
+Then open [`localhost:8800`](http://localhost:8800) in a browser.
 
 
 ## Installation
