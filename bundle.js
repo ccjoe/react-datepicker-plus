@@ -120,6 +120,7 @@ var DateDay = (function (_Component) {
             var status = _props.status;
             var dayAddon = _props.dayAddon;
             //selected date, render date, each date
+            selected = selected || new Date();
             var sy = selected.getFullYear();
             var sm = selected.getMonth();
             var sd = selected.getDate();
@@ -250,13 +251,13 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 function dateFormat(date, format) {
-    if (!date) return;
+    if (!date) return '';
     var weeks = ['日', '一', '二', '三', '四', '五', '六'];
     if (format === undefined) {
         format = date;
         date = new Date();
     }
-    date = typeof date === 'number' ? new Date(date) : date;
+    date = typeof date === 'number' || typeof date === 'string' ? new Date(date) : date;
     var map = {
         "M": date.getMonth() + 1, //月份
         "d": date.getDate(), //日
@@ -579,7 +580,7 @@ var DateInput = (function (_Component) {
  	}
  	componentDidMount() {
  	  this.setState({
- 	    // styles: 
+ 	    // styles:
  	  })
  	}*/
 
@@ -640,6 +641,7 @@ var DateInput = (function (_Component) {
 			var customInput = _props2.customInput;
 			var disabled = _props2.disabled;
 
+			console.log(this.dateString(), 'this.dateString()');
 			return _react2['default'].createElement('input', { ref: 'input', type: 'text', disabled: disabled, value: this.dateString(), onFocus: this.handleFocus.bind(this), onBlur: this.handleBlur.bind(this), onChange: this.handleChange.bind(this) });
 		}
 	}]);
@@ -1120,12 +1122,13 @@ var ReactDatepickerPlus = (function (_Component) {
 		_classCallCheck(this, ReactDatepickerPlus);
 
 		_get(Object.getPrototypeOf(ReactDatepickerPlus.prototype), 'constructor', this).call(this, props);
+		var selected = props.selected;
 		this.state = {
-			date: props.selected, //render month by date
+			date: selected, //render month by date
 			show: props.inline ? true : false,
 			focus: false, //focus state
 			offset: {}, //datepicker position
-			selected: props.selected,
+			selected: selected,
 			start: props.start,
 			end: props.end
 		};
@@ -1172,7 +1175,7 @@ var ReactDatepickerPlus = (function (_Component) {
 
 			if (!show) return;
 			if (!focus) {
-				input.focus(); //when show && !focus, trigger focus 
+				input.focus(); //when show && !focus, trigger focus
 			} else if (!inline) {
 					onBlur && onBlur(event, this);
 					focus && this.removePicker();
@@ -1194,6 +1197,7 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'numMonth',
 		value: function numMonth(date, num) {
+			date = date || now;
 			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
 		}
 	}, {
@@ -1292,15 +1296,19 @@ var ReactDatepickerPlus = (function (_Component) {
 			var picker = undefined,
 			    pickers = undefined,
 			    pickerInBody = undefined;
+			var clsName = this.props.className || '',
+			    clsWrapperName = clsName ? ' ' + clsName + '-panes' : '';
 			var di = function di(val, stat) {
-				return _react2['default'].createElement(_dateInputJs2['default'], { selected: !val ? selected : val, format: format, disabled: disabled,
-					onFocus: _this.onFocus.bind(_this), onBlur: _this.onBlur.bind(_this), status: stat });
+				return _react2['default'].createElement(_dateInputJs2['default'], { selected: !val ? selected : val,
+					format: format, disabled: disabled,
+					onFocus: _this.onFocus.bind(_this),
+					onBlur: _this.onBlur.bind(_this), status: stat });
 			};
 			if (show) {
 				pickers = this.pickers(status);
 				picker = _react2['default'].createElement(
 					'div',
-					{ className: months > 1 ? 'date-multi clearfix' : '' },
+					{ className: (months > 1 ? 'date-multi clearfix' : '') + clsWrapperName },
 					pickers
 				);
 				pickerInBody = _react2['default'].createElement(
@@ -1317,7 +1325,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			) : di();
 			return _react2['default'].createElement(
 				'div',
-				{ className: 'date-components' },
+				{ className: "date-components " + clsName },
 				didom,
 				inline ? picker : pickerInBody
 			);
