@@ -17,6 +17,11 @@ class DateDay extends Component {
     getDayInfo(){
         var {date, edate, min, max, start, end, selected, selecting, status, dayAddon } = this.props //selected date, render date, each date
         selected = selected || new Date()
+
+        selected = selected instanceof Date ? selected : new Date(selected)
+        date = date instanceof Date ? date : new Date(date)
+        edate = edate instanceof Date ? edate : new Date(edate)
+
         const [sy, sm, sd] = [selected.getFullYear(), selected.getMonth(), selected.getDate()]
         const [cy, cm, cd] = [date.getFullYear(), date.getMonth(), date.getDate()]
         const [y, m, d] = [edate.getFullYear(), edate.getMonth(), edate.getDate()]
@@ -60,10 +65,10 @@ class DateDay extends Component {
         let festDom, {festival, haslunar} = this.props
 
         if(festival && (salarfest||lunarfest)){
-          festDom = <span className="date-fest">{(salarfest?salarfest:'') + (lunarfest?lunarfest:'')}</span>
+          festDom = <div><span className="date-fest">{(salarfest?salarfest:'') + (lunarfest?lunarfest:'')}</span>{addon}</div>
         }else{
           festDom = <div><span className="date-d">{date.getDate()}</span>{addon}</div>
-        }
+		}
         if(haslunar){   //has lunar and must has term
             festDom = <div className="date-day-sets">{festDom}<span className="date-lunar">{term ? term : toLunarDay(lunar.day)}</span></div>
         }

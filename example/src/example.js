@@ -145,6 +145,14 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 				</div>
 
 				<div className="demo-item">
+					<h5>datepicker with date string value</h5>
+					<pre className="demo-code">
+						{`<Datepicker selected="" placeholder="pls input sth..."/>`}
+      				</pre>
+					<Datepicker selected="2018-01-01" placeholder="pls input sth..."/>
+				</div>
+
+				<div className="demo-item">
 					<h5>datepicker with self defined className</h5>
 					<p>input Component root element will add your  self defined className, 'my-datepicker'<br/>
 						and not inline datepicker pane Component root element will add  your  self defined className + 'my-datepicker-panes'</p>

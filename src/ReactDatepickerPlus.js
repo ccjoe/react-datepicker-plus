@@ -1,3 +1,4 @@
+//@todo 解决切换月份时， 选择的值有变；2.外部值变化后，input值与ui没有变化 3 key input
 // import './datepicker.less'
 import React, { Component } from 'react'
 import ReactDOM from "react-dom"
@@ -43,7 +44,7 @@ class ReactDatepickerPlus extends Component {
 	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
 	// }
 	 constructor(props) {
-		super(props);
+		 super(props);
 		var selected =  props.selected
         this.state = {
 				date: selected,		//render month by date
@@ -92,12 +93,14 @@ class ReactDatepickerPlus extends Component {
 
 	updateMonth(num){
 		const {date} = this.state
+		console.log(date, 'date')
 		const cdate = this.numMonth(date, num)
 		this.updateDate({date: cdate}, true)
 	}
 
 	numMonth(date, num){
 		date = date || now;
+		date = date instanceof Date ? date : new Date(date)
 		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate())
 	}
 
@@ -110,8 +113,10 @@ class ReactDatepickerPlus extends Component {
 		let getSelected = !isMonth ? dateinfo.date : this.state[status]
 		// let temp = {}; temp[status] = getSelected
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
-		onChange && onChange(dateinfo, this)
-		!isMonth && autoHide && this.removePicker()
+		if(!isMonth){
+			onChange && onChange(dateinfo, this)
+			autoHide && this.removePicker()
+		}
 	}
 
 	removePicker(){

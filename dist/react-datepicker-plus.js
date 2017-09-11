@@ -79,6 +79,9 @@ var ReactDatepickerPlus = (function (_Component) {
 	// 	dayAddon: React.PropTypes.func 		//args (dayinfo)
 	// 	//dayAddon, add data for day, and need to return dom,
 	// 	//the return value will be insert to day each element. pls see last demo
+	//  placeholder
+	//  placeholderEnd
+	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
 	// }
 
 	function ReactDatepickerPlus(props) {
@@ -161,6 +164,7 @@ var ReactDatepickerPlus = (function (_Component) {
 		key: 'numMonth',
 		value: function numMonth(date, num) {
 			date = date || now;
+			date = date instanceof Date ? date : new Date(date);
 			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
 		}
 	}, {
@@ -255,6 +259,9 @@ var ReactDatepickerPlus = (function (_Component) {
 			var inline = _props4.inline;
 			var months = _props4.months;
 			var disabled = _props4.disabled;
+			var placeholder = _props4.placeholder;
+			var placeholderEnd = _props4.placeholderEnd;
+			var children = _props4.children;
 
 			var picker = undefined,
 			    pickers = undefined,
@@ -264,6 +271,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			var di = function di(val, stat) {
 				return _react2['default'].createElement(_dateInputJs2['default'], { selected: !val ? selected : val,
 					format: format, disabled: disabled,
+					placeholder: stat == 'end' ? placeholderEnd : placeholder, children: children,
 					onFocus: _this.onFocus.bind(_this),
 					onBlur: _this.onBlur.bind(_this), status: stat });
 			};
@@ -438,6 +446,11 @@ var DateDay = (function (_Component) {
             var dayAddon = _props.dayAddon;
             //selected date, render date, each date
             selected = selected || new Date();
+
+            selected = selected instanceof Date ? selected : new Date(selected);
+            date = date instanceof Date ? date : new Date(date);
+            edate = edate instanceof Date ? edate : new Date(edate);
+
             var sy = selected.getFullYear();
             var sm = selected.getMonth();
             var sd = selected.getDate();
@@ -509,9 +522,14 @@ var DateDay = (function (_Component) {
 
             if (festival && (salarfest || lunarfest)) {
                 festDom = _react2['default'].createElement(
-                    'span',
-                    { className: 'date-fest' },
-                    (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
+                    'div',
+                    null,
+                    _react2['default'].createElement(
+                        'span',
+                        { className: 'date-fest' },
+                        (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
+                    ),
+                    addon
                 );
             } else {
                 festDom = _react2['default'].createElement(
@@ -636,7 +654,7 @@ var _react2 = _interopRequireDefault(_react);
 var chars = {
 	weeksCn: ['日', '一', '二', '三', '四', '五', '六'],
 	weeksEnF: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-	weeksEnS: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+	weeksEnS: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 	monthsCn: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
 	monthsEn: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 };
@@ -934,7 +952,7 @@ var DateInput = (function (_Component) {
 	}, {
 		key: 'handleChange',
 		value: function handleChange(event) {
-			this.props.onChange(event);
+			// this.props.onChange(event, this)
 		}
 	}, {
 		key: 'getInput',
@@ -958,13 +976,67 @@ var DateInput = (function (_Component) {
 			return this.getInput().getBoundingClientRect();
 		}
 	}, {
+		key: 'recursiveMap',
+		value: function recursiveMap(childs, inputElem) {
+			var _this = this;
+
+			var copyHasChildElem = function copyHasChildElem(child) {
+				return _react2['default'].cloneElement(child, {
+					children: _this.recursiveMap(child.props.children, inputElem)
+				});
+			};
+
+			if (childs.props && childs.props.children) {
+				return copyHasChildElem(childs);
+			}
+
+			return _react2['default'].Children.map(childs, function (child) {
+				if (_react2['default'].isValidElement(child)) {
+					return child.type !== 'input' ? child : inputElem;
+				}
+				if (child.props.children) {
+					child = copyHasChildElem(child);
+				}
+				return child;
+			});
+		}
+	}, {
+		key: 'setChildInput',
+		value: function setChildInput(children, inputElem) {
+			if (children && children.props) {
+				return _react2['default'].createElement(
+					'children',
+					null,
+					this.setChildInput(children.props.children, inputElem)
+				);
+			} else {
+				return _react2['default'].Children.map(children, function (child) {
+					return child.type === 'input' ? inputElem : child;
+				});
+				/* 			return <div>
+    				{React.Children.map(children, child => {
+    					return child.type === 'input' ? inputElem : child
+    				})}
+    			</div> */
+			}
+
+			// else if(children){
+			// 	return React.Children.map(children, child => {
+			// 		return child.type === 'input' ? inputElem : child
+			// 	})
+			// }
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _props2 = this.props;
 			var customInput = _props2.customInput;
 			var disabled = _props2.disabled;
+			var placeholder = _props2.placeholder;
+			var children = _props2.children;
 
-			return _react2['default'].createElement('input', { ref: 'input', type: 'text', disabled: disabled, value: this.dateString(), onFocus: this.handleFocus.bind(this), onBlur: this.handleBlur.bind(this), onChange: this.handleChange.bind(this) });
+			var inputElem = _react2['default'].createElement('input', { ref: 'input', type: 'text', placeholder: placeholder, disabled: disabled, value: this.dateString(), onFocus: this.handleFocus.bind(this), onBlur: this.handleBlur.bind(this), onChange: this.handleChange.bind(this) });
+			return children ? this.recursiveMap(children, inputElem) : inputElem;
 		}
 	}]);
 

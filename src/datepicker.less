@@ -21,7 +21,7 @@
 .date-multi{
 	.date-picker:first-child{
 		.date-next{display: none;}
-	}		
+	}
 	.date-picker:last-child{
 		.date-prev{display: none;}
 	}
@@ -71,6 +71,7 @@
 		padding:8px @gap;
 		width: 25px;
 		text-align: center;
+		vertical-align: middle;
 	}
 	.date-nocurrent, .date-disabled{
 		color: @borderColor;
@@ -83,7 +84,7 @@
 	.date-selected{
 		background-color: @selectColor;
 	}
-	
+
 	.date-selecting{
 		.date-range:not(.date-hover){
 			background-color: @borderLighter;
@@ -100,14 +101,14 @@
 		}
 	}
 	.date-day-sets{
-		span{display: block;} 
+		span{display: block;}
 	}
 	.date-time{
 		text-align: center;
 		padding: @gap 0;
 		background-color: @borderLighter;
 	}
-	.date-fest{ 
+	.date-fest{
 		font-size: 11px;
 		letter-spacing: 0;
 	}
