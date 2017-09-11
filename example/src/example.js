@@ -15,6 +15,7 @@ class App extends Component {
 	constructor(props) {
         super(props);
 		this.state = {
+			linkageValue: '2017-09-15',
 			addonData: {
 				rest: {
 					'2016/01/01': '休',
@@ -58,8 +59,11 @@ class App extends Component {
 	onChange(dateinfo){
 		console.log(dateinfo, 'onChange')
 	}
+	linkageChange(dateInfo){
+		this.setState({'linkageValue': dateInfo.date})
+	}
 	dayAddon(dayinfo){
-		let {addonData} = this.state
+		let {addonData, linkageValue} = this.state
 		let {date} = dayinfo
 		let dateStr = dateFormat(date, 'yyyy/MM/dd')
 		let resstr, val, doms = []
@@ -74,6 +78,7 @@ class App extends Component {
 
 
 	render () {
+		let {addonData, linkageValue} = this.state
 		return (
 			<div className="demo-list clearfix">
 				<pre className="demo-code">
@@ -180,6 +185,21 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 				</div>
 
 				<div className="demo-item">
+					<h5>datepicker value is linkage</h5>
+					<pre className="demo-code">
+						{`
+<span>{linkageValue.toString()}</span>
+<Datepicker selected={linkageValue}
+	onChange={this.linkageChange.bind(this)} />
+<Datepicker selected={linkageValue}
+	onChange={this.linkageChange.bind(this)} />`}
+      				</pre>
+					<span>{linkageValue.toString()}</span>
+					<Datepicker selected={linkageValue} onChange={this.linkageChange.bind(this)} />
+					<Datepicker selected={linkageValue} onChange={this.linkageChange.bind(this)} />
+				</div>
+
+				<div className="demo-item">
 					<h5>datepicker autoHide when selected</h5>
 					<pre className="demo-code">
 						{`<Datepicker autoHide={true}/>`}
@@ -249,6 +269,13 @@ RENDER DOM IS:
 							<input/>
 						</div>
 					</Datepicker>
+
+					<Datepicker  months={2} isfill   start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期">
+                            <div className="type_item">
+                                <span className="ico_search_type ico_search_ddate"></span>
+                                <input/>
+                            </div>
+                    </Datepicker>
 					<style>{
 						`
 						.type_item {

@@ -93,7 +93,6 @@ class ReactDatepickerPlus extends Component {
 
 	updateMonth(num){
 		const {date} = this.state
-		console.log(date, 'date')
 		const cdate = this.numMonth(date, num)
 		this.updateDate({date: cdate}, true)
 	}
@@ -107,6 +106,7 @@ class ReactDatepickerPlus extends Component {
 	updateDay(dateinfo){
 		this.updateDate(dateinfo)
 	}
+
 	updateDate(dateinfo, isMonth){
 		let {onChange, autoHide} = this.props
 		let {status='selected', selected} = this.state
@@ -148,12 +148,20 @@ class ReactDatepickerPlus extends Component {
 		!this.props.inline && this.setState({width: w})
 	}
 
+	componentWillReceiveProps(props, oldprops) {
+		// console.log(props.selected, this.props.selected, 'props')
+		if(props.selected !== this.props.selected){
+			this.setState({selected: props.selected})
+			// this.updateDate({date: props.selected}, true)
+		}
+	}
+
 	render () {
 		let {show, selected, start, end, status} = this.state
 		let {format, inline, months, disabled, placeholder, placeholderEnd, children} = this.props
 		let picker, pickers, pickerInBody
 		let clsName = this.props.className || '', clsWrapperName = clsName?' '+clsName+'-panes': ''
-		let di = (val, stat) => <DateInput selected={!val ? selected : val}
+		let di = (val, stat) => <DateInput selected={val===void 0 ? selected : val}
 										   format={format} disabled={disabled}
 										   placeholder={stat=='end'?placeholderEnd:placeholder}  children={children}
 										   onFocus={this.onFocus.bind(this)}
@@ -163,7 +171,7 @@ class ReactDatepickerPlus extends Component {
 			picker = <div className={(months>1?'date-multi clearfix':'') + clsWrapperName}>{pickers}</div>
 			pickerInBody = <DateInBody  onUpdate={this.updateSize.bind(this)} className='date-picker-wrapper' ref="insDateInBody">{picker}</DateInBody>
 		}
-		let didom = start && end ? <div className="date-inputs">{di(start, 'start')}{di(end, 'end')}</div> : di()
+		let didom = start || end ? <div className="date-inputs">{start!==void 0 && di(start, 'start')}{end!==void 0 && di(end, 'end')}</div> : di()
 		return <div className={"date-components "+ clsName}>
 					{didom}
 					{inline ? picker : pickerInBody}
