@@ -40,9 +40,9 @@ class DateDay extends Component {
 			//是否在限制的范围内
 			let isStart = status==='start', isEnd = status==='end'
 			if(isStart || isEnd){
-				if(isStart){
+				if(isStart && end){
 					dayinfo.disabled = edataNo > +end
-				}else if(isEnd){
+				}else if(isEnd && start){
 					dayinfo.disabled = edataNo < +start
 				}
 			}else{

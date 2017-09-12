@@ -508,9 +508,9 @@ var DateDay = (function (_Component) {
                 var isStart = status === 'start',
                     isEnd = status === 'end';
                 if (isStart || isEnd) {
-                    if (isStart) {
+                    if (isStart && end) {
                         dayinfo.disabled = edataNo > +end;
-                    } else if (isEnd) {
+                    } else if (isEnd && start) {
                         dayinfo.disabled = edataNo < +start;
                     }
                 } else {
