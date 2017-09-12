@@ -369,11 +369,13 @@ var App = (function (_Component) {
 						'pre',
 						{ className: 'demo-code' },
 						'<Datepicker start={min} end={max}>\n\t<div className="type_item"> <span className="ico_date"></span><input/> </div>\n</Datepicker>',
-						'\n\nRENDER DOM IS:\n<div class="date-inputs">\n    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-10"></div>\n    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-20"></div>\n</div>'
+						'\n\nRENDER DOM IS:\n<div class="date-inputs">\n    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-10"></div>\n    <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-20"></div>\n</div>\n\nPLS CHECK CONSOLE about onChange callback to get dateInfo.status object about \'start end\'\n'
 					),
 					_react2['default'].createElement(
 						Datepicker,
-						{ start: min, end: max, placeholder: 'departDate', placeholderEnd: 'arrivalDate' },
+						{ start: min, end: max, placeholder: 'departDate', placeholderEnd: 'arrivalDate', onChange: function (dateInfo) {
+								console.log(dateInfo, 'dateInfo');
+							} },
 						_react2['default'].createElement(
 							'div',
 							{ className: 'type_item' },
@@ -387,7 +389,9 @@ var App = (function (_Component) {
 					),
 					_react2['default'].createElement(
 						Datepicker,
-						{ months: 2, isfill: true, start: min, end: "", placeholder: '出发日期', placeholderEnd: '返回日期' },
+						{ months: 2, isfill: true, start: min, end: "", placeholder: '出发日期', placeholderEnd: '返回日期', onChange: function (dateInfo) {
+								console.log(dateInfo, 'dateInfo');
+							} },
 						_react2['default'].createElement(
 							'div',
 							{ className: 'type_item' },

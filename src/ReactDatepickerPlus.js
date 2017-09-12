@@ -126,7 +126,7 @@ class ReactDatepickerPlus extends Component {
 			if(end){
 				this.setState({max: end})
 			}
-
+			dateinfo.status = status
 			onChange && onChange(dateinfo, this)
 			autoHide && this.removePicker()
 		}

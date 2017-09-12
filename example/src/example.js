@@ -260,17 +260,25 @@ RENDER DOM IS:
 <div class="date-inputs">
     <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-10"></div>
     <div class="type_item"><span class="ico_date">icon</span><input type="text" value="2016-10-20"></div>
-</div>`}
+</div>
+
+PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 'start end'
+`}
+
       				</pre>
 
-					<Datepicker start={min} end={max} placeholder="departDate" placeholderEnd="arrivalDate">
+					<Datepicker start={min} end={max} placeholder="departDate" placeholderEnd="arrivalDate"  onChange={function(dateInfo){
+						console.log(dateInfo ,'dateInfo')
+					}}>
 						<div className="type_item">
 							<span className="ico_date">icon</span>
 							<input/>
 						</div>
 					</Datepicker>
 
-					<Datepicker  months={2} isfill   start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期">
+					<Datepicker  months={2} isfill   start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期" onChange={function(dateInfo){
+						console.log(dateInfo ,'dateInfo')
+					}}>
                             <div className="type_item">
                                 <span className="ico_search_type ico_search_ddate"></span>
                                 <input/>
