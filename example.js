@@ -338,7 +338,7 @@ var App = (function (_Component) {
 						{ className: 'demo-code' },
 						'<Datepicker inline min={min} max={max} />'
 					),
-					_react2['default'].createElement(Datepicker, { inline: true, min: min, max: max })
+					_react2['default'].createElement(Datepicker, { inline: true, min: min, max: max, selected: now })
 				),
 				_react2['default'].createElement(
 					'div',
@@ -366,6 +366,11 @@ var App = (function (_Component) {
 						' element just placehold for real react input'
 					),
 					_react2['default'].createElement(
+						'h5',
+						null,
+						'complex demo: the demo of start end min max and end is null '
+					),
+					_react2['default'].createElement(
 						'pre',
 						{ className: 'demo-code' },
 						'<Datepicker start={min} end={max}>\n\t<div className="type_item"> <span className="ico_date"></span><input/> </div>\n</Datepicker>',
@@ -373,7 +378,7 @@ var App = (function (_Component) {
 					),
 					_react2['default'].createElement(
 						Datepicker,
-						{ start: min, end: max, placeholder: 'departDate', placeholderEnd: 'arrivalDate', onChange: function (dateInfo) {
+						{ min: new Date('2016-10-08 00:00:00'), max: new Date('2016-10-28 00:00:00'), start: min, end: max, placeholder: 'departDate', placeholderEnd: 'arrivalDate', onChange: function (dateInfo) {
 								console.log(dateInfo, 'dateInfo');
 							} },
 						_react2['default'].createElement(
@@ -387,9 +392,13 @@ var App = (function (_Component) {
 							_react2['default'].createElement('input', null)
 						)
 					),
+					_react2['default'].createElement('br', null),
+					_react2['default'].createElement('br', null),
+					_react2['default'].createElement('br', null),
+					_react2['default'].createElement('br', null),
 					_react2['default'].createElement(
 						Datepicker,
-						{ months: 2, isfill: true, start: min, end: "", placeholder: '出发日期', placeholderEnd: '返回日期', onChange: function (dateInfo) {
+						{ min: new Date('2016-10-08 00:00:00'), months: 2, isfill: true, start: min, end: "", placeholder: '出发日期', placeholderEnd: '返回日期', onChange: function (dateInfo) {
 								console.log(dateInfo, 'dateInfo');
 							} },
 						_react2['default'].createElement(
