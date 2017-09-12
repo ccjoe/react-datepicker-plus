@@ -97,7 +97,9 @@ var ReactDatepickerPlus = (function (_Component) {
 			offset: {}, //datepicker position
 			selected: selected,
 			start: props.start,
-			end: props.end
+			end: props.end,
+			min: props.min || props.start,
+			max: props.max || props.end
 		};
 	}
 
@@ -149,6 +151,11 @@ var ReactDatepickerPlus = (function (_Component) {
 				}
 		}
 	}, {
+		key: 'clickPane',
+		value: function clickPane(event, abc) {
+			this.state.focus = false; //just change state not trigger render
+		}
+	}, {
 		key: 'show',
 		value: function show(_show, offset, focus, status) {
 			this.setState({ show: _show, offset: offset, focus: focus, status: status });
@@ -179,6 +186,8 @@ var ReactDatepickerPlus = (function (_Component) {
 			var _props2 = this.props;
 			var onChange = _props2.onChange;
 			var autoHide = _props2.autoHide;
+			var start = _props2.start;
+			var end = _props2.end;
 			var _state3 = this.state;
 			var _state3$status = _state3.status;
 			var status = _state3$status === undefined ? 'selected' : _state3$status;
@@ -188,6 +197,13 @@ var ReactDatepickerPlus = (function (_Component) {
 			// let temp = {}; temp[status] = getSelected
 			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
 			if (!isMonth) {
+				if (start) {
+					this.setState({ min: start });
+				}
+				if (end) {
+					this.setState({ max: end });
+				}
+
 				onChange && onChange(dateinfo, this);
 				autoHide && this.removePicker();
 			}
@@ -210,6 +226,8 @@ var ReactDatepickerPlus = (function (_Component) {
 			var date = _state4.date;
 			var start = _state4.start;
 			var end = _state4.end;
+			var min = _state4.min;
+			var max = _state4.max;
 			var offset = _state4.offset;
 			var _props3 = this.props;
 			var inline = _props3.inline;
@@ -225,16 +243,16 @@ var ReactDatepickerPlus = (function (_Component) {
 				offsets.push({ left: i * pickerWidth + offset.left, top: offset.top });
 				idate = this.numMonth(date, i);
 				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth.bind(this) });
-				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
+				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { min: min, max: max, date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
 
 				$pickers.push(inline ? _react2['default'].createElement(
 					'div',
-					{ className: classes, key: i },
+					{ onMouseDown: this.clickPane.bind(this), className: classes, key: i },
 					dh,
 					dc
 				) : _react2['default'].createElement(
 					'div',
-					{ className: classes, style: offsets[i], key: i },
+					{ onMouseDown: this.clickPane.bind(this), className: classes, style: offsets[i], key: i },
 					dh,
 					dc
 				));
@@ -249,10 +267,8 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(props, oldprops) {
-			// console.log(props.selected, this.props.selected, 'props')
 			if (props.selected !== this.props.selected) {
 				this.setState({ selected: props.selected });
-				// this.updateDate({date: props.selected}, true)
 			}
 		}
 	}, {
@@ -285,7 +301,8 @@ var ReactDatepickerPlus = (function (_Component) {
 					format: format, disabled: disabled,
 					placeholder: stat == 'end' ? placeholderEnd : placeholder, children: children,
 					onFocus: _this.onFocus.bind(_this),
-					onBlur: _this.onBlur.bind(_this), status: stat });
+					onBlur: _this.onBlur.bind(_this), status: stat,
+					ref: stat });
 			};
 			if (show) {
 				pickers = this.pickers(status);
@@ -485,7 +502,22 @@ var DateDay = (function (_Component) {
                 currentMonth: m === cm,
                 currentDay: y === sy && m === sm && d === sd
             };
-            if (min || max) dayinfo.disabled = !range(min, max); //是否在限制的范围内
+            //需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
+            if (min || max) {
+                //是否在限制的范围内
+                var isStart = status === 'start',
+                    isEnd = status === 'end';
+                if (isStart || isEnd) {
+                    if (isStart) {
+                        dayinfo.disabled = edataNo > +end;
+                    } else if (isEnd) {
+                        dayinfo.disabled = edataNo < +start;
+                    }
+                } else {
+                    dayinfo.disabled = !range(min, max);
+                }
+            }
+
             if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
             if (selecting && status) dayinfo.inselect = status === 'start' ? range(selecting, end) : range(start, selecting);
 
