@@ -54,8 +54,8 @@ class ReactDatepickerPlus extends Component {
 				selected: selected,
 				start: props.start,
 				end: props.end,
-				min: props.min || props.start,
-				max: props.max || props.end,
+				min: props.min,
+				max: props.max,
 				// status: ''   	//React.PropTypes.oneOf(['start', 'end'])
 				//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		}
@@ -120,12 +120,12 @@ class ReactDatepickerPlus extends Component {
 		// let temp = {}; temp[status] = getSelected
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
 		if(!isMonth){
-			if(start){
-				this.setState({min: start})
+			/* if(start){
+				this.setState({start: start})
 			}
 			if(end){
-				this.setState({max: end})
-			}
+				this.setState({end: end})
+			} */
 			dateinfo.status = status
 			onChange && onChange(dateinfo, this)
 			autoHide && this.removePicker()
@@ -164,6 +164,12 @@ class ReactDatepickerPlus extends Component {
 	componentWillReceiveProps(props, oldprops) {
 		if(props.selected !== this.props.selected){
 			this.setState({selected: props.selected})
+		}
+		if(props.start !== this.props.start){
+			this.setState({start: props.start})
+		}
+		if(props.end !== this.props.end){
+			this.setState({end: props.end})
 		}
 	}
 

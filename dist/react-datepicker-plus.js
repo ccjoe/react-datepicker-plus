@@ -98,8 +98,8 @@ var ReactDatepickerPlus = (function (_Component) {
 			selected: selected,
 			start: props.start,
 			end: props.end,
-			min: props.min || props.start,
-			max: props.max || props.end
+			min: props.min,
+			max: props.max
 		};
 	}
 
@@ -197,12 +197,12 @@ var ReactDatepickerPlus = (function (_Component) {
 			// let temp = {}; temp[status] = getSelected
 			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
 			if (!isMonth) {
-				if (start) {
-					this.setState({ min: start });
-				}
-				if (end) {
-					this.setState({ max: end });
-				}
+				/* if(start){
+    	this.setState({start: start})
+    }
+    if(end){
+    	this.setState({end: end})
+    } */
 				dateinfo.status = status;
 				onChange && onChange(dateinfo, this);
 				autoHide && this.removePicker();
@@ -269,6 +269,12 @@ var ReactDatepickerPlus = (function (_Component) {
 		value: function componentWillReceiveProps(props, oldprops) {
 			if (props.selected !== this.props.selected) {
 				this.setState({ selected: props.selected });
+			}
+			if (props.start !== this.props.start) {
+				this.setState({ start: props.start });
+			}
+			if (props.end !== this.props.end) {
+				this.setState({ end: props.end });
 			}
 		}
 	}, {
@@ -490,9 +496,12 @@ var DateDay = (function (_Component) {
             var m = edate.getMonth();
             var d = edate.getDate();
 
-            var edataNo = +edate;
+            var edateNo = +edate;
             var range = function range(start, end) {
-                return edataNo >= +start && edataNo <= +end;
+                return edateNo >= +start && edateNo <= +end;
+            };
+            var minmax = function minmax(min, max) {
+                return min && edateNo < +min || max && edateNo > +max;
             };
             var dayinfo = {
                 date: edate,
@@ -503,29 +512,26 @@ var DateDay = (function (_Component) {
                 currentDay: y === sy && m === sm && d === sd
             };
             //需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
-            if (min || max) {
-                //是否在限制的范围内
-                var isStart = status === 'start',
-                    isEnd = status === 'end';
-                if (isStart || isEnd) {
-                    if (isStart && end) {
-                        dayinfo.disabled = edataNo > +end;
-                    } else if (isEnd && start) {
-                        dayinfo.disabled = edataNo < +start;
-                    }
-                } else {
-                    dayinfo.disabled = !range(min, max);
-                }
+            //是否在限制的范围内
+            var isStart = status === 'start',
+                isEnd = status === 'end';
+
+            if (isStart) {
+                dayinfo.disabled = minmax(min, !max || max > +end ? +end : max);
+            } else if (isEnd) {
+                dayinfo.disabled = minmax(min && min > +start ? min : +start, max);
+            } else if (min || max) {
+                dayinfo.disabled = minmax(min, max);
             }
 
             if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
-            if (selecting && status) dayinfo.inselect = status === 'start' ? range(selecting, end) : range(start, selecting);
+            if (selecting && status) dayinfo.inselect = isStart ? range(selecting, end) : range(start, selecting);
 
             if (dayAddon) {
                 dayinfo.addon = dayAddon(dayinfo);
             }
             dayinfo.lunarfest = _dateHolidays.lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
-            // console.log(dayinfo, edataNo, start, end, 'startend')
+            // console.log(dayinfo, edateNo, start, end, 'startend')
             return dayinfo;
         }
     }, {

@@ -236,7 +236,7 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 					<pre className="demo-code">
 						{`<Datepicker inline min={min} max={max} />`}
       				</pre>
-					<Datepicker inline min={min} max={max} />
+					<Datepicker inline min={min} max={max} selected={now} />
 				</div>
 
 				<div className="demo-item demo-full">
@@ -249,6 +249,7 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 
 				<div className="demo-item demo-full">
 					<h5>defined your input dom, {`<input/>`} element just placehold for real react input</h5>
+					<h5>complex demo: the demo of start end min max and end is null </h5>
 					<pre className="demo-code">
 						{`<Datepicker start={min} end={max}>
 	<div className="type_item"> <span className="ico_date"></span><input/> </div>
@@ -267,7 +268,7 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 
       				</pre>
 
-					<Datepicker start={min} end={max} placeholder="departDate" placeholderEnd="arrivalDate"  onChange={function(dateInfo){
+					<Datepicker min={new Date('2016-10-08 00:00:00')} max={new Date('2016-10-28 00:00:00')} start={min} end={max} placeholder="departDate" placeholderEnd="arrivalDate"  onChange={function(dateInfo){
 						console.log(dateInfo ,'dateInfo')
 					}}>
 						<div className="type_item">
@@ -275,8 +276,8 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 							<input/>
 						</div>
 					</Datepicker>
-
-					<Datepicker  months={2} isfill   start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期" onChange={function(dateInfo){
+					<br/><br/><br/><br/>
+					<Datepicker   min={new Date('2016-10-08 00:00:00')}   months={2} isfill   start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期" onChange={function(dateInfo){
 						console.log(dateInfo ,'dateInfo')
 					}}>
                             <div className="type_item">

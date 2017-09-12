@@ -25,8 +25,9 @@ class DateDay extends Component {
         const [sy, sm, sd] = [selected.getFullYear(), selected.getMonth(), selected.getDate()]
         const [cy, cm, cd] = [date.getFullYear(), date.getMonth(), date.getDate()]
         const [y, m, d] = [edate.getFullYear(), edate.getMonth(), edate.getDate()]
-        let edataNo = +edate
-        let range = (start, end) => edataNo >= +start && edataNo <= +end
+        let edateNo = +edate
+		let range = (start, end) => edateNo >= +start && edateNo <= +end
+		let minmax = (min, max) => (min && edateNo < +min) || (max && edateNo > +max)
         var dayinfo = {
             date: edate,
             lunar: toLunarDate(edate),
@@ -36,28 +37,25 @@ class DateDay extends Component {
             currentDay: y === sy && m === sm && d === sd
         };
 		//需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
-		if(min || max){
-			//是否在限制的范围内
-			let isStart = status==='start', isEnd = status==='end'
-			if(isStart || isEnd){
-				if(isStart && end){
-					dayinfo.disabled = edataNo > +end
-				}else if(isEnd && start){
-					dayinfo.disabled = edataNo < +start
-				}
-			}else{
-				dayinfo.disabled = !range(min, max)
-			}
+		//是否在限制的范围内
+		let isStart = status==='start', isEnd = status==='end'
+
+		if(isStart){
+			dayinfo.disabled = minmax(min, !max||max>+end?+end:max)
+		}else if(isEnd){
+			dayinfo.disabled = minmax(min&&min>+start?min:+start, max)
+		}else if(min || max){
+			dayinfo.disabled = minmax(min, max)
 		}
 
         if(start && end) dayinfo.inrange = range(start, end) //是否在选择结果的范围内
-        if(selecting && status) dayinfo.inselect = status==='start' ? range(selecting, end) : range(start, selecting)
+        if(selecting && status) dayinfo.inselect = isStart ? range(selecting, end) : range(start, selecting)
 
         if(dayAddon){
             dayinfo.addon = dayAddon(dayinfo)
         }
         dayinfo.lunarfest = lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
-        // console.log(dayinfo, edataNo, start, end, 'startend')
+        // console.log(dayinfo, edateNo, start, end, 'startend')
         return dayinfo;
     }
     zero (n) {
