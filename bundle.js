@@ -121,6 +121,11 @@ var DateDay = (function (_Component) {
             var dayAddon = _props.dayAddon;
             //selected date, render date, each date
             selected = selected || new Date();
+
+            selected = selected instanceof Date ? selected : new Date(selected);
+            date = date instanceof Date ? date : new Date(date);
+            edate = edate instanceof Date ? edate : new Date(edate);
+
             var sy = selected.getFullYear();
             var sm = selected.getMonth();
             var sd = selected.getDate();
@@ -143,7 +148,22 @@ var DateDay = (function (_Component) {
                 currentMonth: m === cm,
                 currentDay: y === sy && m === sm && d === sd
             };
-            if (min || max) dayinfo.disabled = !range(min, max); //是否在限制的范围内
+            //需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
+            if (min || max) {
+                //是否在限制的范围内
+                var isStart = status === 'start',
+                    isEnd = status === 'end';
+                if (isStart || isEnd) {
+                    if (isStart) {
+                        dayinfo.disabled = edataNo > +end;
+                    } else if (isEnd) {
+                        dayinfo.disabled = edataNo < +start;
+                    }
+                } else {
+                    dayinfo.disabled = !range(min, max);
+                }
+            }
+
             if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
             if (selecting && status) dayinfo.inselect = status === 'start' ? range(selecting, end) : range(start, selecting);
 
@@ -192,9 +212,14 @@ var DateDay = (function (_Component) {
 
             if (festival && (salarfest || lunarfest)) {
                 festDom = _react2['default'].createElement(
-                    'span',
-                    { className: 'date-fest' },
-                    (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
+                    'div',
+                    null,
+                    _react2['default'].createElement(
+                        'span',
+                        { className: 'date-fest' },
+                        (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
+                    ),
+                    addon
                 );
             } else {
                 festDom = _react2['default'].createElement(
@@ -317,7 +342,7 @@ var _react2 = _interopRequireDefault(_react);
 var chars = {
 	weeksCn: ['日', '一', '二', '三', '四', '五', '六'],
 	weeksEnF: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-	weeksEnS: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+	weeksEnS: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 	monthsCn: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
 	monthsEn: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 };
@@ -1090,6 +1115,7 @@ exports['default'] = DateTime;
 module.exports = exports['default'];
 
 },{"./date-day.js":2,"react":undefined}],"react-datepicker-plus":[function(require,module,exports){
+//@todo 解决切换月份时， 选择的值有变；2.外部值变化后，input值与ui没有变化 3 key input
 // import './datepicker.less'
 'use strict';
 
@@ -1186,7 +1212,9 @@ var ReactDatepickerPlus = (function (_Component) {
 			offset: {}, //datepicker position
 			selected: selected,
 			start: props.start,
-			end: props.end
+			end: props.end,
+			min: props.min || props.start,
+			max: props.max || props.end
 		};
 	}
 
@@ -1238,6 +1266,11 @@ var ReactDatepickerPlus = (function (_Component) {
 				}
 		}
 	}, {
+		key: 'clickPane',
+		value: function clickPane(event, abc) {
+			this.state.focus = false; //just change state not trigger render
+		}
+	}, {
 		key: 'show',
 		value: function show(_show, offset, focus, status) {
 			this.setState({ show: _show, offset: offset, focus: focus, status: status });
@@ -1254,6 +1287,7 @@ var ReactDatepickerPlus = (function (_Component) {
 		key: 'numMonth',
 		value: function numMonth(date, num) {
 			date = date || now;
+			date = date instanceof Date ? date : new Date(date);
 			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
 		}
 	}, {
@@ -1267,6 +1301,8 @@ var ReactDatepickerPlus = (function (_Component) {
 			var _props2 = this.props;
 			var onChange = _props2.onChange;
 			var autoHide = _props2.autoHide;
+			var start = _props2.start;
+			var end = _props2.end;
 			var _state3 = this.state;
 			var _state3$status = _state3.status;
 			var status = _state3$status === undefined ? 'selected' : _state3$status;
@@ -1275,8 +1311,17 @@ var ReactDatepickerPlus = (function (_Component) {
 			var getSelected = !isMonth ? dateinfo.date : this.state[status];
 			// let temp = {}; temp[status] = getSelected
 			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
-			onChange && onChange(dateinfo, this);
-			!isMonth && autoHide && this.removePicker();
+			if (!isMonth) {
+				if (start) {
+					this.setState({ min: start });
+				}
+				if (end) {
+					this.setState({ max: end });
+				}
+
+				onChange && onChange(dateinfo, this);
+				autoHide && this.removePicker();
+			}
 		}
 	}, {
 		key: 'removePicker',
@@ -1296,6 +1341,8 @@ var ReactDatepickerPlus = (function (_Component) {
 			var date = _state4.date;
 			var start = _state4.start;
 			var end = _state4.end;
+			var min = _state4.min;
+			var max = _state4.max;
 			var offset = _state4.offset;
 			var _props3 = this.props;
 			var inline = _props3.inline;
@@ -1311,16 +1358,16 @@ var ReactDatepickerPlus = (function (_Component) {
 				offsets.push({ left: i * pickerWidth + offset.left, top: offset.top });
 				idate = this.numMonth(date, i);
 				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth.bind(this) });
-				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
+				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { min: min, max: max, date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
 
 				$pickers.push(inline ? _react2['default'].createElement(
 					'div',
-					{ className: classes, key: i },
+					{ onMouseDown: this.clickPane.bind(this), className: classes, key: i },
 					dh,
 					dc
 				) : _react2['default'].createElement(
 					'div',
-					{ className: classes, style: offsets[i], key: i },
+					{ onMouseDown: this.clickPane.bind(this), className: classes, style: offsets[i], key: i },
 					dh,
 					dc
 				));
@@ -1331,6 +1378,13 @@ var ReactDatepickerPlus = (function (_Component) {
 		key: 'updateSize',
 		value: function updateSize(w) {
 			!this.props.inline && this.setState({ width: w });
+		}
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(props, oldprops) {
+			if (props.selected !== this.props.selected) {
+				this.setState({ selected: props.selected });
+			}
 		}
 	}, {
 		key: 'render',
@@ -1358,11 +1412,12 @@ var ReactDatepickerPlus = (function (_Component) {
 			var clsName = this.props.className || '',
 			    clsWrapperName = clsName ? ' ' + clsName + '-panes' : '';
 			var di = function di(val, stat) {
-				return _react2['default'].createElement(_dateInputJs2['default'], { selected: !val ? selected : val,
+				return _react2['default'].createElement(_dateInputJs2['default'], { selected: val === void 0 ? selected : val,
 					format: format, disabled: disabled,
 					placeholder: stat == 'end' ? placeholderEnd : placeholder, children: children,
 					onFocus: _this.onFocus.bind(_this),
-					onBlur: _this.onBlur.bind(_this), status: stat });
+					onBlur: _this.onBlur.bind(_this), status: stat,
+					ref: stat });
 			};
 			if (show) {
 				pickers = this.pickers(status);
@@ -1377,11 +1432,11 @@ var ReactDatepickerPlus = (function (_Component) {
 					picker
 				);
 			}
-			var didom = start && end ? _react2['default'].createElement(
+			var didom = start || end ? _react2['default'].createElement(
 				'div',
 				{ className: 'date-inputs' },
-				di(start, 'start'),
-				di(end, 'end')
+				start !== void 0 && di(start, 'start'),
+				end !== void 0 && di(end, 'end')
 			) : di();
 			return _react2['default'].createElement(
 				'div',

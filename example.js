@@ -37,6 +37,7 @@ var App = (function (_Component) {
 
 		_get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this, props);
 		this.state = {
+			linkageValue: '2017-09-15',
 			addonData: {
 				rest: {
 					'2016/01/01': '休',
@@ -88,9 +89,16 @@ var App = (function (_Component) {
 			console.log(dateinfo, 'onChange');
 		}
 	}, {
+		key: 'linkageChange',
+		value: function linkageChange(dateInfo) {
+			this.setState({ 'linkageValue': dateInfo.date });
+		}
+	}, {
 		key: 'dayAddon',
 		value: function dayAddon(dayinfo) {
-			var addonData = this.state.addonData;
+			var _state = this.state;
+			var addonData = _state.addonData;
+			var linkageValue = _state.linkageValue;
 			var date = dayinfo.date;
 
 			var dateStr = (0, _srcDateFormat.dateFormat)(date, 'yyyy/MM/dd');
@@ -112,6 +120,10 @@ var App = (function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _state2 = this.state;
+			var addonData = _state2.addonData;
+			var linkageValue = _state2.linkageValue;
+
 			return _react2['default'].createElement(
 				'div',
 				{ className: 'demo-list clearfix' },
@@ -171,6 +183,21 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'h5',
 						null,
+						'datepicker with date string value'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker selected="" placeholder="pls input sth..."/>'
+					),
+					_react2['default'].createElement(Datepicker, { selected: '2018-01-01', placeholder: 'pls input sth...' })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
 						'datepicker with self defined className'
 					),
 					_react2['default'].createElement(
@@ -216,6 +243,27 @@ var App = (function (_Component) {
 						'<Datepicker selected={now}/>'
 					),
 					_react2['default'].createElement(Datepicker, { selected: now })
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker value is linkage'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'\n<span>{linkageValue.toString()}</span>\n<Datepicker selected={linkageValue}\n\tonChange={this.linkageChange.bind(this)} />\n<Datepicker selected={linkageValue}\n\tonChange={this.linkageChange.bind(this)} />'
+					),
+					_react2['default'].createElement(
+						'span',
+						null,
+						linkageValue.toString()
+					),
+					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) }),
+					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) })
 				),
 				_react2['default'].createElement(
 					'div',
@@ -334,6 +382,16 @@ var App = (function (_Component) {
 								{ className: 'ico_date' },
 								'icon'
 							),
+							_react2['default'].createElement('input', null)
+						)
+					),
+					_react2['default'].createElement(
+						Datepicker,
+						{ months: 2, isfill: true, start: min, end: "", placeholder: '出发日期', placeholderEnd: '返回日期' },
+						_react2['default'].createElement(
+							'div',
+							{ className: 'type_item' },
+							_react2['default'].createElement('span', { className: 'ico_search_type ico_search_ddate' }),
 							_react2['default'].createElement('input', null)
 						)
 					),
