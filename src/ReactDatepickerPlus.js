@@ -54,6 +54,8 @@ class ReactDatepickerPlus extends Component {
 				selected: selected,
 				start: props.start,
 				end: props.end,
+				min: props.min || props.start,
+				max: props.max || props.end,
 				// status: ''   	//React.PropTypes.oneOf(['start', 'end'])
 				//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		}
@@ -108,12 +110,19 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	updateDate(dateinfo, isMonth){
-		let {onChange, autoHide} = this.props
+		let {onChange, autoHide, start, end} = this.props
 		let {status='selected', selected} = this.state
 		let getSelected = !isMonth ? dateinfo.date : this.state[status]
 		// let temp = {}; temp[status] = getSelected
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
 		if(!isMonth){
+			if(start){
+				this.setState({min: start})
+			}
+			if(end){
+				this.setState({max: end})
+			}
+
 			onChange && onChange(dateinfo, this)
 			autoHide && this.removePicker()
 		}
@@ -126,7 +135,7 @@ class ReactDatepickerPlus extends Component {
 
     pickers(status) {
 		let $pickers = [], offsets = [], dh, dc, idate
-		let {date,  start, end, offset} = this.state
+		let {date,  start, end, min, max, offset} = this.state
 		let {inline, months, lang, haslunar, className} = this.props
 		let selected = this.state[status?status:'selected']
 		let classes = `date-picker date-picker-${inline?'inline':'block'} ${className?className:''} ${haslunar?'date-picker-lunar':''}`
@@ -135,7 +144,7 @@ class ReactDatepickerPlus extends Component {
 			offsets.push({left: i*pickerWidth + offset.left, top: offset.top})
 			idate = this.numMonth(date, i)
 			dh = <DateHeader date={idate} lang={haslunar?'cn':lang} updateMonth={this.updateMonth.bind(this)}/>
-			dc = <DateCalendar {...this.props} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay.bind(this)}/>
+			dc = <DateCalendar {...this.props} min={min} max={max} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay.bind(this)}/>
 
 			$pickers.push(inline ?
 					 <div className={classes} key={i}>{dh}{dc}</div> :
@@ -149,10 +158,8 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	componentWillReceiveProps(props, oldprops) {
-		// console.log(props.selected, this.props.selected, 'props')
 		if(props.selected !== this.props.selected){
 			this.setState({selected: props.selected})
-			// this.updateDate({date: props.selected}, true)
 		}
 	}
 
@@ -165,7 +172,8 @@ class ReactDatepickerPlus extends Component {
 										   format={format} disabled={disabled}
 										   placeholder={stat=='end'?placeholderEnd:placeholder}  children={children}
 										   onFocus={this.onFocus.bind(this)}
-										   onBlur={this.onBlur.bind(this)} status={stat}/>
+										   onBlur={this.onBlur.bind(this)} status={stat}
+										   ref={stat}/>
 		if(show){
 			pickers = this.pickers(status)
 			picker = <div className={(months>1?'date-multi clearfix':'') + clsWrapperName}>{pickers}</div>

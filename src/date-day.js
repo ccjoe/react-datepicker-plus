@@ -35,7 +35,21 @@ class DateDay extends Component {
             currentMonth: m === cm,
             currentDay: y === sy && m === sm && d === sd
         };
-        if(min || max) dayinfo.disabled = !range(min, max)    //是否在限制的范围内
+		//需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
+		if(min || max){
+			//是否在限制的范围内
+			let isStart = status==='start', isEnd = status==='end'
+			if(isStart || isEnd){
+				if(isStart){
+					dayinfo.disabled = edataNo > +end
+				}else if(isEnd){
+					dayinfo.disabled = edataNo < +start
+				}
+			}else{
+				dayinfo.disabled = !range(min, max)
+			}
+		}
+
         if(start && end) dayinfo.inrange = range(start, end) //是否在选择结果的范围内
         if(selecting && status) dayinfo.inselect = status==='start' ? range(selecting, end) : range(start, selecting)
 
