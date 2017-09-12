@@ -89,6 +89,10 @@ class ReactDatepickerPlus extends Component {
 	    }
 	}
 
+	clickPane(event, abc){
+		this.state.focus = false //just change state not trigger render
+	}
+
 	show (show, offset, focus, status) {
 	    this.setState({ show, offset, focus, status})
 	}
@@ -147,8 +151,8 @@ class ReactDatepickerPlus extends Component {
 			dc = <DateCalendar {...this.props} min={min} max={max} date={idate} status={status} start={start} end={end} selected={selected} onChange={this.updateDay.bind(this)}/>
 
 			$pickers.push(inline ?
-					 <div className={classes} key={i}>{dh}{dc}</div> :
-					 <div className={classes} style={offsets[i]} key={i}>{dh}{dc}</div>)
+					 <div onMouseDown={this.clickPane.bind(this)} className={classes} key={i}>{dh}{dc}</div> :
+					 <div onMouseDown={this.clickPane.bind(this)} className={classes} style={offsets[i]} key={i}>{dh}{dc}</div>)
 		}
 		return $pickers
     }
