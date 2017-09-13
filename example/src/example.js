@@ -125,14 +125,14 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 					`}
 				</pre>
 
-				<div className="demo-item demo-full">
+				{/* <div className="demo-item demo-full">
 					<h5>datepicker with 12 month popup</h5>
 					<pre className="demo-code">
 						{`<Datepicker months={12} isfill={true} inline/>`}
       				</pre>
 					<Datepicker months={12} isfill={true} inline/>
 				</div>
-
+ */}
 				<div className="demo-item">
 					<h5>dead simple datepicker</h5>
 					<pre className="demo-code">
@@ -192,11 +192,14 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 <Datepicker selected={linkageValue}
 	onChange={this.linkageChange.bind(this)} />
 <Datepicker selected={linkageValue}
+	onChange={this.linkageChange.bind(this)} />
+<Datepicker start={linkageValue} end={new Date('2017-09-28')}
 	onChange={this.linkageChange.bind(this)} />`}
       				</pre>
 					<span>{linkageValue.toString()}</span>
 					<Datepicker selected={linkageValue} onChange={this.linkageChange.bind(this)} />
 					<Datepicker selected={linkageValue} onChange={this.linkageChange.bind(this)} />
+					<Datepicker start={linkageValue} end={new Date('2017-09-28')} onChange={this.linkageChange.bind(this)} />
 				</div>
 
 				<div className="demo-item">
@@ -277,7 +280,7 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 						</div>
 					</Datepicker>
 					<br/><br/><br/><br/>
-					<Datepicker   min={new Date('2016-10-08 00:00:00')}   months={2} isfill   start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期" onChange={function(dateInfo){
+					<Datepicker   min={new Date('2016-10-08 00:00:00')} months={2} isfill start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期" onChange={function(dateInfo){
 						console.log(dateInfo ,'dateInfo')
 					}}>
                             <div className="type_item">

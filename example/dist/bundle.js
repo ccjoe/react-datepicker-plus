@@ -275,6 +275,11 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
+function dateObject(date) {
+    if (!date) return;
+    return date instanceof Date ? date : new Date(date);
+}
+
 function dateFormat(date, format) {
     if (!date) return '';
     var weeks = ['日', '一', '二', '三', '四', '五', '六'];
@@ -282,7 +287,7 @@ function dateFormat(date, format) {
         format = date;
         date = new Date();
     }
-    date = typeof date === 'number' || typeof date === 'string' ? new Date(date) : date;
+    date = dateObject(date);
     var map = {
         "M": date.getMonth() + 1, //月份
         "d": date.getDate(), //日
@@ -308,15 +313,28 @@ function dateFormat(date, format) {
     });
     return format;
 }
-
-var todayStart = new Date().setHours(0, 0, 0, 0);
+var today = new Date();
+var todayStart = today.setHours(0, 0, 0, 0);
 var dateDiff = function dateDiff(timestape, time) {
     return Math.ceil((timestape - (time ? time : +todayStart)) / (3600 * 1000 * 24));
 };
 
+var plusDay = function plusDay(date, num) {
+    num = num !== void 0 ? num : 1;
+    return new Date(+date + 3600000 * 24 * num);
+};
+
+var minusDay = function minusDay(date, num) {
+    return plusDay(-num);
+};
+
 exports.dateFormat = dateFormat;
 exports.dateDiff = dateDiff;
+exports.today = today;
 exports.todayStart = todayStart;
+exports.dateObject = dateObject;
+exports.plusDay = plusDay;
+exports.minusDay = minusDay;
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -1161,7 +1179,7 @@ var _dateInBodyJs = require('./date-in-body.js');
 
 var _dateInBodyJs2 = _interopRequireDefault(_dateInBodyJs);
 
-var now = new Date();
+var _dateFormatJs = require('./date-format.js');
 
 var ReactDatepickerPlus = (function (_Component) {
 	_inherits(ReactDatepickerPlus, _Component);
@@ -1204,17 +1222,17 @@ var ReactDatepickerPlus = (function (_Component) {
 		_classCallCheck(this, ReactDatepickerPlus);
 
 		_get(Object.getPrototypeOf(ReactDatepickerPlus.prototype), 'constructor', this).call(this, props);
-		var selected = props.selected;
+		var selected = (0, _dateFormatJs.dateObject)(props.selected);
 		this.state = {
 			date: selected, //render month by date
 			show: props.inline ? true : false,
 			focus: false, //focus state
 			offset: {}, //datepicker position
 			selected: selected,
-			start: props.start,
-			end: props.end,
-			min: props.min,
-			max: props.max
+			start: (0, _dateFormatJs.dateObject)(props.start),
+			end: (0, _dateFormatJs.dateObject)(props.end),
+			min: (0, _dateFormatJs.dateObject)(props.min),
+			max: (0, _dateFormatJs.dateObject)(props.max)
 		};
 	}
 
@@ -1286,8 +1304,7 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'numMonth',
 		value: function numMonth(date, num) {
-			date = date || now;
-			date = date instanceof Date ? date : new Date(date);
+			date = date || _dateFormatJs.today;
 			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
 		}
 	}, {
@@ -1312,12 +1329,6 @@ var ReactDatepickerPlus = (function (_Component) {
 			// let temp = {}; temp[status] = getSelected
 			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
 			if (!isMonth) {
-				/* if(start){
-    	this.setState({start: start})
-    }
-    if(end){
-    	this.setState({end: end})
-    } */
 				dateinfo.status = status;
 				onChange && onChange(dateinfo, this);
 				autoHide && this.removePicker();
@@ -1461,7 +1472,7 @@ var ReactDatepickerPlus = (function (_Component) {
 ReactDatepickerPlus.defaultProps = {
 	isfill: false,
 	format: 'yyyy-MM-dd',
-	selected: now,
+	selected: _dateFormatJs.today,
 	months: 1,
 	lang: 'en'
 };
@@ -1469,4 +1480,4 @@ ReactDatepickerPlus.defaultProps = {
 exports['default'] = ReactDatepickerPlus;
 module.exports = exports['default'];
 
-},{"./date-calendar.js":1,"./date-header.js":4,"./date-in-body.js":6,"./date-input.js":7,"react":undefined,"react-dom":undefined}]},{},[]);
+},{"./date-calendar.js":1,"./date-format.js":3,"./date-header.js":4,"./date-in-body.js":6,"./date-input.js":7,"react":undefined,"react-dom":undefined}]},{},[]);

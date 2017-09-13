@@ -48,7 +48,7 @@ class DateDay extends Component {
 			dayinfo.disabled = minmax(min, max)
 		}
 
-        if(start && end) dayinfo.inrange = range(start, end) //是否在选择结果的范围内
+		if(start && end) dayinfo.inrange = range(start, end) //是否在选择结果的范围内
         if(selecting && status) dayinfo.inselect = isStart ? range(selecting, end) : range(start, selecting)
 
         if(dayAddon){

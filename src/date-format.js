@@ -3,6 +3,11 @@
  * @author Joe Liu
  * @email icareu.joe@gmail.com
  */
+function dateObject(date){
+	if(!date) return
+	return date instanceof Date ? date : new Date(date)
+}
+
 function dateFormat(date, format){
   if(!date) return '';
   var weeks = ['日','一','二','三','四','五','六'];
@@ -10,7 +15,7 @@ function dateFormat(date, format){
         format = date;
         date = new Date();
     }
-    date = (typeof date === 'number' || typeof date==='string') ? new Date(date) : date;
+    date = dateObject(date);
     var map = {
         "M": date.getMonth() + 1, //月份
         "d": date.getDate(), //日
@@ -37,12 +42,25 @@ function dateFormat(date, format){
     });
     return format;
 }
-
-let todayStart = new Date().setHours(0,0,0,0)
+var today = new Date()
+var todayStart = today.setHours(0, 0, 0, 0)
 let dateDiff = (timestape, time) => Math.ceil((timestape - (time?time:+todayStart))/(3600*1000*24))
+
+var plusDay = function(date, num){
+    num = num !== void 0 ? num : 1
+    return new Date(+date + 3600000*24*num)
+}
+
+var minusDay = function(date, num){
+    return plusDay(-num)
+}
 
 export {
     dateFormat,
-    dateDiff,
-    todayStart
+	dateDiff,
+	today,
+	todayStart,
+	dateObject,
+	plusDay,
+	minusDay
 }

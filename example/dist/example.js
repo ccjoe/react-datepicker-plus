@@ -134,21 +134,6 @@ var App = (function (_Component) {
 				),
 				_react2['default'].createElement(
 					'div',
-					{ className: 'demo-item demo-full' },
-					_react2['default'].createElement(
-						'h5',
-						null,
-						'datepicker with 12 month popup'
-					),
-					_react2['default'].createElement(
-						'pre',
-						{ className: 'demo-code' },
-						'<Datepicker months={12} isfill={true} inline/>'
-					),
-					_react2['default'].createElement(Datepicker, { months: 12, isfill: true, inline: true })
-				),
-				_react2['default'].createElement(
-					'div',
 					{ className: 'demo-item' },
 					_react2['default'].createElement(
 						'h5',
@@ -255,7 +240,7 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'pre',
 						{ className: 'demo-code' },
-						'\n<span>{linkageValue.toString()}</span>\n<Datepicker selected={linkageValue}\n\tonChange={this.linkageChange.bind(this)} />\n<Datepicker selected={linkageValue}\n\tonChange={this.linkageChange.bind(this)} />'
+						'\n<span>{linkageValue.toString()}</span>\n<Datepicker selected={linkageValue}\n\tonChange={this.linkageChange.bind(this)} />\n<Datepicker selected={linkageValue}\n\tonChange={this.linkageChange.bind(this)} />\n<Datepicker start={linkageValue} end={new Date(\'2017-09-28\')}\n\tonChange={this.linkageChange.bind(this)} />'
 					),
 					_react2['default'].createElement(
 						'span',
@@ -263,7 +248,8 @@ var App = (function (_Component) {
 						linkageValue.toString()
 					),
 					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) }),
-					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) })
+					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) }),
+					_react2['default'].createElement(Datepicker, { start: linkageValue, end: new Date('2017-09-28'), onChange: this.linkageChange.bind(this) })
 				),
 				_react2['default'].createElement(
 					'div',
@@ -547,6 +533,14 @@ App.defaultProps = {
 };
 
 ReactDOM.render(_react2['default'].createElement(App, null), document.getElementById('app'));
+/* <div className="demo-item demo-full">
+<h5>datepicker with 12 month popup</h5>
+<pre className="demo-code">
+	{`<Datepicker months={12} isfill={true} inline/>`}
+ 				</pre>
+<Datepicker months={12} isfill={true} inline/>
+</div>
+*/
 
 },{"../../src/date-format":2,"react":undefined,"react-datepicker-plus":undefined,"react-dom":undefined}],2:[function(require,module,exports){
 /**
@@ -559,6 +553,11 @@ ReactDOM.render(_react2['default'].createElement(App, null), document.getElement
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
+function dateObject(date) {
+    if (!date) return;
+    return date instanceof Date ? date : new Date(date);
+}
+
 function dateFormat(date, format) {
     if (!date) return '';
     var weeks = ['日', '一', '二', '三', '四', '五', '六'];
@@ -566,7 +565,7 @@ function dateFormat(date, format) {
         format = date;
         date = new Date();
     }
-    date = typeof date === 'number' || typeof date === 'string' ? new Date(date) : date;
+    date = dateObject(date);
     var map = {
         "M": date.getMonth() + 1, //月份
         "d": date.getDate(), //日
@@ -592,14 +591,27 @@ function dateFormat(date, format) {
     });
     return format;
 }
-
-var todayStart = new Date().setHours(0, 0, 0, 0);
+var today = new Date();
+var todayStart = today.setHours(0, 0, 0, 0);
 var dateDiff = function dateDiff(timestape, time) {
     return Math.ceil((timestape - (time ? time : +todayStart)) / (3600 * 1000 * 24));
 };
 
+var plusDay = function plusDay(date, num) {
+    num = num !== void 0 ? num : 1;
+    return new Date(+date + 3600000 * 24 * num);
+};
+
+var minusDay = function minusDay(date, num) {
+    return plusDay(-num);
+};
+
 exports.dateFormat = dateFormat;
 exports.dateDiff = dateDiff;
+exports.today = today;
 exports.todayStart = todayStart;
+exports.dateObject = dateObject;
+exports.plusDay = plusDay;
+exports.minusDay = minusDay;
 
 },{}]},{},[1]);

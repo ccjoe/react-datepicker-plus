@@ -6,8 +6,7 @@ import DateHeader from './date-header.js'
 import DateCalendar from './date-calendar.js'
 import DateInput from './date-input.js'
 import DateInBody from './date-in-body.js'
-
-var now = new Date()
+import {dateObject, today} from './date-format.js'
 
 class ReactDatepickerPlus extends Component {
 	// propTypes: {
@@ -44,18 +43,18 @@ class ReactDatepickerPlus extends Component {
 	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
 	// }
 	 constructor(props) {
-		 super(props);
-		var selected =  props.selected
+		super(props);
+		var selected =  dateObject(props.selected)
         this.state = {
 				date: selected,		//render month by date
 				show: props.inline ? true : false,
 				focus: false,	//focus state
 				offset: {},		//datepicker position
 				selected: selected,
-				start: props.start,
-				end: props.end,
-				min: props.min,
-				max: props.max,
+				start: dateObject(props.start),
+				end: dateObject(props.end),
+				min: dateObject(props.min),
+				max: dateObject(props.max),
 				// status: ''   	//React.PropTypes.oneOf(['start', 'end'])
 				//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		}
@@ -104,8 +103,7 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	numMonth(date, num){
-		date = date || now;
-		date = date instanceof Date ? date : new Date(date)
+		date = date || today
 		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate())
 	}
 
@@ -120,12 +118,6 @@ class ReactDatepickerPlus extends Component {
 		// let temp = {}; temp[status] = getSelected
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
 		if(!isMonth){
-			/* if(start){
-				this.setState({start: start})
-			}
-			if(end){
-				this.setState({end: end})
-			} */
 			dateinfo.status = status
 			onChange && onChange(dateinfo, this)
 			autoHide && this.removePicker()
@@ -200,7 +192,7 @@ class ReactDatepickerPlus extends Component {
 ReactDatepickerPlus.defaultProps = {
 	isfill: false,
 	format: 'yyyy-MM-dd',
-	selected: now,
+	selected: today,
 	months: 1,
 	lang: 'en'
 }
