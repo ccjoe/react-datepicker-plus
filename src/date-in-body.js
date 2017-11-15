@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from "react-dom"
-class DateInBody extends Component {  
+class DateInBody extends Component {
   // propTypes: {
   //   classes: React.PropTypes.string, //class split by spacing
   //   offset: React.PropTypes.object,
@@ -42,7 +42,7 @@ class DateInBody extends Component {
   }
 
   render() {
-    return <div className={this.props.className} children={this.props.children} children={null} style={this.props.offset}/>
+    return <div className={this.props.className} children={null} style={this.props.offset}/>
   }
 }
 

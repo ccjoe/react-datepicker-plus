@@ -4,7 +4,7 @@
  * @email icareu.joe@gmail.com
  */
 function dateObject(date){
-	if(!date) return
+	if(!date) return date
 	return date instanceof Date ? date : new Date(date)
 }
 

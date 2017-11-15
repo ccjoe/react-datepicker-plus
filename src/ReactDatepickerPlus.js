@@ -81,7 +81,8 @@ class ReactDatepickerPlus extends Component {
 		const {inline, onBlur} = this.props
 		if(!show) return;
 		if (!focus) {
-	      	input.focus()	//when show && !focus, trigger focus
+			//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
+	      	setTimeout(function(){ input.focus() }, 0)	//when show && !focus, trigger focus,
 	    } else if(!inline) {
 	      onBlur && onBlur(event, this)
 	      focus && this.removePicker()
@@ -103,7 +104,7 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	numMonth(date, num){
-		date = date || today
+		date = dateObject(date) || today
 		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate())
 	}
 

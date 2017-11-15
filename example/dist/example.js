@@ -134,6 +134,21 @@ var App = (function (_Component) {
 				),
 				_react2['default'].createElement(
 					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'datepicker with 12 month popup'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker months={12} isfill={true} inline/>'
+					),
+					_react2['default'].createElement(Datepicker, { months: 12, isfill: true, inline: true })
+				),
+				_react2['default'].createElement(
+					'div',
 					{ className: 'demo-item' },
 					_react2['default'].createElement(
 						'h5',
@@ -533,14 +548,6 @@ App.defaultProps = {
 };
 
 ReactDOM.render(_react2['default'].createElement(App, null), document.getElementById('app'));
-/* <div className="demo-item demo-full">
-<h5>datepicker with 12 month popup</h5>
-<pre className="demo-code">
-	{`<Datepicker months={12} isfill={true} inline/>`}
- 				</pre>
-<Datepicker months={12} isfill={true} inline/>
-</div>
-*/
 
 },{"../../src/date-format":2,"react":undefined,"react-datepicker-plus":undefined,"react-dom":undefined}],2:[function(require,module,exports){
 /**
@@ -554,7 +561,7 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 function dateObject(date) {
-    if (!date) return;
+    if (!date) return date;
     return date instanceof Date ? date : new Date(date);
 }
 

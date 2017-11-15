@@ -125,14 +125,14 @@ var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = ne
 					`}
 				</pre>
 
-				{/* <div className="demo-item demo-full">
+				<div className="demo-item demo-full">
 					<h5>datepicker with 12 month popup</h5>
 					<pre className="demo-code">
 						{`<Datepicker months={12} isfill={true} inline/>`}
       				</pre>
 					<Datepicker months={12} isfill={true} inline/>
 				</div>
- */}
+
 				<div className="demo-item">
 					<h5>dead simple datepicker</h5>
 					<pre className="demo-code">

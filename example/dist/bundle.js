@@ -276,7 +276,7 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 function dateObject(date) {
-    if (!date) return;
+    if (!date) return date;
     return date instanceof Date ? date : new Date(date);
 }
 
@@ -557,7 +557,7 @@ var DateInBody = (function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react2["default"].createElement("div", { className: this.props.className, children: this.props.children, children: null, style: this.props.offset });
+      return _react2["default"].createElement("div", { className: this.props.className, children: null, style: this.props.offset });
     }
   }]);
 
@@ -1277,7 +1277,10 @@ var ReactDatepickerPlus = (function (_Component) {
 
 			if (!show) return;
 			if (!focus) {
-				input.focus(); //when show && !focus, trigger focus
+				//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
+				setTimeout(function () {
+					input.focus();
+				}, 0); //when show && !focus, trigger focus,
 			} else if (!inline) {
 					onBlur && onBlur(event, this);
 					focus && this.removePicker();
@@ -1304,7 +1307,7 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'numMonth',
 		value: function numMonth(date, num) {
-			date = date || _dateFormatJs.today;
+			date = (0, _dateFormatJs.dateObject)(date) || _dateFormatJs.today;
 			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
 		}
 	}, {
