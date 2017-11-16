@@ -64,7 +64,7 @@ class DateDay extends Component {
 
     setDate(dateinfo) {
         if(dateinfo.disabled) return;
-        this.props.onChange(dateinfo);
+		this.props.onChange(dateinfo);
     }
     setMouseEnter(dateinfo){
         if(dateinfo.disabled) return;

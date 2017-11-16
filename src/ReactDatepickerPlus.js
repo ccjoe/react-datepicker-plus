@@ -48,7 +48,7 @@ class ReactDatepickerPlus extends Component {
         this.state = {
 				date: selected,		//render month by date
 				show: props.inline ? true : false,
-				focus: false,	//focus state
+				focus: false,	//focus state true/false/'blank'
 				offset: {},		//datepicker position
 				selected: selected,
 				start: dateObject(props.start),
@@ -77,20 +77,28 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	onBlur(event, input){
-		const {show, focus} = this.state
-		const {inline, onBlur} = this.props
+		const {show, focus, status} = this.state
+		const {inline, onBlur, autoHide} = this.props
+		if(autoHide){
+			if(!focus){
+				this.removePicker()
+				return
+			}
+		}
 		if(!show) return;
-		if (!focus) {
+		if (!focus || focus==='blank') {
 			//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
 	      	setTimeout(function(){ input.focus() }, 0)	//when show && !focus, trigger focus,
 	    } else if(!inline) {
 	      onBlur && onBlur(event, this)
 	      focus && this.removePicker()
-	    }
+		}
+
 	}
 
 	clickPane(event, abc){
-		this.state.focus = false //just change state not trigger render
+		if(this.state.focus)
+			this.state.focus = 'blank'
 	}
 
 	show (show, offset, focus, status) {
@@ -116,18 +124,21 @@ class ReactDatepickerPlus extends Component {
 		let {onChange, autoHide, start, end} = this.props
 		let {status='selected', selected} = this.state
 		let getSelected = !isMonth ? dateinfo.date : this.state[status]
-		// let temp = {}; temp[status] = getSelected
-		this.setState({show: true, date: dateinfo.date, selected: getSelected, focus: false, [status]: getSelected})
+
+		this.setState({show: true, date: dateinfo.date, selected: getSelected, [status]: getSelected})
+
 		if(!isMonth){
+			this.state.focus = false
 			dateinfo.status = status
 			onChange && onChange(dateinfo, this)
-			autoHide && this.removePicker()
+		}else{
+			this.state.focus = 'blank'
 		}
 	}
 
 	removePicker(){
 		this.show(false)
-		this.refs.insDateInBody && this.refs.insDateInBody.removePicker(true)
+		this.refs.insDateInBody && this.refs.insDateInBody.removePicker()
 	}
 
     pickers(status) {
@@ -179,7 +190,7 @@ class ReactDatepickerPlus extends Component {
 										   ref={stat}/>
 		if(show){
 			pickers = this.pickers(status)
-			picker = <div className={(months>1?'date-multi clearfix':'') + clsWrapperName}>{pickers}</div>
+			picker = <div className={(months>1?'date-multi clearfix':'date-single') + clsWrapperName}>{pickers}</div>
 			pickerInBody = <DateInBody  onUpdate={this.updateSize.bind(this)} className='date-picker-wrapper' ref="insDateInBody">{picker}</DateInBody>
 		}
 		let didom = start || end ? <div className="date-inputs">{start!==void 0 && di(start, 'start')}{end!==void 0 && di(end, 'end')}</div> : di()

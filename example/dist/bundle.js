@@ -541,12 +541,12 @@ var DateInBody = (function (_Component) {
     }
   }, {
     key: "removePicker",
-    value: function removePicker(current) {
-      this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0];
-      // console.log(this.popup, 'popup')
+    value: function removePicker() {
+      // this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0]
       if (this.popup) {
         _reactDom2["default"].unmountComponentAtNode(this.popup);
         document.body.removeChild(this.popup);
+        this.popup = null;
       }
     }
   }, {
@@ -1226,7 +1226,7 @@ var ReactDatepickerPlus = (function (_Component) {
 		this.state = {
 			date: selected, //render month by date
 			show: props.inline ? true : false,
-			focus: false, //focus state
+			focus: false, //focus state true/false/'blank'
 			offset: {}, //datepicker position
 			selected: selected,
 			start: (0, _dateFormatJs.dateObject)(props.start),
@@ -1271,12 +1271,20 @@ var ReactDatepickerPlus = (function (_Component) {
 			var _state2 = this.state;
 			var show = _state2.show;
 			var focus = _state2.focus;
+			var status = _state2.status;
 			var _props = this.props;
 			var inline = _props.inline;
 			var onBlur = _props.onBlur;
+			var autoHide = _props.autoHide;
 
+			if (autoHide) {
+				if (!focus) {
+					this.removePicker();
+					return;
+				}
+			}
 			if (!show) return;
-			if (!focus) {
+			if (!focus || focus === 'blank') {
 				//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
 				setTimeout(function () {
 					input.focus();
@@ -1289,7 +1297,7 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'clickPane',
 		value: function clickPane(event, abc) {
-			this.state.focus = false; //just change state not trigger render
+			if (this.state.focus) this.state.focus = 'blank';
 		}
 	}, {
 		key: 'show',
@@ -1329,19 +1337,22 @@ var ReactDatepickerPlus = (function (_Component) {
 			var selected = _state3.selected;
 
 			var getSelected = !isMonth ? dateinfo.date : this.state[status];
-			// let temp = {}; temp[status] = getSelected
-			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected, focus: false }, status, getSelected));
+
+			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected }, status, getSelected));
+
 			if (!isMonth) {
+				this.state.focus = false;
 				dateinfo.status = status;
 				onChange && onChange(dateinfo, this);
-				autoHide && this.removePicker();
+			} else {
+				this.state.focus = 'blank';
 			}
 		}
 	}, {
 		key: 'removePicker',
 		value: function removePicker() {
 			this.show(false);
-			this.refs.insDateInBody && this.refs.insDateInBody.removePicker(true);
+			this.refs.insDateInBody && this.refs.insDateInBody.removePicker();
 		}
 	}, {
 		key: 'pickers',
@@ -1443,7 +1454,7 @@ var ReactDatepickerPlus = (function (_Component) {
 				pickers = this.pickers(status);
 				picker = _react2['default'].createElement(
 					'div',
-					{ className: (months > 1 ? 'date-multi clearfix' : '') + clsWrapperName },
+					{ className: (months > 1 ? 'date-multi clearfix' : 'date-single') + clsWrapperName },
 					pickers
 				);
 				pickerInBody = _react2['default'].createElement(

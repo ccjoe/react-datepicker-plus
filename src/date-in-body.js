@@ -28,12 +28,12 @@ class DateInBody extends Component {
   componentWillMount() {
     // this.removePicker()
   }
-  removePicker(current){
-    this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0]
-    // console.log(this.popup, 'popup')
+  removePicker(){
+    // this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0]
     if(this.popup){
-      ReactDOM.unmountComponentAtNode(this.popup)
-      document.body.removeChild(this.popup)
+				ReactDOM.unmountComponentAtNode(this.popup)
+				document.body.removeChild(this.popup)
+				this.popup = null
     }
   }
   renderLayer() {
