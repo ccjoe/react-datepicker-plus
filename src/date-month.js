@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import DateDay from './date-day.js'
-class DateMonth extends Component { 
+class DateMonth extends Component {
 	/*propTypes: {
 		date: React.PropTypes.object.isRequired,
 		format: React.PropTypes.string

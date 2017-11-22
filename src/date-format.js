@@ -5,7 +5,13 @@
  */
 function dateObject(date){
 	if(!date) return date
-	return date instanceof Date ? date : new Date(date)
+
+	return date instanceof Date ? date : (
+		//with hours or not
+		typeof date === 'string' && date.length<=10 ?
+		new Date(date + ' 00:00:00'):
+		new Date(date)
+	)
 }
 
 function dateFormat(date, format){

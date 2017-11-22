@@ -96,7 +96,7 @@ class ReactDatepickerPlus extends Component {
 
 	}
 
-	clickPane(event, abc){
+	clickPane(event){
 		if(this.state.focus)
 			this.state.focus = 'blank'
 	}
@@ -123,7 +123,7 @@ class ReactDatepickerPlus extends Component {
 	updateDate(dateinfo, isMonth){
 		let {onChange, autoHide, start, end} = this.props
 		let {status='selected', selected} = this.state
-		let getSelected = !isMonth ? dateinfo.date : this.state[status]
+		let getSelected = dateObject(!isMonth ? dateinfo.date : this.state[status])
 
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, [status]: getSelected})
 
@@ -167,13 +167,13 @@ class ReactDatepickerPlus extends Component {
 
 	componentWillReceiveProps(props, oldprops) {
 		if(props.selected !== this.props.selected){
-			this.setState({selected: props.selected})
+			this.setState({selected: dateObject(props.selected)})
 		}
 		if(props.start !== this.props.start){
-			this.setState({start: props.start})
+			this.setState({start: dateObject(props.start)})
 		}
 		if(props.end !== this.props.end){
-			this.setState({end: props.end})
+			this.setState({end: dateObject(props.end)})
 		}
 	}
 

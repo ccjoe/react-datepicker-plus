@@ -122,6 +122,17 @@ dayAddon: React.PropTypes.func 		//args (dayinfo)
  \n
 ================================
 var now = new Date('2016/10/15')\nvar min = new Date('2016/10/10')\nvar max = new Date('2016/10/20')
+
+
+=============================
+CLASS IN　DAY
+date-nocurrent:		不在当前月范围内
+date-point:			当前选择范围最大/小值
+date-selected:		当前选择值
+date-disabled:		在当前月范围内但不可用
+date-range:			当前选择范围所有值
+date-hover:			当前hover的day
+=============================
 					`}
 				</pre>
 
