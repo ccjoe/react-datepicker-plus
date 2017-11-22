@@ -1284,12 +1284,12 @@ var ReactDatepickerPlus = (function (_Component) {
 				}
 			}
 			if (!show) return;
-			if (!focus || focus === 'blank') {
+			if (!focus) {
 				//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
 				setTimeout(function () {
 					input.focus();
 				}, 0); //when show && !focus, trigger focus,
-			} else if (!inline) {
+			} else if (!inline && focus !== 'blank') {
 					onBlur && onBlur(event, this);
 					focus && this.removePicker();
 				}
