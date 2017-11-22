@@ -175,6 +175,12 @@ class ReactDatepickerPlus extends Component {
 		if(props.end !== this.props.end){
 			this.setState({end: dateObject(props.end)})
 		}
+		if(props.min !== this.props.min){
+			this.setState({min: dateObject(props.min)})
+		}
+		if(props.max !== this.props.max){
+			this.setState({max: dateObject(props.max)})
+		}
 	}
 
 	render () {

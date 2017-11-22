@@ -15,6 +15,8 @@ class App extends Component {
 	constructor(props) {
         super(props);
 		this.state = {
+			min: min,
+			max: max,
 			linkageValue: '2017-09-15',
 			addonData: {
 				rest: {
@@ -248,17 +250,23 @@ date-hover:			当前hover的day
 				<div className="demo-item">
 					<h5>datepicker with min and max range</h5>
 					<pre className="demo-code">
-						{`<Datepicker inline min={min} max={max} />`}
+						{`<Datepicker inline min={this.state.min} max={this.state.max} selected={now} />`}
       				</pre>
-					<Datepicker inline min={min} max={max} selected={now} />
+					<button onClick={function(){
+						this.setState({min: new Date('2016/10/12'), max: new Date('2016/10/18')});
+						console.log(this.state, 'state')
+					}.bind(this)}>
+					 设置范围 {`{min: new Date('2016/10/12'), max: new Date('2016/10/18')}`}
+					</button>
+					<Datepicker inline min={this.state.min} max={this.state.max} selected={now} />
 				</div>
 
 				<div className="demo-item demo-full">
 					<h5>bi-datepicker with start and end range</h5>
 					<pre className="demo-code">
-						{`<Datepicker start={min} end={max} />`}
+						{`<Datepicker start={this.state.min} end={this.state.max}  />`}
       				</pre>
-					<Datepicker start={min} end={max} />
+					<Datepicker start={this.state.min} end={this.state.max}  />
 				</div>
 
 				<div className="demo-item demo-full">

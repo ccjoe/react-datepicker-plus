@@ -283,6 +283,12 @@ var ReactDatepickerPlus = (function (_Component) {
 			if (props.end !== this.props.end) {
 				this.setState({ end: (0, _dateFormatJs.dateObject)(props.end) });
 			}
+			if (props.min !== this.props.min) {
+				this.setState({ min: (0, _dateFormatJs.dateObject)(props.min) });
+			}
+			if (props.max !== this.props.max) {
+				this.setState({ max: (0, _dateFormatJs.dateObject)(props.max) });
+			}
 		}
 	}, {
 		key: 'render',
@@ -526,7 +532,7 @@ var DateDay = (function (_Component) {
                 salarfest: _dateHolidays.salarHolidays[this.zero(m + 1) + this.zero(d)], //这里的月份用的是视图的
                 currentMonth: m === cm,
                 currentDay: y === sy && m === sm && d === sd,
-                currentPoint: edate === realMin || edate === realMax
+                currentPoint: edateNo === realMin || edateNo === realMax
             };
             //需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
             //是否在限制的范围内
