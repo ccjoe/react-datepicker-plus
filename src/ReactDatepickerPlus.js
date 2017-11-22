@@ -86,10 +86,10 @@ class ReactDatepickerPlus extends Component {
 			}
 		}
 		if(!show) return;
-		if (!focus || focus==='blank') {
+		if (!focus) {
 			//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
 	      	setTimeout(function(){ input.focus() }, 0)	//when show && !focus, trigger focus,
-	    } else if(!inline) {
+	    }else if(!inline && focus!=='blank') {
 	      onBlur && onBlur(event, this)
 	      focus && this.removePicker()
 		}
@@ -180,7 +180,7 @@ class ReactDatepickerPlus extends Component {
 	render () {
 		let {show, selected, start, end, status} = this.state
 		let {format, inline, months, disabled, placeholder, placeholderEnd, children} = this.props
-		let picker, pickers, pickerInBody
+		let picker, pickers, pickerInBody;
 		let clsName = this.props.className || '', clsWrapperName = clsName?' '+clsName+'-panes': ''
 		let di = (val, stat) => <DateInput selected={val===void 0 ? selected : val}
 										   format={format} disabled={disabled}
