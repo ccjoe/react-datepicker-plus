@@ -1430,6 +1430,12 @@ var ReactDatepickerPlus = (function (_Component) {
 			if (props.end !== this.props.end) {
 				this.setState({ end: (0, _dateFormatJs.dateObject)(props.end) });
 			}
+			if (props.min !== this.props.min) {
+				this.setState({ min: (0, _dateFormatJs.dateObject)(props.min) });
+			}
+			if (props.max !== this.props.max) {
+				this.setState({ max: (0, _dateFormatJs.dateObject)(props.max) });
+			}
 		}
 	}, {
 		key: 'render',

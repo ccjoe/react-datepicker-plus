@@ -37,6 +37,8 @@ var App = (function (_Component) {
 
 		_get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this, props);
 		this.state = {
+			min: min,
+			max: max,
 			linkageValue: '2017-09-15',
 			addonData: {
 				rest: {
@@ -337,9 +339,18 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'pre',
 						{ className: 'demo-code' },
-						'<Datepicker inline min={min} max={max} />'
+						'<Datepicker inline min={this.state.min} max={this.state.max} selected={now} />'
 					),
-					_react2['default'].createElement(Datepicker, { inline: true, min: min, max: max, selected: now })
+					_react2['default'].createElement(
+						'button',
+						{ onClick: (function () {
+								this.setState({ min: new Date('2016/10/12'), max: new Date('2016/10/18') });
+								console.log(this.state, 'state');
+							}).bind(this) },
+						'设置范围 ',
+						'{min: new Date(\'2016/10/12\'), max: new Date(\'2016/10/18\')}'
+					),
+					_react2['default'].createElement(Datepicker, { inline: true, min: this.state.min, max: this.state.max, selected: now })
 				),
 				_react2['default'].createElement(
 					'div',
@@ -352,9 +363,9 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'pre',
 						{ className: 'demo-code' },
-						'<Datepicker start={min} end={max} />'
+						'<Datepicker start={this.state.min} end={this.state.max}  />'
 					),
-					_react2['default'].createElement(Datepicker, { start: min, end: max })
+					_react2['default'].createElement(Datepicker, { start: this.state.min, end: this.state.max })
 				),
 				_react2['default'].createElement(
 					'div',
