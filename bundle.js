@@ -121,11 +121,9 @@ var DateDay = (function (_Component) {
             var dayAddon = _props.dayAddon;
             //selected date, render date, each date
             selected = selected || new Date();
-
-            selected = selected instanceof Date ? selected : new Date(selected);
-            date = date instanceof Date ? date : new Date(date);
-            edate = edate instanceof Date ? edate : new Date(edate);
-
+            // selected = selected instanceof Date ? selected : new Date(selected)
+            // date = date instanceof Date ? date : new Date(date)
+            // edate = edate instanceof Date ? edate : new Date(edate)
             var sy = selected.getFullYear();
             var sm = selected.getMonth();
             var sd = selected.getDate();
@@ -136,20 +134,32 @@ var DateDay = (function (_Component) {
             var m = edate.getMonth();
             var d = edate.getDate();
 
-            var edateNo = +edate;
-            var range = function range(start, end) {
-                return edateNo >= +start && edateNo <= +end;
+            var toNo = function toNo(x) {
+                return x ? +x : 0;
             };
-            var minmax = function minmax(min, max) {
-                return min && edateNo < +min || max && edateNo > +max;
+            var edateNo = toNo(edate),
+                minNo = toNo(min),
+                maxNo = toNo(max),
+                startNo = toNo(start),
+                endNo = toNo(end);
+            var range = function range(startNo, endNo) {
+                return edateNo >= startNo && edateNo <= endNo;
             };
+            var minmax = function minmax(minNo, maxNo) {
+                return minNo && edateNo < minNo || maxNo && edateNo > maxNo;
+            };
+
+            var realMin = min && minNo > startNo ? minNo : startNo;
+            var realMax = !max || maxNo > endNo ? endNo : maxNo;
+
             var dayinfo = {
                 date: edate,
                 lunar: (0, _dateLunar.toLunarDate)(edate),
                 term: (0, _dateTerm.getMonthSolarTerms)(y, m)[d],
                 salarfest: _dateHolidays.salarHolidays[this.zero(m + 1) + this.zero(d)], //这里的月份用的是视图的
                 currentMonth: m === cm,
-                currentDay: y === sy && m === sm && d === sd
+                currentDay: y === sy && m === sm && d === sd,
+                currentPoint: edateNo === realMin || edateNo === realMax
             };
             //需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
             //是否在限制的范围内
@@ -157,11 +167,11 @@ var DateDay = (function (_Component) {
                 isEnd = status === 'end';
 
             if (isStart) {
-                dayinfo.disabled = minmax(min, !max || max > +end ? +end : max);
+                dayinfo.disabled = minmax(minNo, realMax);
             } else if (isEnd) {
-                dayinfo.disabled = minmax(min && min > +start ? min : +start, max);
+                dayinfo.disabled = minmax(realMin, maxNo);
             } else if (min || max) {
-                dayinfo.disabled = minmax(min, max);
+                dayinfo.disabled = minmax(minNo, maxNo);
             }
 
             if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
@@ -201,6 +211,7 @@ var DateDay = (function (_Component) {
             var term = info.term;
             var lunar = info.lunar;
             var currentDay = info.currentDay;
+            var currentPoint = info.currentPoint;
             var currentMonth = info.currentMonth;
             var disabled = info.disabled;
             var inrange = info.inrange;
@@ -248,7 +259,7 @@ var DateDay = (function (_Component) {
             }
             return _react2['default'].createElement(
                 'div',
-                { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentDay ? 'date-selected' : "") + (disabled ? ' date-disabled' : "") + (inrange ? ' date-range' : "") + (inselect ? ' date-hover' : ""),
+                { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentPoint ? ' date-point' : "") + (currentDay ? ' date-selected' : "") + (disabled ? ' date-disabled' : "") + (inrange ? ' date-range' : "") + (inselect ? ' date-hover' : ""),
                     onMouseDown: this.setDate.bind(this, info),
                     onMouseEnter: this.setMouseEnter.bind(this, info) },
                 festDom
@@ -277,7 +288,10 @@ Object.defineProperty(exports, '__esModule', {
 });
 function dateObject(date) {
     if (!date) return date;
-    return date instanceof Date ? date : new Date(date);
+
+    return date instanceof Date ? date :
+    //with hours or not
+    typeof date === 'string' && date.length <= 10 ? new Date(date + ' 00:00:00') : new Date(date);
 }
 
 function dateFormat(date, format) {
@@ -1296,7 +1310,7 @@ var ReactDatepickerPlus = (function (_Component) {
 		}
 	}, {
 		key: 'clickPane',
-		value: function clickPane(event, abc) {
+		value: function clickPane(event) {
 			if (this.state.focus) this.state.focus = 'blank';
 		}
 	}, {
@@ -1336,7 +1350,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			var status = _state3$status === undefined ? 'selected' : _state3$status;
 			var selected = _state3.selected;
 
-			var getSelected = !isMonth ? dateinfo.date : this.state[status];
+			var getSelected = (0, _dateFormatJs.dateObject)(!isMonth ? dateinfo.date : this.state[status]);
 
 			this.setState(_defineProperty({ show: true, date: dateinfo.date, selected: getSelected }, status, getSelected));
 
@@ -1408,13 +1422,13 @@ var ReactDatepickerPlus = (function (_Component) {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(props, oldprops) {
 			if (props.selected !== this.props.selected) {
-				this.setState({ selected: props.selected });
+				this.setState({ selected: (0, _dateFormatJs.dateObject)(props.selected) });
 			}
 			if (props.start !== this.props.start) {
-				this.setState({ start: props.start });
+				this.setState({ start: (0, _dateFormatJs.dateObject)(props.start) });
 			}
 			if (props.end !== this.props.end) {
-				this.setState({ end: props.end });
+				this.setState({ end: (0, _dateFormatJs.dateObject)(props.end) });
 			}
 		}
 	}, {
