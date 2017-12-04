@@ -138,6 +138,12 @@ date-hover:			当前hover的day
 					`}
 				</pre>
 
+                <br/>
+                <hr/>
+                <h3>Have a try</h3>
+                <hr/>
+
+
 				<div className="demo-item demo-full">
 					<h5>datepicker with 12 month popup</h5>
 					<pre className="demo-code">

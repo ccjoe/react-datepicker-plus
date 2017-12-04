@@ -5,13 +5,16 @@
  */
 function dateObject(date){
 	if(!date) return date
-
-	return date instanceof Date ? date : (
-		//with hours or not
-		typeof date === 'string' && date.length<=10 ?
-		new Date(date + ' 00:00:00'):
-		new Date(date)
-	)
+	if(typeof date === 'string'){
+		//"2017-11-28T11:01:14.025Z" len=24
+		//'2017-10-10 00:00:00' len=19
+		//'2017-10-10' len=10
+		if(date.indexOf('/') && date.length<24){
+			date = date.replace(/-/g, '/')
+		}
+		date.length<=10 ? new Date(date + ' 00:00:00'): new Date(date)
+	}
+	return date instanceof Date ? date : new Date(date)
 }
 
 function dateFormat(date, format){
