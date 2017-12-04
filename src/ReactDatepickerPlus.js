@@ -1,7 +1,6 @@
 //@todo 解决切换月份时， 选择的值有变；2.外部值变化后，input值与ui没有变化 3 key input
 // import './datepicker.less'
 import React, { Component } from 'react'
-import ReactDOM from "react-dom"
 import DateHeader from './date-header.js'
 import DateCalendar from './date-calendar.js'
 import DateInput from './date-input.js'
@@ -62,7 +61,7 @@ class ReactDatepickerPlus extends Component {
 
 	onFocus(event, input){
 		let {show, focus, selected} = this.state
-		if(show && !focus){
+		if((show && !focus) || focus === 'blank'){
 			this.state.focus = true//just change state not trigger render
 			return
 		}
@@ -73,11 +72,12 @@ class ReactDatepickerPlus extends Component {
 
 		this.show(true, {left, top}, true, status)
 		onFocus && onFocus(event, this)
-		if(status) this.setState({date: selected})
+
+		this.setState({date: selected})
 	}
 
 	onBlur(event, input){
-		const {show, focus, status} = this.state
+		const {show, focus} = this.state
 		const {inline, onBlur, autoHide} = this.props
 		if(autoHide){
 			if(!focus){
@@ -86,17 +86,17 @@ class ReactDatepickerPlus extends Component {
 			}
 		}
 		if(!show) return;
-		if (!focus) {
+		if (!focus ||  focus==='blank') {
 			//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
-	      	setTimeout(function(){ input.focus() }, 0)	//when show && !focus, trigger focus,
-	    }else if(!inline && focus!=='blank') {
-	      onBlur && onBlur(event, this)
-	      focus && this.removePicker()
+				setTimeout(function(){ input.focus() }, 0)	//when show && !focus, trigger focus,
+		}else if(!inline && focus!=='blank') {
+			onBlur && onBlur(event, this)
+			focus && this.removePicker()
 		}
 
 	}
 
-	clickPane(event){
+	clickPane(){
 		if(this.state.focus)
 			this.state.focus = 'blank'
 	}
@@ -121,8 +121,8 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	updateDate(dateinfo, isMonth){
-		let {onChange, autoHide, start, end} = this.props
-		let {status='selected', selected} = this.state
+		let {onChange} = this.props
+		let {status='selected'} = this.state
 		let getSelected = dateObject(!isMonth ? dateinfo.date : this.state[status])
 
 		this.setState({show: true, date: dateinfo.date, selected: getSelected, [status]: getSelected})
@@ -165,7 +165,7 @@ class ReactDatepickerPlus extends Component {
 		!this.props.inline && this.setState({width: w})
 	}
 
-	componentWillReceiveProps(props, oldprops) {
+	componentWillReceiveProps(props) {
 		if(props.selected !== this.props.selected){
 			this.setState({selected: dateObject(props.selected)})
 		}
@@ -200,7 +200,7 @@ class ReactDatepickerPlus extends Component {
 			pickerInBody = <DateInBody  onUpdate={this.updateSize.bind(this)} className='date-picker-wrapper' ref="insDateInBody">{picker}</DateInBody>
 		}
 		let didom = start || end ? <div className="date-inputs">{start!==void 0 && di(start, 'start')}{end!==void 0 && di(end, 'end')}</div> : di()
-		return <div className={"date-components "+ clsName}>
+		return <div className={'date-components '+ clsName}>
 					{didom}
 					{inline ? picker : pickerInBody}
 				</div>

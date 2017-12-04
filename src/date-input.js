@@ -40,7 +40,7 @@ class DateInput extends Component {
 	focus () {
 	    this.refs.input.focus()
 	}
-	handleChange(event){
+	handleChange(){
 		// this.props.onChange(event, this)
 	}
 	getInput(){
@@ -100,7 +100,7 @@ class DateInput extends Component {
 	}
 
 	render () {
-		const { customInput, disabled, placeholder, children } = this.props
+		const { disabled, placeholder, children } = this.props
 		const inputElem = <input ref="input" type="text" placeholder={placeholder} disabled={disabled} value={this.dateString()} onFocus={this.handleFocus.bind(this)} onBlur={this.handleBlur.bind(this)} onChange={this.handleChange.bind(this)} />
 		return children ? this.recursiveMap(children, inputElem) : inputElem
 	}

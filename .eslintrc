@@ -1,32 +1,38 @@
 {
-	"parser": "babel-eslint",
-	"env": {
-		"browser": true,
-		"node": true
-	},
-	"plugins": [
-		"react"
-	],
-	"rules": {
-		"curly": [2, "multi-line"],
-		"quotes": [2, "single", "avoid-escape"],
-		"react/display-name": 0,
-		"react/jsx-boolean-value": 1,
-		"react/jsx-quotes": 1,
-		"react/jsx-no-undef": 1,
-		"react/jsx-sort-props": 0,
-		"react/jsx-sort-prop-types": 1,
-		"react/jsx-uses-react": 1,
-		"react/jsx-uses-vars": 1,
-		"react/no-did-mount-set-state": 1,
-		"react/no-did-update-set-state": 1,
-		"react/no-multi-comp": 1,
-		"react/no-unknown-property": 1,
-		"react/prop-types": 1,
-		"react/react-in-jsx-scope": 1,
-		"react/self-closing-comp": 1,
-		"react/wrap-multilines": 1,
-		"semi": 2,
-		"strict": 0
-	}
-}
+    "parser": "babel-eslint",
+    "plugins": [
+      "react"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "amd": true,
+      "es6": true,
+      "node": true,
+      "mocha": true
+    },
+    "rules": {
+      "comma-dangle": 1,
+      "quotes": [ 1, "single" ],
+      "no-undef": 1,
+      "global-strict": 0,
+      "no-extra-semi": 0,
+      "semi": 0,
+      "no-underscore-dangle": 0,
+      "no-console": 0,
+      "no-unused-vars": 1,
+      "no-trailing-spaces": [1, { "skipBlankLines": true }],
+      "no-unreachable": 1,
+      "no-alert": 0,
+      "react/jsx-uses-react": 1,
+      "react/jsx-uses-vars": 1,
+      "linebreak-style": 0
+    },
+    "root": true
+  }

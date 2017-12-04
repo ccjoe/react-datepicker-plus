@@ -134,6 +134,14 @@ var App = (function (_Component) {
 					{ className: 'demo-code' },
 					'\n--------------------------\nProps And CALLBACK OR APIs\n--------------------------\nselected: React.PropTypes.object,\t//default date, not defined, it will be now(), defined \'\' will be empty value\nformat: React.PropTypes.string,     //format date\nisfill: React.PropTypes.bool,\t    //show prefix-prev prefix-next month\nmonths: React.PropTypes.number,\t\t//show multi-panes by months\n\ntime: React.PropTypes.bool,         //show time select @todo\n\nmin: React.PropTypes.object,        //select date range min\nmax: React.PropTypes.object,        //select date range max\n\n\n\nstart: React.PropTypes.object,\t    //selected time is a range, start date\nend: React.PropTypes.object,\t    //selected time is a range, start date\n\nclassName: React.PropTypes.string,  // custom class\ndisabled: React.PropTypes.bool,     //input can\'t change\nautoHide: React.PropTypes.bool,     //selected auto hide\ninline: React.PropTypes.bool,       //inline\nlang: React.PropTypes.oneOf([\'cn\', \'en\'])\n\nfestival: React.PropTypes.bool, \t//show festival\nhaslunar: React.PropTypes.bool, \t//show lunar\n\nonFocus: React.PropTypes.func,\t\t//args (event, picker)\nonBlur: React.PropTypes.func,\t\t//args (event, picker)\nonChange: React.PropTypes.func,\t\t//args (dayinfo, picker)\ndayAddon: React.PropTypes.func \t\t//args (dayinfo)\n\n//dayAddon, add data for day, and need to return dom,\n//the return value will be insert to day each element. pls see last demo\n//  placeholder\n//  children\n \n\n================================\nvar now = new Date(\'2016/10/15\')\nvar min = new Date(\'2016/10/10\')\nvar max = new Date(\'2016/10/20\')\n\n\n=============================\nCLASS IN　DAY\ndate-nocurrent:\t\t不在当前月范围内\ndate-point:\t\t\t当前选择范围最大/小值\ndate-selected:\t\t当前选择值\ndate-disabled:\t\t在当前月范围内但不可用\ndate-range:\t\t\t当前选择范围所有值\ndate-hover:\t\t\t当前hover的day\n=============================\n\t\t\t\t\t'
 				),
+				_react2['default'].createElement('br', null),
+				_react2['default'].createElement('hr', null),
+				_react2['default'].createElement(
+					'h3',
+					null,
+					'Have a try'
+				),
+				_react2['default'].createElement('hr', null),
 				_react2['default'].createElement(
 					'div',
 					{ className: 'demo-item demo-full' },
@@ -574,7 +582,10 @@ Object.defineProperty(exports, '__esModule', {
 function dateObject(date) {
     if (!date) return date;
     if (typeof date === 'string') {
-        if (date.indexOf('/')) {
+        //"2017-11-28T11:01:14.025Z" len=24
+        //'2017-10-10 00:00:00' len=19
+        //'2017-10-10' len=10
+        if (date.indexOf('/') && date.length < 24) {
             date = date.replace(/-/g, '/');
         }
         date.length <= 10 ? new Date(date + ' 00:00:00') : new Date(date);
