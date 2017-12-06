@@ -288,10 +288,16 @@ Object.defineProperty(exports, '__esModule', {
 });
 function dateObject(date) {
     if (!date) return date;
-
-    return date instanceof Date ? date :
-    //with hours or not
-    typeof date === 'string' && date.length <= 10 ? new Date(date + ' 00:00:00') : new Date(date);
+    if (typeof date === 'string') {
+        //"2017-11-28T11:01:14.025Z" len=24
+        //'2017-10-10 00:00:00' len=19
+        //'2017-10-10' len=10
+        if (date.indexOf('/') && date.length < 24) {
+            date = date.replace(/-/g, '/');
+        }
+        date.length <= 10 ? new Date(date + ' 00:00:00') : new Date(date);
+    }
+    return date instanceof Date ? date : new Date(date);
 }
 
 function dateFormat(date, format) {
@@ -667,7 +673,7 @@ var DateInput = (function (_Component) {
 		}
 	}, {
 		key: 'handleChange',
-		value: function handleChange(event) {
+		value: function handleChange() {
 			// this.props.onChange(event, this)
 		}
 	}, {
@@ -746,7 +752,6 @@ var DateInput = (function (_Component) {
 		key: 'render',
 		value: function render() {
 			var _props2 = this.props;
-			var customInput = _props2.customInput;
 			var disabled = _props2.disabled;
 			var placeholder = _props2.placeholder;
 			var children = _props2.children;
@@ -1173,10 +1178,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require("react-dom");
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
 var _dateHeaderJs = require('./date-header.js');
 
 var _dateHeaderJs2 = _interopRequireDefault(_dateHeaderJs);
@@ -1260,7 +1261,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			var focus = _state.focus;
 			var selected = _state.selected;
 
-			if (show && !focus) {
+			if (show && !focus || focus === 'blank') {
 				this.state.focus = true; //just change state not trigger render
 				return;
 			}
@@ -1277,7 +1278,8 @@ var ReactDatepickerPlus = (function (_Component) {
 
 			this.show(true, { left: left, top: top }, true, status);
 			onFocus && onFocus(event, this);
-			if (status) this.setState({ date: selected });
+
+			this.setState({ date: selected });
 		}
 	}, {
 		key: 'onBlur',
@@ -1285,7 +1287,6 @@ var ReactDatepickerPlus = (function (_Component) {
 			var _state2 = this.state;
 			var show = _state2.show;
 			var focus = _state2.focus;
-			var status = _state2.status;
 			var _props = this.props;
 			var inline = _props.inline;
 			var onBlur = _props.onBlur;
@@ -1298,7 +1299,7 @@ var ReactDatepickerPlus = (function (_Component) {
 				}
 			}
 			if (!show) return;
-			if (!focus) {
+			if (!focus || focus === 'blank') {
 				//use setTimeout for firefox will lost focus because onMouseDown then trigger onClick, fuck
 				setTimeout(function () {
 					input.focus();
@@ -1310,7 +1311,7 @@ var ReactDatepickerPlus = (function (_Component) {
 		}
 	}, {
 		key: 'clickPane',
-		value: function clickPane(event) {
+		value: function clickPane() {
 			if (this.state.focus) this.state.focus = 'blank';
 		}
 	}, {
@@ -1340,15 +1341,9 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'updateDate',
 		value: function updateDate(dateinfo, isMonth) {
-			var _props2 = this.props;
-			var onChange = _props2.onChange;
-			var autoHide = _props2.autoHide;
-			var start = _props2.start;
-			var end = _props2.end;
-			var _state3 = this.state;
-			var _state3$status = _state3.status;
-			var status = _state3$status === undefined ? 'selected' : _state3$status;
-			var selected = _state3.selected;
+			var onChange = this.props.onChange;
+			var _state$status = this.state.status;
+			var status = _state$status === undefined ? 'selected' : _state$status;
 
 			var getSelected = (0, _dateFormatJs.dateObject)(!isMonth ? dateinfo.date : this.state[status]);
 
@@ -1376,19 +1371,19 @@ var ReactDatepickerPlus = (function (_Component) {
 			    dh = undefined,
 			    dc = undefined,
 			    idate = undefined;
-			var _state4 = this.state;
-			var date = _state4.date;
-			var start = _state4.start;
-			var end = _state4.end;
-			var min = _state4.min;
-			var max = _state4.max;
-			var offset = _state4.offset;
-			var _props3 = this.props;
-			var inline = _props3.inline;
-			var months = _props3.months;
-			var lang = _props3.lang;
-			var haslunar = _props3.haslunar;
-			var className = _props3.className;
+			var _state3 = this.state;
+			var date = _state3.date;
+			var start = _state3.start;
+			var end = _state3.end;
+			var min = _state3.min;
+			var max = _state3.max;
+			var offset = _state3.offset;
+			var _props2 = this.props;
+			var inline = _props2.inline;
+			var months = _props2.months;
+			var lang = _props2.lang;
+			var haslunar = _props2.haslunar;
+			var className = _props2.className;
 
 			var selected = this.state[status ? status : 'selected'];
 			var classes = 'date-picker date-picker-' + (inline ? 'inline' : 'block') + ' ' + (className ? className : '') + ' ' + (haslunar ? 'date-picker-lunar' : '');
@@ -1420,7 +1415,7 @@ var ReactDatepickerPlus = (function (_Component) {
 		}
 	}, {
 		key: 'componentWillReceiveProps',
-		value: function componentWillReceiveProps(props, oldprops) {
+		value: function componentWillReceiveProps(props) {
 			if (props.selected !== this.props.selected) {
 				this.setState({ selected: (0, _dateFormatJs.dateObject)(props.selected) });
 			}
@@ -1442,20 +1437,20 @@ var ReactDatepickerPlus = (function (_Component) {
 		value: function render() {
 			var _this = this;
 
-			var _state5 = this.state;
-			var show = _state5.show;
-			var selected = _state5.selected;
-			var start = _state5.start;
-			var end = _state5.end;
-			var status = _state5.status;
-			var _props4 = this.props;
-			var format = _props4.format;
-			var inline = _props4.inline;
-			var months = _props4.months;
-			var disabled = _props4.disabled;
-			var placeholder = _props4.placeholder;
-			var placeholderEnd = _props4.placeholderEnd;
-			var children = _props4.children;
+			var _state4 = this.state;
+			var show = _state4.show;
+			var selected = _state4.selected;
+			var start = _state4.start;
+			var end = _state4.end;
+			var status = _state4.status;
+			var _props3 = this.props;
+			var format = _props3.format;
+			var inline = _props3.inline;
+			var months = _props3.months;
+			var disabled = _props3.disabled;
+			var placeholder = _props3.placeholder;
+			var placeholderEnd = _props3.placeholderEnd;
+			var children = _props3.children;
 
 			var picker = undefined,
 			    pickers = undefined,
@@ -1491,7 +1486,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			) : di();
 			return _react2['default'].createElement(
 				'div',
-				{ className: "date-components " + clsName },
+				{ className: 'date-components ' + clsName },
 				didom,
 				inline ? picker : pickerInBody
 			);
@@ -1514,4 +1509,4 @@ ReactDatepickerPlus.defaultProps = {
 exports['default'] = ReactDatepickerPlus;
 module.exports = exports['default'];
 
-},{"./date-calendar.js":1,"./date-format.js":3,"./date-header.js":4,"./date-in-body.js":6,"./date-input.js":7,"react":undefined,"react-dom":undefined}]},{},[]);
+},{"./date-calendar.js":1,"./date-format.js":3,"./date-header.js":4,"./date-in-body.js":6,"./date-input.js":7,"react":undefined}]},{},[]);
