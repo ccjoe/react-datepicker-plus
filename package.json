@@ -13,7 +13,7 @@
     "url": "https://github.com/ccjoe/react-datepicker-plus/issues"
   },
   "dependencies": {
-    "react-layer-plus": "^1.0.6"
+    "react-layer-plus": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.3",

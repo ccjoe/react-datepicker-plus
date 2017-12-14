@@ -66,11 +66,12 @@ class ReactDatepickerPlus extends Component {
 			return
 		}
 		let status = input.props.status; selected = status?this.state[status]:selected;
-		let {left, top, height} = input.handlePosition();
+		let {left, top, height, width} = input.handlePosition();
 			top += (height+ (document.body.scrollTop || document.documentElement.scrollTop))
 		let {onFocus} = this.props
-
+		this.inputWidth = width
 		this.show(true, {left, top}, true, status)
+
 		onFocus && onFocus(event, this)
 
 		this.setState({date: selected})
@@ -163,6 +164,12 @@ class ReactDatepickerPlus extends Component {
 
     updateSize (w) {
 		!this.props.inline && this.setState({width: w})
+		var offset = this.state.offset
+		//右侧距离判断
+		var fullWidth = document.documentElement.clientWidth
+		if(2*w+offset.left > fullWidth){
+			this.setState({offset: {left:  offset.left + this.inputWidth - 2*w, top: offset.top}, width: w})
+		}
 	}
 
 	componentWillReceiveProps(props) {

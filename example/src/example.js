@@ -391,7 +391,7 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 					<Datepicker inline haslunar={true}  isfill={true} festival={true}/>
 				</div>
 
-				<div className="demo-item demo-full">
+				<div className="demo-item demo-full" style={{right: 50, width: 300, position: 'absolute'}}>
 					<h5>datepicker with cn holiday label('休')</h5>
 					<pre className="demo-code">
 						{`
@@ -435,7 +435,7 @@ dayAddon(dayinfo){
 },
 <Datepicker  className="date-picker-demo" inline  selected={now} haslunar={true}  isfill={true} festival={true}/> dayAddon={this.dayAddon}`}
       				</pre>
-					<Datepicker className="date-picker-demo" inline selected={now} haslunar={true}  isfill={true} festival={true} dayAddon={this.dayAddon.bind(this)}/>
+					<Datepicker  months={2} className="date-picker-demo" selected={now} haslunar={true}  isfill={true} festival={true} dayAddon={this.dayAddon.bind(this)}/>
 				</div>
 			</div>
 		);

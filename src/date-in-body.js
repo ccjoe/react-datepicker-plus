@@ -1,15 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from "react-dom"
 class DateInBody extends Component {
-  // propTypes: {
-  //   classes: React.PropTypes.string, //class split by spacing
-  //   offset: React.PropTypes.object,
-  //   updateSize: React.PropTypes.function
-  // }
-  // constructor(props) {
-  //     super(props);
-  // }
-
   componentDidMount() {
     this.popup = document.createElement("div")
     // this.popup.className = this.props.classes
@@ -17,7 +8,7 @@ class DateInBody extends Component {
     this.renderLayer()
     if(!this.props.inline){
       let adjustSize = this.popup.getElementsByClassName('date-picker')[0].clientWidth
-      this.props.onUpdate && this.props.onUpdate(adjustSize);
+			this.props.onUpdate && this.props.onUpdate(adjustSize);
     }
   }
 
