@@ -390,8 +390,8 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
       				</pre>
 					<Datepicker inline haslunar={true}  isfill={true} festival={true}/>
 				</div>
-
-				<div className="demo-item demo-full" style={{right: 50, width: 300, position: 'absolute'}}>
+				{/*  */}
+				<div className="demo-item demo-full">
 					<h5>datepicker with cn holiday label('休')</h5>
 					<pre className="demo-code">
 						{`
