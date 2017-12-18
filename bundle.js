@@ -529,16 +529,6 @@ var DateInBody = (function (_Component) {
 
   _createClass(DateInBody, [{
     key: "componentDidMount",
-
-    // propTypes: {
-    //   classes: React.PropTypes.string, //class split by spacing
-    //   offset: React.PropTypes.object,
-    //   updateSize: React.PropTypes.function
-    // }
-    // constructor(props) {
-    //     super(props);
-    // }
-
     value: function componentDidMount() {
       this.popup = document.createElement("div");
       // this.popup.className = this.props.classes
@@ -1272,11 +1262,14 @@ var ReactDatepickerPlus = (function (_Component) {
 			var left = _input$handlePosition.left;
 			var top = _input$handlePosition.top;
 			var height = _input$handlePosition.height;
+			var width = _input$handlePosition.width;
 
 			top += height + (document.body.scrollTop || document.documentElement.scrollTop);
 			var onFocus = this.props.onFocus;
 
+			this.inputWidth = width;
 			this.show(true, { left: left, top: top }, true, status);
+
 			onFocus && onFocus(event, this);
 
 			this.setState({ date: selected });
@@ -1412,6 +1405,12 @@ var ReactDatepickerPlus = (function (_Component) {
 		key: 'updateSize',
 		value: function updateSize(w) {
 			!this.props.inline && this.setState({ width: w });
+			var offset = this.state.offset;
+			//右侧距离判断
+			var fullWidth = document.documentElement.clientWidth;
+			if (2 * w + offset.left > fullWidth) {
+				this.setState({ offset: { left: offset.left + this.inputWidth - 2 * w, top: offset.top }, width: w });
+			}
 		}
 	}, {
 		key: 'componentWillReceiveProps',
