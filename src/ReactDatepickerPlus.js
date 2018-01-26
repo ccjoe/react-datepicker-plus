@@ -114,7 +114,9 @@ class ReactDatepickerPlus extends Component {
 
 	numMonth(date, num){
 		date = dateObject(date) || today
-		return new Date(date.getFullYear(), date.getMonth() + num, date.getDate())
+		var y=date.getFullYear(), m=date.getMonth()+num, d = date.getDate()
+		var maxd = new Date(y, m+1, 0).getDate() //判断某月为共多少天
+		return new Date(y, m, d > maxd ? maxd : d)
 	}
 
 	updateDay(dateinfo){

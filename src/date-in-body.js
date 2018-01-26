@@ -7,8 +7,9 @@ class DateInBody extends Component {
     document.body.appendChild(this.popup)
     this.renderLayer()
     if(!this.props.inline){
-      let adjustSize = this.popup.getElementsByClassName('date-picker')[0].clientWidth
-			this.props.onUpdate && this.props.onUpdate(adjustSize);
+			let picker = this.popup.getElementsByClassName('date-picker')[0]
+      let adjustSize = picker &&　picker.clientWidth
+			picker && this.props.onUpdate && this.props.onUpdate(adjustSize);
     }
   }
 

@@ -182,7 +182,11 @@ var ReactDatepickerPlus = (function (_Component) {
 		key: 'numMonth',
 		value: function numMonth(date, num) {
 			date = (0, _dateFormatJs.dateObject)(date) || _dateFormatJs.today;
-			return new Date(date.getFullYear(), date.getMonth() + num, date.getDate());
+			var y = date.getFullYear(),
+			    m = date.getMonth() + num,
+			    d = date.getDate();
+			var maxd = new Date(y, m + 1, 0).getDate(); //判断某月为共多少天
+			return new Date(y, m, d > maxd ? maxd : d);
 		}
 	}, {
 		key: 'updateDay',
@@ -911,8 +915,9 @@ var DateInBody = (function (_Component) {
       document.body.appendChild(this.popup);
       this.renderLayer();
       if (!this.props.inline) {
-        var adjustSize = this.popup.getElementsByClassName('date-picker')[0].clientWidth;
-        this.props.onUpdate && this.props.onUpdate(adjustSize);
+        var picker = this.popup.getElementsByClassName('date-picker')[0];
+        var adjustSize = picker && picker.clientWidth;
+        picker && this.props.onUpdate && this.props.onUpdate(adjustSize);
       }
     }
   }, {
