@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {toLunarDate, toLunarDay} from './date-lunar'
-import {getSolarTermIndex, getMonthSolarTerms} from './date-term'
+import {getMonthSolarTerms} from './date-term'
 import {salarHolidays, lunarHolidays} from'./date-holidays'
 //render month
 //current month
