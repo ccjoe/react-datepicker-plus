@@ -84,19 +84,7 @@ class DateInput extends Component {
 			return React.Children.map(children, child => {
 				return child.type === 'input' ? inputElem : child
 			})
-/* 			return <div>
-				{React.Children.map(children, child => {
-					return child.type === 'input' ? inputElem : child
-				})}
-			</div> */
 		}
-
-		// else if(children){
-		// 	return React.Children.map(children, child => {
-		// 		return child.type === 'input' ? inputElem : child
-		// 	})
-		// }
-
 	}
 
 	render () {

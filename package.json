@@ -1,6 +1,6 @@
 {
   "name": "react-datepicker-plus",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "react-datepicker-plus",
   "main": "lib/ReactDatepickerPlus.js",
   "author": "ccjoe",
@@ -13,7 +13,6 @@
     "url": "https://github.com/ccjoe/react-datepicker-plus/issues"
   },
   "dependencies": {
-    "react-layer-plus": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.3",

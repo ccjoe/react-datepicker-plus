@@ -79,6 +79,10 @@ var ReactDatepickerPlus = (function (_Component) {
 	//  placeholder
 	//  placeholderEnd
 	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
+
+	// salarHolidays: null,  holiday by solar date mmdd
+	// lunarHolidays: null,  holiday by lunar date mmdd
+	// dayHolidays: null,  lunar holiday by solar date yyyymmdd
 	// }
 
 	function ReactDatepickerPlus(props) {
@@ -96,13 +100,13 @@ var ReactDatepickerPlus = (function (_Component) {
 			end: (0, _dateFormatJs.dateObject)(props.end),
 			min: (0, _dateFormatJs.dateObject)(props.min),
 			max: (0, _dateFormatJs.dateObject)(props.max)
+			// status: ''   	//React.PropTypes.oneOf(['start', 'end'])
+			//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		};
 	}
 
 	_createClass(ReactDatepickerPlus, [{
 		key: 'onFocus',
-		// status: ''   	//React.PropTypes.oneOf(['start', 'end'])
-		//'start' and 'end' use by bi-datepicker range value, and undefined use by single datepicker single date
 		value: function onFocus(event, input) {
 			var _state = this.state;
 			var show = _state.show;
@@ -113,7 +117,8 @@ var ReactDatepickerPlus = (function (_Component) {
 				this.state.focus = true; //just change state not trigger render
 				return;
 			}
-			var status = input.props.status;selected = status ? this.state[status] : selected;
+			var status = input.props.status;
+			selected = status ? this.state[status] : selected;
 
 			var _input$handlePosition = input.handlePosition();
 
@@ -246,8 +251,21 @@ var ReactDatepickerPlus = (function (_Component) {
 			for (var i = 0; i < months; i++) {
 				offsets.push({ left: i * pickerWidth + offset.left, top: offset.top });
 				idate = this.numMonth(date, i);
-				dh = _react2['default'].createElement(_dateHeaderJs2['default'], { date: idate, lang: haslunar ? 'cn' : lang, updateMonth: this.updateMonth.bind(this) });
-				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, { min: min, max: max, date: idate, status: status, start: start, end: end, selected: selected, onChange: this.updateDay.bind(this) }));
+				dh = _react2['default'].createElement(_dateHeaderJs2['default'], {
+					date: idate,
+					lang: haslunar ? 'cn' : lang,
+					updateMonth: this.updateMonth.bind(this)
+				});
+				dc = _react2['default'].createElement(_dateCalendarJs2['default'], _extends({}, this.props, {
+					min: min,
+					max: max,
+					date: idate,
+					status: status,
+					start: start,
+					end: end,
+					selected: selected,
+					onChange: this.updateDay.bind(this)
+				}));
 
 				$pickers.push(inline ? _react2['default'].createElement(
 					'div',
@@ -256,7 +274,12 @@ var ReactDatepickerPlus = (function (_Component) {
 					dc
 				) : _react2['default'].createElement(
 					'div',
-					{ onMouseDown: this.clickPane.bind(this), className: classes, style: offsets[i], key: i },
+					{
+						onMouseDown: this.clickPane.bind(this),
+						className: classes,
+						style: offsets[i],
+						key: i
+					},
 					dh,
 					dc
 				));
@@ -271,7 +294,10 @@ var ReactDatepickerPlus = (function (_Component) {
 			//右侧距离判断
 			var fullWidth = document.documentElement.clientWidth;
 			if (2 * w + offset.left > fullWidth) {
-				this.setState({ offset: { left: offset.left + this.inputWidth - 2 * w, top: offset.top }, width: w });
+				this.setState({
+					offset: { left: offset.left + this.inputWidth - 2 * w, top: offset.top },
+					width: w
+				});
 			}
 		}
 	}, {
@@ -319,12 +345,17 @@ var ReactDatepickerPlus = (function (_Component) {
 			var clsName = this.props.className || '',
 			    clsWrapperName = clsName ? ' ' + clsName + '-panes' : '';
 			var di = function di(val, stat) {
-				return _react2['default'].createElement(_dateInputJs2['default'], { selected: val === void 0 ? selected : val,
-					format: format, disabled: disabled,
-					placeholder: stat == 'end' ? placeholderEnd : placeholder, children: children,
+				return _react2['default'].createElement(_dateInputJs2['default'], {
+					selected: val === void 0 ? selected : val,
+					format: format,
+					disabled: disabled,
+					placeholder: stat == 'end' ? placeholderEnd : placeholder,
+					children: children,
 					onFocus: _this.onFocus.bind(_this),
-					onBlur: _this.onBlur.bind(_this), status: stat,
-					ref: stat });
+					onBlur: _this.onBlur.bind(_this),
+					status: stat,
+					ref: stat
+				});
 			};
 			if (show) {
 				pickers = this.pickers(status);
@@ -335,7 +366,11 @@ var ReactDatepickerPlus = (function (_Component) {
 				);
 				pickerInBody = _react2['default'].createElement(
 					_dateInBodyJs2['default'],
-					{ onUpdate: this.updateSize.bind(this), className: 'date-picker-wrapper', ref: 'insDateInBody' },
+					{
+						onUpdate: this.updateSize.bind(this),
+						className: 'date-picker-wrapper',
+						ref: 'insDateInBody'
+					},
 					picker
 				);
 			}
@@ -357,14 +392,15 @@ var ReactDatepickerPlus = (function (_Component) {
 	return ReactDatepickerPlus;
 })(_react.Component);
 
-;
-
 ReactDatepickerPlus.defaultProps = {
 	isfill: false,
 	format: 'yyyy-MM-dd',
 	selected: _dateFormatJs.today,
 	months: 1,
-	lang: 'en'
+	lang: 'en',
+	salarHolidays: null,
+	lunarHolidays: null,
+	dayHolidays: null
 };
 
 exports['default'] = ReactDatepickerPlus;
@@ -438,7 +474,7 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -463,190 +499,194 @@ var _dateHolidays = require('./date-holidays');
 
 //render month
 //current month
+var now = new Date();
 
 var DateDay = (function (_Component) {
-    _inherits(DateDay, _Component);
+	_inherits(DateDay, _Component);
 
-    /*propTypes: {
+	/*propTypes: {
         date: React.PropTypes.object,
         format: React.PropTypes.string,
     }*/
 
-    function DateDay(props) {
-        _classCallCheck(this, DateDay);
+	function DateDay(props) {
+		_classCallCheck(this, DateDay);
 
-        _get(Object.getPrototypeOf(DateDay.prototype), 'constructor', this).call(this, props);
-        // console.log(this.props.selected, props.selected, 'selected')
-    }
+		_get(Object.getPrototypeOf(DateDay.prototype), 'constructor', this).call(this, props);
+		// console.log(this.props.selected, props.selected, 'selected')
+	}
 
-    //获取某天的所有信息 m+1才是显示用的月分
+	//获取某天的所有信息 m+1才是显示用的月分
 
-    _createClass(DateDay, [{
-        key: 'getDayInfo',
-        value: function getDayInfo() {
-            var _props = this.props;
-            var date = _props.date;
-            var edate = _props.edate;
-            var min = _props.min;
-            var max = _props.max;
-            var start = _props.start;
-            var end = _props.end;
-            var selected = _props.selected;
-            var selecting = _props.selecting;
-            var status = _props.status;
-            var dayAddon = _props.dayAddon;
-            //selected date, render date, each date
-            selected = selected || new Date();
-            // selected = selected instanceof Date ? selected : new Date(selected)
-            // date = date instanceof Date ? date : new Date(date)
-            // edate = edate instanceof Date ? edate : new Date(edate)
-            var sy = selected.getFullYear();
-            var sm = selected.getMonth();
-            var sd = selected.getDate();
-            var cy = date.getFullYear();
-            var cm = date.getMonth();
-            var cd = date.getDate();
-            var y = edate.getFullYear();
-            var m = edate.getMonth();
-            var d = edate.getDate();
+	_createClass(DateDay, [{
+		key: 'getDayInfo',
+		value: function getDayInfo() {
+			var _props = this.props;
+			var date = _props.date;
+			var edate = _props.edate;
+			var min = _props.min;
+			var max = _props.max;
+			var start = _props.start;
+			var end = _props.end;
+			var selected = _props.selected;
+			var selecting = _props.selecting;
+			var status = _props.status;
+			var dayAddon = _props.dayAddon;
+			//selected date, render date, each date
+			selected = selected || now;
 
-            var toNo = function toNo(x) {
-                return x ? +x : 0;
-            };
-            var edateNo = toNo(edate),
-                minNo = toNo(min),
-                maxNo = toNo(max),
-                startNo = toNo(start),
-                endNo = toNo(end);
-            var range = function range(startNo, endNo) {
-                return edateNo >= startNo && edateNo <= endNo;
-            };
-            var minmax = function minmax(minNo, maxNo) {
-                return minNo && edateNo < minNo || maxNo && edateNo > maxNo;
-            };
+			var lastLunarHolidays = this.props.lunarHolidays || _dateHolidays.lunarHolidays;
+			var lastSalarHolidays = this.props.salarHolidays || _dateHolidays.salarHolidays;
+			var lastDayHolidays = this.props.dayHolidays || _dateHolidays.dayHolidays;
+			// selected = selected instanceof Date ? selected : new Date(selected)
+			// date = date instanceof Date ? date : new Date(date)
+			// edate = edate instanceof Date ? edate : new Date(edate)
+			var sy = selected.getFullYear();
+			var sm = selected.getMonth();
+			var sd = selected.getDate();
+			var cy = date.getFullYear();
+			var cm = date.getMonth();
+			var cd = date.getDate();
+			var y = edate.getFullYear();
+			var m = edate.getMonth();
+			var d = edate.getDate();
+			var ty = now.getFullYear();
+			var tm = now.getMonth();
+			var td = now.getDate();
 
-            var realMin = min && minNo > startNo ? minNo : startNo;
-            var realMax = !max || maxNo > endNo ? endNo : maxNo;
+			var toNo = function toNo(x) {
+				return x ? +x : 0;
+			};
+			var edateNo = toNo(edate),
+			    minNo = toNo(min),
+			    maxNo = toNo(max),
+			    startNo = toNo(start),
+			    endNo = toNo(end);
+			var range = function range(startNo, endNo) {
+				return edateNo >= startNo && edateNo <= endNo;
+			};
+			var minmax = function minmax(minNo, maxNo) {
+				return minNo && edateNo < minNo || maxNo && edateNo > maxNo;
+			};
 
-            var dayinfo = {
-                date: edate,
-                lunar: (0, _dateLunar.toLunarDate)(edate),
-                term: (0, _dateTerm.getMonthSolarTerms)(y, m)[d],
-                salarfest: _dateHolidays.salarHolidays[this.zero(m + 1) + this.zero(d)], //这里的月份用的是视图的
-                currentMonth: m === cm,
-                currentDay: y === sy && m === sm && d === sd,
-                currentPoint: edateNo === realMin || edateNo === realMax
-            };
-            //需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
-            //是否在限制的范围内
-            var isStart = status === 'start',
-                isEnd = status === 'end';
+			var realMin = min && minNo > startNo ? minNo : startNo;
+			var realMax = !max || maxNo > endNo ? endNo : maxNo;
 
-            if (isStart) {
-                dayinfo.disabled = minmax(minNo, realMax);
-            } else if (isEnd) {
-                dayinfo.disabled = minmax(realMin, maxNo);
-            } else if (min || max) {
-                dayinfo.disabled = minmax(minNo, maxNo);
-            }
+			var lunar = (0, _dateLunar.toLunarDate)(edate);
+			var lunarmmdd = '' + this.zero(lunar.month) + this.zero(lunar.day);
+			var salarmmdd = '' + this.zero(m + 1) + this.zero(d);
+			var salarymd = y + salarmmdd;
 
-            if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
-            if (selecting && status) dayinfo.inselect = isStart ? range(selecting, end) : range(start, selecting);
+			var dayinfo = {
+				today: y === ty && m === tm && d === td,
+				date: edate,
+				lunar: lunar,
+				term: (0, _dateTerm.getMonthSolarTerms)(y, m)[d],
+				salarfest: lastSalarHolidays[salarmmdd], //这里的月份用的是视图的
+				lunarfest: lastLunarHolidays[lunarmmdd] || lastDayHolidays[salarymd],
+				currentMonth: m === cm,
+				currentDay: y === sy && m === sm && d === sd,
+				currentPoint: edateNo === realMin || edateNo === realMax
+			};
+			//需要区分 start(不能大于end)与end(水能小于start), 没有则直接看min max @todo
+			//是否在限制的范围内
+			var isStart = status === 'start',
+			    isEnd = status === 'end';
 
-            if (dayAddon) {
-                dayinfo.addon = dayAddon(dayinfo);
-            }
-            dayinfo.lunarfest = _dateHolidays.lunarHolidays[this.zero(dayinfo.lunar.month) + this.zero(dayinfo.lunar.day)];
-            // console.log(dayinfo, edateNo, start, end, 'startend')
-            return dayinfo;
-        }
-    }, {
-        key: 'zero',
-        value: function zero(n) {
-            return n < 10 ? '0' + n : n;
-        }
-    }, {
-        key: 'setDate',
-        value: function setDate(dateinfo) {
-            if (dateinfo.disabled) return;
-            this.props.onChange(dateinfo);
-        }
-    }, {
-        key: 'setMouseEnter',
-        value: function setMouseEnter(dateinfo) {
-            if (dateinfo.disabled) return;
-            this.props.onMouseEnter.bind(this, dateinfo);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var info = this.getDayInfo();
-            var date = info.date;
-            var salarfest = info.salarfest;
-            var lunarfest = info.lunarfest;
-            var term = info.term;
-            var lunar = info.lunar;
-            var currentDay = info.currentDay;
-            var currentPoint = info.currentPoint;
-            var currentMonth = info.currentMonth;
-            var disabled = info.disabled;
-            var inrange = info.inrange;
-            var inselect = info.inselect;
-            var addon = info.addon;
-            var festDom = undefined;var _props2 = this.props;
-            var festival = _props2.festival;
-            var haslunar = _props2.haslunar;
+			if (isStart) {
+				dayinfo.disabled = minmax(minNo, realMax);
+			} else if (isEnd) {
+				dayinfo.disabled = minmax(realMin, maxNo);
+			} else if (min || max) {
+				dayinfo.disabled = minmax(minNo, maxNo);
+			}
 
-            if (festival && (salarfest || lunarfest)) {
-                festDom = _react2['default'].createElement(
-                    'div',
-                    null,
-                    _react2['default'].createElement(
-                        'span',
-                        { className: 'date-fest' },
-                        (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '')
-                    ),
-                    addon
-                );
-            } else {
-                festDom = _react2['default'].createElement(
-                    'div',
-                    null,
-                    _react2['default'].createElement(
-                        'span',
-                        { className: 'date-d' },
-                        date.getDate()
-                    ),
-                    addon
-                );
-            }
-            if (haslunar) {
-                //has lunar and must has term
-                festDom = _react2['default'].createElement(
-                    'div',
-                    { className: 'date-day-sets' },
-                    festDom,
-                    _react2['default'].createElement(
-                        'span',
-                        { className: 'date-lunar' },
-                        term ? term : (0, _dateLunar.toLunarDay)(lunar.day)
-                    )
-                );
-            }
-            return _react2['default'].createElement(
-                'div',
-                { className: "date-day" + (!currentMonth ? " date-nocurrent " : " ") + (currentPoint ? ' date-point' : "") + (currentDay ? ' date-selected' : "") + (disabled ? ' date-disabled' : "") + (inrange ? ' date-range' : "") + (inselect ? ' date-hover' : ""),
-                    onMouseDown: this.setDate.bind(this, info),
-                    onMouseEnter: this.setMouseEnter.bind(this, info) },
-                festDom
-            );
-        }
-    }]);
+			if (start && end) dayinfo.inrange = range(start, end); //是否在选择结果的范围内
+			if (selecting && status) dayinfo.inselect = isStart ? range(selecting, end) : range(start, selecting);
 
-    return DateDay;
+			if (dayAddon) {
+				dayinfo.addon = dayAddon(dayinfo);
+			}
+
+			return dayinfo;
+		}
+	}, {
+		key: 'zero',
+		value: function zero(n) {
+			return n < 10 ? '0' + n : n;
+		}
+	}, {
+		key: 'setDate',
+		value: function setDate(dateinfo) {
+			if (dateinfo.disabled) return;
+			this.props.onChange(dateinfo);
+		}
+	}, {
+		key: 'setMouseEnter',
+		value: function setMouseEnter(dateinfo) {
+			if (dateinfo.disabled) return;
+			this.props.onMouseEnter.bind(this, dateinfo);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var info = this.getDayInfo();
+			var today = info.today;
+			var date = info.date;
+			var salarfest = info.salarfest;
+			var lunarfest = info.lunarfest;
+			var term = info.term;
+			var lunar = info.lunar;
+			var currentDay = info.currentDay;
+			var currentPoint = info.currentPoint;
+			var currentMonth = info.currentMonth;
+			var disabled = info.disabled;
+			var inrange = info.inrange;
+			var inselect = info.inselect;
+			var addon = info.addon;
+			var _props2 = this.props;
+			var festival = _props2.festival;
+			var haslunar = _props2.haslunar;
+			var hasFest = festival && (salarfest || lunarfest);
+
+			var festDom = _react2['default'].createElement(
+				'div',
+				null,
+				_react2['default'].createElement(
+					'span',
+					{ className: hasFest ? 'date-fest' : 'date-d' },
+					hasFest ? (salarfest ? salarfest : '') + (lunarfest ? lunarfest : '') : today ? '今' : date.getDate()
+				),
+				addon
+			);
+
+			if (haslunar) {
+				//has lunar and must has term
+				festDom = _react2['default'].createElement(
+					'div',
+					{ className: 'date-day-sets' },
+					festDom,
+					_react2['default'].createElement(
+						'span',
+						{ className: 'date-lunar' },
+						term ? term : (0, _dateLunar.toLunarDay)(lunar.day)
+					)
+				);
+			}
+			return _react2['default'].createElement(
+				'div',
+				{
+					className: 'date-day' + (!currentMonth ? ' date-nocurrent ' : ' ') + (currentPoint ? ' date-point' : '') + (currentDay ? ' date-selected' : '') + (disabled ? ' date-disabled' : '') + (inrange ? ' date-range' : '') + (inselect ? ' date-hover' : ''),
+					onMouseDown: this.setDate.bind(this, info),
+					onMouseEnter: this.setMouseEnter.bind(this, info)
+				},
+				festDom
+			);
+		}
+	}]);
+
+	return DateDay;
 })(_react.Component);
-
-;
 
 exports['default'] = DateDay;
 module.exports = exports['default'];
@@ -838,39 +878,50 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 var salarHolidays = {
-    '0101': '元旦',
-    '0214': '情人',
-    '0308': '妇女',
-    '0312': '植树',
-    '0401': '愚人',
-    '0501': '劳动',
-    '0504': '青年',
-    '0601': '儿童',
-    '0701': '建党',
-    '0801': '建军',
-    '0910': '教师',
-    '1001': '国庆',
-    '1224': '平安夜',
-    '1225': '圣诞'
+	'0101': '元旦',
+	'0214': '情人',
+	'0308': '妇女',
+	'0312': '植树',
+	'0401': '愚人',
+	'0501': '劳动',
+	'0504': '青年',
+	'0601': '儿童',
+	'0701': '建党',
+	'0801': '建军',
+	'0910': '教师',
+	'1001': '国庆',
+	'1224': '平安夜',
+	'1225': '圣诞'
 };
 
 var lunarHolidays = {
-    '0101': '春节',
-    '0115': '元宵',
-    '0505': '端午',
-    '0707': '七夕',
-    '0715': '中元',
-    '0815': '中秋',
-    '0909': '重阳',
-    '1208': '腊八',
-    '1224': '小年'
+	'0101': '春节',
+	'0115': '元宵',
+	'0505': '端午',
+	'0707': '七夕',
+	'0715': '中元',
+	'0815': '中秋',
+	'0909': '重阳',
+	'1208': '腊八',
+	'1224': '小年'
+};
+
+//按阳历计的阴历节日
+var dayHolidays = {
+	'20170127': '除夕',
+	'20170404': '清明',
+	'20180215': '除夕',
+	'20180405': '清明',
+	'20190204': '除夕',
+	'20190405': '清明'
 };
 
 exports.salarHolidays = salarHolidays;
 exports.lunarHolidays = lunarHolidays;
+exports.dayHolidays = dayHolidays;
 
 },{}],7:[function(require,module,exports){
 (function (global){
@@ -1108,18 +1159,7 @@ var DateInput = (function (_Component) {
 				return _react2['default'].Children.map(children, function (child) {
 					return child.type === 'input' ? inputElem : child;
 				});
-				/* 			return <div>
-    				{React.Children.map(children, child => {
-    					return child.type === 'input' ? inputElem : child
-    				})}
-    			</div> */
 			}
-
-			// else if(children){
-			// 	return React.Children.map(children, child => {
-			// 		return child.type === 'input' ? inputElem : child
-			// 	})
-			// }
 		}
 	}, {
 		key: 'render',

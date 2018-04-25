@@ -22,6 +22,30 @@ var Datepicker = require('react-datepicker-plus');
 var now = new Date('2016/10/15');
 var min = new Date('2016/10/10');
 var max = new Date('2016/10/20');
+//按阳历计
+var salarHolidays = {
+	'0101': '元旦',
+	'0501': '五一',
+	'1001': '国庆',
+	'1224': '平安夜',
+	'1225': '圣诞'
+};
+//按阴历计
+var lunarHolidays = {
+	'0101': '春节',
+	'0115': '元宵',
+	'0505': '端午',
+	'0815': '中秋'
+};
+//按阳历计的阴历节日
+var dayHolidays = {
+	'20170127': '除夕',
+	'20170404': '清明',
+	'20180215': '除夕',
+	'20180405': '清明',
+	'20190204': '除夕',
+	'20190405': '清明'
+};
 
 var App = (function (_Component) {
 	_inherits(App, _Component);
@@ -93,7 +117,7 @@ var App = (function (_Component) {
 	}, {
 		key: 'linkageChange',
 		value: function linkageChange(dateInfo) {
-			this.setState({ 'linkageValue': dateInfo.date });
+			this.setState({ linkageValue: dateInfo.date });
 		}
 	}, {
 		key: 'dayAddon',
@@ -213,9 +237,9 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'p',
 						null,
-						'input Component root element will add your  self defined className, \'my-datepicker\'',
+						'input Component root element will add your self defined className, \'my-datepicker\'',
 						_react2['default'].createElement('br', null),
-						'and not inline datepicker pane Component root element will add  your  self defined className + \'my-datepicker-panes\''
+						'and not inline datepicker pane Component root element will add your self defined className + \'my-datepicker-panes\''
 					),
 					_react2['default'].createElement(
 						'pre',
@@ -274,7 +298,11 @@ var App = (function (_Component) {
 					),
 					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) }),
 					_react2['default'].createElement(Datepicker, { selected: linkageValue, onChange: this.linkageChange.bind(this) }),
-					_react2['default'].createElement(Datepicker, { start: linkageValue, end: new Date('2017-09-28'), onChange: this.linkageChange.bind(this) })
+					_react2['default'].createElement(Datepicker, {
+						start: linkageValue,
+						end: new Date('2017-09-28'),
+						onChange: this.linkageChange.bind(this)
+					})
 				),
 				_react2['default'].createElement(
 					'div',
@@ -351,10 +379,12 @@ var App = (function (_Component) {
 					),
 					_react2['default'].createElement(
 						'button',
-						{ onClick: (function () {
+						{
+							onClick: (function () {
 								this.setState({ min: new Date('2016/10/12'), max: new Date('2016/10/18') });
 								console.log(this.state, 'state');
-							}).bind(this) },
+							}).bind(this)
+						},
 						'设置范围 ',
 						'{min: new Date(\'2016/10/12\'), max: new Date(\'2016/10/18\')}'
 					),
@@ -398,9 +428,17 @@ var App = (function (_Component) {
 					),
 					_react2['default'].createElement(
 						Datepicker,
-						{ min: new Date('2016-10-08 00:00:00'), max: new Date('2016-10-28 00:00:00'), start: min, end: max, placeholder: 'departDate', placeholderEnd: 'arrivalDate', onChange: function (dateInfo) {
+						{
+							min: new Date('2016-10-08 00:00:00'),
+							max: new Date('2016-10-28 00:00:00'),
+							start: min,
+							end: max,
+							placeholder: 'departDate',
+							placeholderEnd: 'arrivalDate',
+							onChange: function (dateInfo) {
 								console.log(dateInfo, 'dateInfo');
-							} },
+							}
+						},
 						_react2['default'].createElement(
 							'div',
 							{ className: 'type_item' },
@@ -418,9 +456,18 @@ var App = (function (_Component) {
 					_react2['default'].createElement('br', null),
 					_react2['default'].createElement(
 						Datepicker,
-						{ min: new Date('2016-10-08 00:00:00'), months: 2, isfill: true, start: min, end: "", placeholder: '出发日期', placeholderEnd: '返回日期', onChange: function (dateInfo) {
+						{
+							min: new Date('2016-10-08 00:00:00'),
+							months: 2,
+							isfill: true,
+							start: min,
+							end: '',
+							placeholder: '出发日期',
+							placeholderEnd: '返回日期',
+							onChange: function (dateInfo) {
 								console.log(dateInfo, 'dateInfo');
-							} },
+							}
+						},
 						_react2['default'].createElement(
 							'div',
 							{ className: 'type_item' },
@@ -462,7 +509,11 @@ var App = (function (_Component) {
 						{ className: 'demo-code' },
 						'<Datepicker onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onChange} />'
 					),
-					_react2['default'].createElement(Datepicker, { onFocus: this.onFocus.bind(this), onBlur: this.onBlur.bind(this), onChange: this.onChange.bind(this) })
+					_react2['default'].createElement(Datepicker, {
+						onFocus: this.onFocus.bind(this),
+						onBlur: this.onBlur.bind(this),
+						onChange: this.onChange.bind(this)
+					})
 				),
 				_react2['default'].createElement(
 					'div',
@@ -530,6 +581,27 @@ var App = (function (_Component) {
 					_react2['default'].createElement(
 						'h5',
 						null,
+						'datepicker with user-defined festival'
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker inline festival={true} salarHolidays={salarHolidays}\n\t\t\t\t\t\tlunarHolidays={lunarHolidays}\n\t\t\t\t\t\tdayHolidays={dayHolidays}/>'
+					),
+					_react2['default'].createElement(Datepicker, {
+						inline: true,
+						festival: true,
+						salarHolidays: salarHolidays,
+						lunarHolidays: lunarHolidays,
+						dayHolidays: dayHolidays
+					})
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item' },
+					_react2['default'].createElement(
+						'h5',
+						null,
 						'datepicker with lunar(lunar auto include term and lang is \'cn\')'
 					),
 					_react2['default'].createElement(
@@ -552,7 +624,15 @@ var App = (function (_Component) {
 						{ className: 'demo-code' },
 						'\nstatic initialState() {\n\taddonData: {\n\t\trest: {\n\t\t\t\'2016/01/01\': \'休\',\n\t\t\t\'2016/10/01\': \'休\',\n\t\t\t\'2016/10/02\': \'休\',\n\t\t\t\'2016/10/03\': \'休\',\n\t\t\t\'2016/10/04\': \'休\',\n\t\t\t\'2016/10/05\': \'休\',\n\t\t\t\'2016/10/06\': \'休\',\n\t\t\t\'2016/10/07\': \'休\'\n\t\t},\n\t\tprice: {\n\t\t\t\'2016/10/01\': \'566\',\n\t\t\t\'2016/10/02\': \'576\',\n\t\t\t\'2016/10/03\': \'555\',\n\t\t\t\'2016/10/04\': \'550\',\n\t\t\t\'2016/10/05\': \'450\',\n\t\t\t\'2016/10/06\': \'650\',\n\t\t\t\'2016/10/07\': \'655\',\n\t\t\t\'2016/10/08\': \'500\',\n\t\t\t\'2016/10/09\': \'300\'\n\t\t}\n\t}\n},\ndayAddon(dayinfo){\n\tlet {addonData} = this.state\n\tlet {date} = dayinfo\n\tlet dateStr = dateFormat(date, \'yyyy/MM/dd\')\n\tlet resstr, val, doms = []\n\tfor(var key in addonData){\n\t\tresstr = addonData[key][dateStr]\n\t\tif(resstr){\n\t\t\tdoms.push(<span className={\'date-day-\'+key} key={key}>{resstr}</span>)\n\t\t}\n\t}\n\treturn doms\n},\n<Datepicker  className="date-picker-demo" inline  selected={now} haslunar={true}  isfill={true} festival={true}/> dayAddon={this.dayAddon}'
 					),
-					_react2['default'].createElement(Datepicker, { months: 2, className: 'date-picker-demo', selected: now, haslunar: true, isfill: true, festival: true, dayAddon: this.dayAddon.bind(this) })
+					_react2['default'].createElement(Datepicker, {
+						months: 2,
+						className: 'date-picker-demo',
+						selected: now,
+						haslunar: true,
+						isfill: true,
+						festival: true,
+						dayAddon: this.dayAddon.bind(this)
+					})
 				)
 			);
 		}

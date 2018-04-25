@@ -1,11 +1,35 @@
 import React, { Component } from 'react'
-var ReactDOM = require('react-dom');
-var Datepicker = require('react-datepicker-plus');
+var ReactDOM = require('react-dom')
+var Datepicker = require('react-datepicker-plus')
 var now = new Date('2016/10/15')
 var min = new Date('2016/10/10')
 var max = new Date('2016/10/20')
+//按阳历计
+var salarHolidays = {
+	'0101': '元旦',
+	'0501': '五一',
+	'1001': '国庆',
+	'1224': '平安夜',
+	'1225': '圣诞'
+}
+//按阴历计
+var lunarHolidays = {
+	'0101': '春节',
+	'0115': '元宵',
+	'0505': '端午',
+	'0815': '中秋'
+}
+//按阳历计的阴历节日
+var dayHolidays = {
+	'20170127': '除夕',
+	'20170404': '清明',
+	'20180215': '除夕',
+	'20180405': '清明',
+	'20190204': '除夕',
+	'20190405': '清明'
+}
 
-import {dateFormat} from '../../src/date-format'
+import { dateFormat } from '../../src/date-format'
 class App extends Component {
 	// propTypes:{
 	// 	date: React.PropTypes.object,
@@ -13,7 +37,7 @@ class App extends Component {
 	// 	// addonData: React.PropTypes.object
 	// },
 	constructor(props) {
-        super(props);
+		super(props)
 		this.state = {
 			min: min,
 			max: max,
@@ -47,40 +71,45 @@ class App extends Component {
 					'2016/10/15': '￥650',
 					'2016/10/16': '￥655',
 					'2016/10/17': '￥500',
-					'2016/10/18': '￥300',
+					'2016/10/18': '￥300'
 				}
 			}
 		}
 	}
-	onFocus(event){
+	onFocus(event) {
 		console.log(event, 'onFocus')
 	}
-	onBlur(event){
+	onBlur(event) {
 		console.log(event, 'onBlur')
 	}
-	onChange(dateinfo){
+	onChange(dateinfo) {
 		console.log(dateinfo, 'onChange')
 	}
-	linkageChange(dateInfo){
-		this.setState({'linkageValue': dateInfo.date})
+	linkageChange(dateInfo) {
+		this.setState({ linkageValue: dateInfo.date })
 	}
-	dayAddon(dayinfo){
-		let {addonData, linkageValue} = this.state
-		let {date} = dayinfo
+	dayAddon(dayinfo) {
+		let { addonData, linkageValue } = this.state
+		let { date } = dayinfo
 		let dateStr = dateFormat(date, 'yyyy/MM/dd')
-		let resstr, val, doms = []
-		for(var key in addonData){
+		let resstr,
+			val,
+			doms = []
+		for (var key in addonData) {
 			resstr = addonData[key][dateStr]
-			if(resstr){
-				doms.push(<span className={'date-day-'+key} key={key}>{resstr}</span>)
+			if (resstr) {
+				doms.push(
+					<span className={'date-day-' + key} key={key}>
+						{resstr}
+					</span>
+				)
 			}
 		}
 		return doms
 	}
 
-
-	render () {
-		let {addonData, linkageValue} = this.state
+	render() {
+		let { addonData, linkageValue } = this.state
 		return (
 			<div className="demo-list clearfix">
 				<pre className="demo-code">
@@ -138,69 +167,60 @@ date-hover:			当前hover的day
 					`}
 				</pre>
 
-                <br/>
-                <hr/>
-                <h3>Have a try</h3>
-                <hr/>
-
+				<br />
+				<hr />
+				<h3>Have a try</h3>
+				<hr />
 
 				<div className="demo-item demo-full">
 					<h5>datepicker with 12 month popup</h5>
-					<pre className="demo-code">
-						{`<Datepicker months={12} isfill={true} inline/>`}
-      				</pre>
-					<Datepicker months={12} isfill={true} inline/>
+					<pre className="demo-code">{`<Datepicker months={12} isfill={true} inline/>`}</pre>
+					<Datepicker months={12} isfill={true} inline />
 				</div>
 
 				<div className="demo-item">
 					<h5>dead simple datepicker</h5>
-					<pre className="demo-code">
-						{`<Datepicker/>`}
-      				</pre>
-					<Datepicker/>
+					<pre className="demo-code">{`<Datepicker/>`}</pre>
+					<Datepicker />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with empty value and placeholder</h5>
 					<pre className="demo-code">
 						{`<Datepicker selected="" placeholder="pls input sth..."/>`}
-      				</pre>
-					<Datepicker selected="" placeholder="pls input sth..."/>
+					</pre>
+					<Datepicker selected="" placeholder="pls input sth..." />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with date string value</h5>
 					<pre className="demo-code">
 						{`<Datepicker selected="" placeholder="pls input sth..."/>`}
-      				</pre>
-					<Datepicker selected="2018-01-01" placeholder="pls input sth..."/>
+					</pre>
+					<Datepicker selected="2018-01-01" placeholder="pls input sth..." />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with self defined className</h5>
-					<p>input Component root element will add your  self defined className, 'my-datepicker'<br/>
-						and not inline datepicker pane Component root element will add  your  self defined className + 'my-datepicker-panes'</p>
-					<pre className="demo-code">
-
-						{`<Datepicker className="my-datepicker"/>`}
-      				</pre>
-					<Datepicker className="my-datepicker"/>
+					<p>
+						input Component root element will add your self defined className, 'my-datepicker'<br />
+						and not inline datepicker pane Component root element will add your self defined
+						className + 'my-datepicker-panes'
+					</p>
+					<pre className="demo-code">{`<Datepicker className="my-datepicker"/>`}</pre>
+					<Datepicker className="my-datepicker" />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with lang chinese</h5>
-					<pre className="demo-code">
-						{`<Datepicker lang='cn'/>`}
-      				</pre>
-					<Datepicker lang='cn'/>
+					<pre className="demo-code">{`<Datepicker lang='cn'/>`}</pre>
+					<Datepicker lang="cn" />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with default date</h5>
-					<pre className="demo-code">
-						{`<Datepicker selected={now}/>`}
-      				</pre>
-					<Datepicker selected={now}/>
+					<pre className="demo-code">{`<Datepicker selected={now}/>`}</pre>
+					<Datepicker selected={now} />
 				</div>
 
 				<div className="demo-item">
@@ -214,42 +234,38 @@ date-hover:			当前hover的day
 	onChange={this.linkageChange.bind(this)} />
 <Datepicker start={linkageValue} end={new Date('2017-09-28')}
 	onChange={this.linkageChange.bind(this)} />`}
-      				</pre>
+					</pre>
 					<span>{linkageValue.toString()}</span>
 					<Datepicker selected={linkageValue} onChange={this.linkageChange.bind(this)} />
 					<Datepicker selected={linkageValue} onChange={this.linkageChange.bind(this)} />
-					<Datepicker start={linkageValue} end={new Date('2017-09-28')} onChange={this.linkageChange.bind(this)} />
+					<Datepicker
+						start={linkageValue}
+						end={new Date('2017-09-28')}
+						onChange={this.linkageChange.bind(this)}
+					/>
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker autoHide when selected</h5>
-					<pre className="demo-code">
-						{`<Datepicker autoHide={true}/>`}
-      				</pre>
-					<Datepicker autoHide={true}/>
+					<pre className="demo-code">{`<Datepicker autoHide={true}/>`}</pre>
+					<Datepicker autoHide={true} />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker disabled</h5>
-					<pre className="demo-code">
-						{`<Datepicker disabled={true}/>`}
-      				</pre>
-					<Datepicker disabled={true}/>
+					<pre className="demo-code">{`<Datepicker disabled={true}/>`}</pre>
+					<Datepicker disabled={true} />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker isfill true</h5>
-					<pre className="demo-code">
-						{`<Datepicker isfill={this.props.isfill}/>`}
-      				</pre>
-					<Datepicker isfill={this.props.isfill}/>
+					<pre className="demo-code">{`<Datepicker isfill={this.props.isfill}/>`}</pre>
+					<Datepicker isfill={this.props.isfill} />
 				</div>
 
 				<div className="demo-item">
 					<h5>inline datepicker</h5>
-					<pre className="demo-code">
-						{`<Datepicker inline />`}
-      				</pre>
+					<pre className="demo-code">{`<Datepicker inline />`}</pre>
 					<Datepicker inline />
 				</div>
 
@@ -257,12 +273,14 @@ date-hover:			当前hover的day
 					<h5>datepicker with min and max range</h5>
 					<pre className="demo-code">
 						{`<Datepicker inline min={this.state.min} max={this.state.max} selected={now} />`}
-      				</pre>
-					<button onClick={function(){
-						this.setState({min: new Date('2016/10/12'), max: new Date('2016/10/18')});
-						console.log(this.state, 'state')
-					}.bind(this)}>
-					 设置范围 {`{min: new Date('2016/10/12'), max: new Date('2016/10/18')}`}
+					</pre>
+					<button
+						onClick={function() {
+							this.setState({ min: new Date('2016/10/12'), max: new Date('2016/10/18') })
+							console.log(this.state, 'state')
+						}.bind(this)}
+					>
+						设置范围 {`{min: new Date('2016/10/12'), max: new Date('2016/10/18')}`}
 					</button>
 					<Datepicker inline min={this.state.min} max={this.state.max} selected={now} />
 				</div>
@@ -271,8 +289,8 @@ date-hover:			当前hover的day
 					<h5>bi-datepicker with start and end range</h5>
 					<pre className="demo-code">
 						{`<Datepicker start={this.state.min} end={this.state.max}  />`}
-      				</pre>
-					<Datepicker start={this.state.min} end={this.state.max}  />
+					</pre>
+					<Datepicker start={this.state.min} end={this.state.max} />
 				</div>
 
 				<div className="demo-item demo-full">
@@ -283,7 +301,7 @@ date-hover:			当前hover的day
 	<div className="type_item"> <span className="ico_date"></span><input/> </div>
 </Datepicker>`}
 
-{`
+						{`
 
 RENDER DOM IS:
 <div class="date-inputs">
@@ -293,28 +311,47 @@ RENDER DOM IS:
 
 PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 'start end'
 `}
+					</pre>
 
-      				</pre>
-
-					<Datepicker min={new Date('2016-10-08 00:00:00')} max={new Date('2016-10-28 00:00:00')} start={min} end={max} placeholder="departDate" placeholderEnd="arrivalDate"  onChange={function(dateInfo){
-						console.log(dateInfo ,'dateInfo')
-					}}>
+					<Datepicker
+						min={new Date('2016-10-08 00:00:00')}
+						max={new Date('2016-10-28 00:00:00')}
+						start={min}
+						end={max}
+						placeholder="departDate"
+						placeholderEnd="arrivalDate"
+						onChange={function(dateInfo) {
+							console.log(dateInfo, 'dateInfo')
+						}}
+					>
 						<div className="type_item">
 							<span className="ico_date">icon</span>
-							<input/>
+							<input />
 						</div>
 					</Datepicker>
-					<br/><br/><br/><br/>
-					<Datepicker   min={new Date('2016-10-08 00:00:00')} months={2} isfill start={min} end={""} placeholder="出发日期" placeholderEnd="返回日期" onChange={function(dateInfo){
-						console.log(dateInfo ,'dateInfo')
-					}}>
-                            <div className="type_item">
-                                <span className="ico_search_type ico_search_ddate"></span>
-                                <input/>
-                            </div>
-                    </Datepicker>
-					<style>{
-						`
+					<br />
+					<br />
+					<br />
+					<br />
+					<Datepicker
+						min={new Date('2016-10-08 00:00:00')}
+						months={2}
+						isfill
+						start={min}
+						end={''}
+						placeholder="出发日期"
+						placeholderEnd="返回日期"
+						onChange={function(dateInfo) {
+							console.log(dateInfo, 'dateInfo')
+						}}
+					>
+						<div className="type_item">
+							<span className="ico_search_type ico_search_ddate" />
+							<input />
+						</div>
+					</Datepicker>
+					<style>
+						{`
 						.type_item {
 							display: inline-block;
 							position: relative;
@@ -333,62 +370,70 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 					</style>
 				</div>
 
-
 				<div className="demo-item demo-full">
 					<h5>bi-datepicker with start and end range, and show 2 months </h5>
 					<pre className="demo-code">
 						{`<Datepicker start={min} end={max} months={2}  isfill={true}/>`}
-      				</pre>
-					<Datepicker start={min} end={max} months={2}  isfill={true}/>
+					</pre>
+					<Datepicker start={min} end={max} months={2} isfill={true} />
 				</div>
 
 				<div className="demo-item demo-full">
 					<h5>datepicker callbacks alert, pls check at console</h5>
 					<pre className="demo-code">
 						{`<Datepicker onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onChange} />`}
-      				</pre>
-					<Datepicker onFocus={this.onFocus.bind(this)} onBlur={this.onBlur.bind(this)} onChange={this.onChange.bind(this)} />
+					</pre>
+					<Datepicker
+						onFocus={this.onFocus.bind(this)}
+						onBlur={this.onBlur.bind(this)}
+						onChange={this.onChange.bind(this)}
+					/>
 				</div>
 
 				<div className="demo-item demo-full">
 					<h5>datepicker with 2 month inline</h5>
-					<pre className="demo-code">
-						{`<Datepicker months={2} inline isfill={true}/>`}
-      				</pre>
-					<Datepicker months={2} inline isfill={true}/>
+					<pre className="demo-code">{`<Datepicker months={2} inline isfill={true}/>`}</pre>
+					<Datepicker months={2} inline isfill={true} />
 				</div>
 
 				<div className="demo-item demo-full">
 					<h5>datepicker with 2 month popup</h5>
-					<pre className="demo-code">
-						{`<Datepicker months={2} isfill={true}/>`}
-      				</pre>
-					<Datepicker months={2} isfill={true}/>
+					<pre className="demo-code">{`<Datepicker months={2} isfill={true}/>`}</pre>
+					<Datepicker months={2} isfill={true} />
 				</div>
 
 				<div className="demo-item demo-full">
 					<h5>datepicker with 3 month popup</h5>
-					<pre className="demo-code">
-						{`<Datepicker months={3} isfill={true}/>`}
-      				</pre>
-					<Datepicker months={3} isfill={true}/>
+					<pre className="demo-code">{`<Datepicker months={3} isfill={true}/>`}</pre>
+					<Datepicker months={3} isfill={true} />
 				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with festival</h5>
-					<pre className="demo-code">
-						{`<Datepicker inline festival={true}/>`}
-      				</pre>
-					<Datepicker inline festival={true}/>
+					<pre className="demo-code">{`<Datepicker inline festival={true}/>`}</pre>
+					<Datepicker inline festival={true} />
 				</div>
 
+				<div className="demo-item">
+					<h5>datepicker with user-defined festival</h5>
+					<pre className="demo-code">{`<Datepicker inline festival={true} salarHolidays={salarHolidays}
+						lunarHolidays={lunarHolidays}
+						dayHolidays={dayHolidays}/>`}</pre>
+					<Datepicker
+						inline
+						festival={true}
+						salarHolidays={salarHolidays}
+						lunarHolidays={lunarHolidays}
+						dayHolidays={dayHolidays}
+					/>
+				</div>
 
 				<div className="demo-item">
 					<h5>datepicker with lunar(lunar auto include term and lang is 'cn')</h5>
 					<pre className="demo-code">
 						{`<Datepicker inline haslunar={true}  isfill={true} festival={true}/>`}
-      				</pre>
-					<Datepicker inline haslunar={true}  isfill={true} festival={true}/>
+					</pre>
+					<Datepicker inline haslunar={true} isfill={true} festival={true} />
 				</div>
 				{/*  */}
 				<div className="demo-item demo-full">
@@ -434,11 +479,19 @@ dayAddon(dayinfo){
 	return doms
 },
 <Datepicker  className="date-picker-demo" inline  selected={now} haslunar={true}  isfill={true} festival={true}/> dayAddon={this.dayAddon}`}
-      				</pre>
-					<Datepicker  months={2} className="date-picker-demo" selected={now} haslunar={true}  isfill={true} festival={true} dayAddon={this.dayAddon.bind(this)}/>
+					</pre>
+					<Datepicker
+						months={2}
+						className="date-picker-demo"
+						selected={now}
+						haslunar={true}
+						isfill={true}
+						festival={true}
+						dayAddon={this.dayAddon.bind(this)}
+					/>
 				</div>
 			</div>
-		);
+		)
 	}
 }
 
@@ -447,6 +500,4 @@ App.defaultProps = {
 	isfill: true
 }
 
-
-
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'))
