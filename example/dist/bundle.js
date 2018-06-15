@@ -53,8 +53,6 @@ var DateCalendar = (function (_Component) {
 	return DateCalendar;
 })(_react.Component);
 
-;
-
 exports['default'] = DateCalendar;
 module.exports = exports['default'];
 
@@ -288,68 +286,68 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 function dateObject(date) {
-    if (!date) return date;
-    if (typeof date === 'string') {
-        //"2017-11-28T11:01:14.025Z" len=24
-        //'2017-10-10 00:00:00' len=19
-        //'2017-10-10' len=10
-        if (date.indexOf('/') && date.length < 24) {
-            date = date.replace(/-/g, '/');
-        }
-        date.length <= 10 ? new Date(date + ' 00:00:00') : new Date(date);
-    }
-    return date instanceof Date ? date : new Date(date);
+	if (!date) return date;
+	if (typeof date === 'string') {
+		//"2017-11-28T11:01:14.025Z" len=24
+		//'2017-10-10 00:00:00' len=19
+		//'2017-10-10' len=10
+		if (date.indexOf('/') && date.length < 24) {
+			date = date.replace(/-/g, '/');
+		}
+		date = date.length <= 10 ? new Date(date + ' 00:00:00') : new Date(date);
+	}
+	return date instanceof Date ? date : new Date(date);
 }
 
 function dateFormat(date, format) {
-    if (!date) return '';
-    var weeks = ['日', '一', '二', '三', '四', '五', '六'];
-    if (format === undefined) {
-        format = date;
-        date = new Date();
-    }
-    date = dateObject(date);
-    var map = {
-        "M": date.getMonth() + 1, //月份
-        "d": date.getDate(), //日
-        "h": date.getHours(), //小时
-        "m": date.getMinutes(), //分
-        "s": date.getSeconds(), //秒
-        "q": Math.floor((date.getMonth() + 3) / 3), //季度
-        "S": date.getMilliseconds(), //毫秒
-        "W": weeks[date.getDay()] //周
-    };
-    format = format.replace(/([yMdhmsqSW])+/g, function (all, t) {
-        var v = map[t];
-        if (v !== undefined) {
-            if (all.length > 1) {
-                v = '0' + v;
-                v = v.substr(v.length - 2);
-            }
-            return v;
-        } else if (t === 'y') {
-            return (date.getFullYear() + '').substr(4 - all.length);
-        }
-        return all;
-    });
-    return format;
+	if (!date) return '';
+	var weeks = ['日', '一', '二', '三', '四', '五', '六'];
+	if (format === undefined) {
+		format = date;
+		date = new Date();
+	}
+	date = dateObject(date);
+	var map = {
+		M: date.getMonth() + 1, //月份
+		d: date.getDate(), //日
+		h: date.getHours(), //小时
+		m: date.getMinutes(), //分
+		s: date.getSeconds(), //秒
+		q: Math.floor((date.getMonth() + 3) / 3), //季度
+		S: date.getMilliseconds(), //毫秒
+		W: weeks[date.getDay()] //周
+	};
+	format = format.replace(/([yMdhmsqSW])+/g, function (all, t) {
+		var v = map[t];
+		if (v !== undefined) {
+			if (all.length > 1) {
+				v = '0' + v;
+				v = v.substr(v.length - 2);
+			}
+			return v;
+		} else if (t === 'y') {
+			return (date.getFullYear() + '').substr(4 - all.length);
+		}
+		return all;
+	});
+	return format;
 }
 var today = new Date();
 var todayStart = today.setHours(0, 0, 0, 0);
 var dateDiff = function dateDiff(timestape, time) {
-    return Math.ceil((timestape - (time ? time : +todayStart)) / (3600 * 1000 * 24));
+	return Math.ceil((timestape - (time ? time : +todayStart)) / (3600 * 1000 * 24));
 };
 
 var plusDay = function plusDay(date, num) {
-    num = num !== void 0 ? num : 1;
-    return new Date(+date + 3600000 * 24 * num);
+	num = num !== void 0 ? num : 1;
+	return new Date(+date + 3600000 * 24 * num);
 };
 
 var minusDay = function minusDay(date, num) {
-    return plusDay(-num);
+	return plusDay(-num);
 };
 
 exports.dateFormat = dateFormat;
@@ -454,8 +452,6 @@ var dateHeader = (function (_Component) {
 	return dateHeader;
 })(_react.Component);
 
-;
-
 exports['default'] = dateHeader;
 module.exports = exports['default'];
 
@@ -509,89 +505,89 @@ exports.lunarHolidays = lunarHolidays;
 exports.dayHolidays = dayHolidays;
 
 },{}],6:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+	value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require("react-dom");
+var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var DateInBody = (function (_Component) {
-  _inherits(DateInBody, _Component);
+	_inherits(DateInBody, _Component);
 
-  function DateInBody() {
-    _classCallCheck(this, DateInBody);
+	function DateInBody() {
+		_classCallCheck(this, DateInBody);
 
-    _get(Object.getPrototypeOf(DateInBody.prototype), "constructor", this).apply(this, arguments);
-  }
+		_get(Object.getPrototypeOf(DateInBody.prototype), 'constructor', this).apply(this, arguments);
+	}
 
-  _createClass(DateInBody, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.popup = document.createElement("div");
-      // this.popup.className = this.props.classes
-      document.body.appendChild(this.popup);
-      this.renderLayer();
-      if (!this.props.inline) {
-        var picker = this.popup.getElementsByClassName('date-picker')[0];
-        var adjustSize = picker && picker.clientWidth;
-        picker && this.props.onUpdate && this.props.onUpdate(adjustSize);
-      }
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      this.renderLayer();
-    }
-  }, {
-    key: "componentWillMount",
-    value: function componentWillMount() {
-      // this.removePicker()
-    }
-  }, {
-    key: "removePicker",
-    value: function removePicker() {
-      // this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0]
-      if (this.popup) {
-        _reactDom2["default"].unmountComponentAtNode(this.popup);
-        document.body.removeChild(this.popup);
-        this.popup = null;
-      }
-    }
-  }, {
-    key: "renderLayer",
-    value: function renderLayer() {
-      if (this.props.children) _reactDom2["default"].render(this.props.children, this.popup);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react2["default"].createElement("div", { className: this.props.className, children: null, style: this.props.offset });
-    }
-  }]);
+	_createClass(DateInBody, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.popup = document.createElement('div');
+			// this.popup.className = this.props.classes
+			document.body.appendChild(this.popup);
+			this.renderLayer();
+			if (!this.props.inline) {
+				var picker = this.popup.getElementsByClassName('date-picker')[0];
+				var adjustSize = picker && picker.clientWidth;
+				picker && this.props.onUpdate && this.props.onUpdate(adjustSize);
+			}
+		}
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate() {
+			this.renderLayer();
+		}
+	}, {
+		key: 'componentWillMount',
+		value: function componentWillMount() {
+			// this.removePicker()
+		}
+	}, {
+		key: 'removePicker',
+		value: function removePicker() {
+			// this.popup = current ? this.popup : document.getElementsByClassName('date-picker-wrapper')[0]
+			if (this.popup) {
+				_reactDom2['default'].unmountComponentAtNode(this.popup);
+				document.body.removeChild(this.popup);
+				this.popup = null;
+			}
+		}
+	}, {
+		key: 'renderLayer',
+		value: function renderLayer() {
+			if (this.props.children) _reactDom2['default'].render(this.props.children, this.popup);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return _react2['default'].createElement('div', { className: this.props.className, children: null, style: this.props.offset });
+		}
+	}]);
 
-  return DateInBody;
+	return DateInBody;
 })(_react.Component);
 
-exports["default"] = DateInBody;
-module.exports = exports["default"];
+exports['default'] = DateInBody;
+module.exports = exports['default'];
 
 },{"react":undefined,"react-dom":undefined}],7:[function(require,module,exports){
 'use strict';
@@ -614,7 +610,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = require("react-dom");
+var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -623,35 +619,11 @@ var _dateFormat = require('./date-format');
 var DateInput = (function (_Component) {
 	_inherits(DateInput, _Component);
 
-	//  propTypes: {
-	//     // element: React.PropTypes.element,
-	//     selected: React.PropTypes.any,
-	//     disabled: React.PropTypes.bool,
-	//     onBlur: React.PropTypes.func,
-	//     onFocus: React.PropTypes.func,
-	//     onChange: React.PropTypes.func
-	// }
-
 	function DateInput(props) {
 		_classCallCheck(this, DateInput);
 
 		_get(Object.getPrototypeOf(DateInput.prototype), 'constructor', this).call(this, props);
 	}
-
-	/*	getInitialState () {
- 	    return {
- 	      // value:  this.dateString()
- 	        styles: {
- 		      top: 0,
- 		      left: 0
- 		    }
- 	    }
- 	}
- 	componentDidMount() {
- 	  this.setState({
- 	    // styles:
- 	  })
- 	}*/
 
 	_createClass(DateInput, [{
 		key: 'dateString',
@@ -693,12 +665,16 @@ var DateInput = (function (_Component) {
 			// Fix for IE8-'s Element.getBoundingClientRect()
 			if ('TextRectangle' in window && !('width' in TextRectangle.prototype)) {
 				Object.defineProperties(TextRectangle.prototype, {
-					'width': { get: function get() {
+					width: {
+						get: function get() {
 							return this.right - this.left;
-						} },
-					'height': { get: function get() {
+						}
+					},
+					height: {
+						get: function get() {
 							return this.bottom - this.top;
-						} }
+						}
+					}
 				});
 			}
 			return this.getInput().getBoundingClientRect();
@@ -751,15 +727,22 @@ var DateInput = (function (_Component) {
 			var placeholder = _props2.placeholder;
 			var children = _props2.children;
 
-			var inputElem = _react2['default'].createElement('input', { ref: 'input', type: 'text', placeholder: placeholder, disabled: disabled, value: this.dateString(), onFocus: this.handleFocus.bind(this), onBlur: this.handleBlur.bind(this), onChange: this.handleChange.bind(this) });
+			var inputElem = _react2['default'].createElement('input', {
+				ref: 'input',
+				type: 'text',
+				placeholder: placeholder,
+				disabled: disabled,
+				value: this.dateString(),
+				onFocus: this.handleFocus.bind(this),
+				onBlur: this.handleBlur.bind(this),
+				onChange: this.handleChange.bind(this)
+			});
 			return children ? this.recursiveMap(children, inputElem) : inputElem;
 		}
 	}]);
 
 	return DateInput;
 })(_react.Component);
-
-;
 
 exports['default'] = DateInput;
 module.exports = exports['default'];
@@ -769,121 +752,121 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 var lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2, 0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977, 0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970, 0x06566, 0x0d4a0, 0x0ea50, 0x06e95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950, 0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557, 0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5d0, 0x14573, 0x052d0, 0x0a9a8, 0x0e950, 0x06aa0, 0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0, 0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b5a0, 0x195a6, 0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570, 0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x055c0, 0x0ab60, 0x096d5, 0x092e0, 0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5, 0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930, 0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530, 0x05aa0, 0x076a3, 0x096d0, 0x04bd7, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45, 0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0];
 
 //传回农历 y 年的总天数
 function lunarYearDays(y) {
-    var i,
-        sum = 348;
-    for (i = 0x8000; i > 0x8; i >>= 1) sum += lunarInfo[y - 1900] & i ? 1 : 0;
-    return sum + leapDays(y);
+	var i,
+	    sum = 348;
+	for (i = 0x8000; i > 0x8; i >>= 1) sum += lunarInfo[y - 1900] & i ? 1 : 0;
+	return sum + leapDays(y);
 }
 
 //传回农历 y 年m月的总天数
 function lunarMonthDays(y, m) {
-    return lunarInfo[y - 1900] & 0x10000 >> m ? 30 : 29;
+	return lunarInfo[y - 1900] & 0x10000 >> m ? 30 : 29;
 }
 
 //传回农历 y 年闰月的天數
 function leapDays(y) {
-    if (leapMonth(y)) return lunarInfo[y - 1900] & 0x10000 ? 30 : 29;else return 0;
+	if (leapMonth(y)) return lunarInfo[y - 1900] & 0x10000 ? 30 : 29;else return 0;
 }
 
 //传回农历 y 年闰哪个月 1-12 , 沒闰传回 0
 function leapMonth(y) {
-    return lunarInfo[y - 1900] & 0xf;
+	return lunarInfo[y - 1900] & 0xf;
 }
 
 //公历转农历
 function toLunarDate(objDate) {
-    var i,
-        leap = 0,
-        temp = 0;
-    var baseDate = new Date(1900, 0, 31);
-    var offset = (objDate - baseDate) / 86400000;
+	var i,
+	    leap = 0,
+	    temp = 0;
+	var baseDate = new Date(1900, 0, 31);
+	var offset = (objDate - baseDate) / 86400000;
 
-    var result = {};
-    result.dayCyl = offset + 40;
-    result.monCyl = 14;
+	var result = {};
+	result.dayCyl = offset + 40;
+	result.monCyl = 14;
 
-    for (i = 1900; i < 2050 && offset > 0; i++) {
-        temp = lunarYearDays(i);
-        offset -= temp;
-        result.monCyl += 12;
-    }
+	for (i = 1900; i < 2050 && offset > 0; i++) {
+		temp = lunarYearDays(i);
+		offset -= temp;
+		result.monCyl += 12;
+	}
 
-    if (offset < 0) {
-        offset += temp;
-        i--;
-        result.monCyl -= 12;
-    }
+	if (offset < 0) {
+		offset += temp;
+		i--;
+		result.monCyl -= 12;
+	}
 
-    result.year = i;
-    result.yearCyl = i - 1864;
+	result.year = i;
+	result.yearCyl = i - 1864;
 
-    leap = leapMonth(i); //闰哪个月
-    result.isLeap = false;
+	leap = leapMonth(i); //闰哪个月
+	result.isLeap = false;
 
-    for (i = 1; i < 13 && offset > 0; i++) {
-        //闰月
-        if (leap > 0 && i == leap + 1 && result.isLeap == false) {
-            --i;
-            result.isLeap = true;
-            temp = leapDays(result.year);
-        } else {
-            temp = lunarMonthDays(result.year, i);
-        }
+	for (i = 1; i < 13 && offset > 0; i++) {
+		//闰月
+		if (leap > 0 && i == leap + 1 && result.isLeap == false) {
+			--i;
+			result.isLeap = true;
+			temp = leapDays(result.year);
+		} else {
+			temp = lunarMonthDays(result.year, i);
+		}
 
-        //解除闰月
-        if (result.isLeap == true && i == leap + 1) {
-            result.isLeap = false;
-        }
+		//解除闰月
+		if (result.isLeap == true && i == leap + 1) {
+			result.isLeap = false;
+		}
 
-        offset -= temp;
-        if (result.isLeap == false) {
-            result.monCyl++;
-        }
-    }
+		offset -= temp;
+		if (result.isLeap == false) {
+			result.monCyl++;
+		}
+	}
 
-    if (offset == 0 && leap > 0 && i == leap + 1) if (result.isLeap) {
-        result.isLeap = false;
-    } else {
-        result.isLeap = true;
-        --i;
-        --result.monCyl;
-    }
+	if (offset == 0 && leap > 0 && i == leap + 1) if (result.isLeap) {
+		result.isLeap = false;
+	} else {
+		result.isLeap = true;
+		--i;
+		--result.monCyl;
+	}
 
-    if (offset < 0) {
-        offset += temp;
-        --i;
-        --result.monCyl;
-    }
+	if (offset < 0) {
+		offset += temp;
+		--i;
+		--result.monCyl;
+	}
 
-    result.month = i;
-    result.day = offset + 1;
-    return result;
+	result.month = i;
+	result.day = offset + 1;
+	return result;
 }
 
 //农历数字转字符
 function toLunarDay(d) {
-    var lunarDay = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
-    var lunarTeen = ['初', '十', '廿', '三'];
-    var dstr = d + '',
-        teen = lunarTeen[0],
-        rightNum = dstr.length < 2 ? '' : dstr.substring(1),
-        rightDeco = rightNum === '0' ? '十' : lunarDay[Number(rightNum) - 1];
-    if (d > 10) {
-        teen = lunarTeen[1];
-        if (d >= 20) {
-            teen = lunarTeen[2];
-            if (d >= 30) {
-                teen = lunarTeen[3];
-            }
-        }
-    }
-    return teen + (dstr.length < 2 ? lunarDay[d - 1] : rightDeco);
+	var lunarDay = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
+	var lunarTeen = ['初', '十', '廿', '三'];
+	var dstr = d + '',
+	    teen = lunarTeen[0],
+	    rightNum = dstr.length < 2 ? '' : dstr.substring(1),
+	    rightDeco = rightNum === '0' ? '十' : lunarDay[Number(rightNum) - 1];
+	if (d > 10) {
+		teen = lunarTeen[1];
+		if (d >= 20) {
+			teen = lunarTeen[2];
+			if (d >= 30) {
+				teen = lunarTeen[3];
+			}
+		}
+	}
+	return teen + (dstr.length < 2 ? lunarDay[d - 1] : rightDeco);
 }
 
 exports['default'] = { lunarYearDays: lunarYearDays, lunarMonthDays: lunarMonthDays, leapDays: leapDays, leapMonth: leapMonth, toLunarDate: toLunarDate, toLunarDay: toLunarDay };
@@ -994,7 +977,7 @@ var DateMonth = (function (_Component) {
 			months.map(function (week, wkey) {
 				weeks.push(_react2['default'].createElement(
 					'div',
-					{ className: "date-week date-week-" + wkey, key: wkey },
+					{ className: 'date-week date-week-' + wkey, key: wkey },
 					that.days(week)
 				));
 			});
@@ -1006,7 +989,12 @@ var DateMonth = (function (_Component) {
 			var days = [],
 			    that = this;
 			week.map(function (day, dkey) {
-				days.push(_react2['default'].createElement(_dateDayJs2['default'], _extends({}, that.props, { onMouseEnter: that.onMouseEnter.bind(this), selecting: that.state.selecting, edate: day, key: dkey })));
+				days.push(_react2['default'].createElement(_dateDayJs2['default'], _extends({}, that.props, {
+					onMouseEnter: that.onMouseEnter.bind(this),
+					selecting: that.state.selecting,
+					edate: day,
+					key: dkey
+				})));
 			});
 			return days;
 		}
@@ -1036,7 +1024,9 @@ var DateMonth = (function (_Component) {
 			    that = this;
 			return _react2['default'].createElement(
 				'div',
-				{ className: "date-month" + (that.state.selecting ? " date-selecting " : " "), onMouseLeave: this.onMouseLeave.bind(this) },
+				{
+					className: 'date-month' + (that.state.selecting ? ' date-selecting ' : ' '),
+					onMouseLeave: this.onMouseLeave.bind(this) },
 				this.weeks(months)
 			);
 		}
@@ -1057,7 +1047,7 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-    value: true
+	value: true
 });
 var sTermMap = '0|gd4|wrn|1d98|1tuh|2akm|2rfn|38g9|3plp|46vz|4o9k|55px|5n73|64o5|6m37|73fd|7kna|81qe|8io7|8zgq|9g4b|9wnk|ad3g|ath2|'.split('|');
 var sTermNames = '小寒|大寒|立春|雨水|惊蛰|春分|清明|谷雨|立夏|小满|芒种|夏至|小暑|大暑|立秋|处暑|白露|秋分|寒露|霜降|立冬|小雪|大雪|冬至'.split('|');
@@ -1065,31 +1055,31 @@ var sTermNames = '小寒|大寒|立春|雨水|惊蛰|春分|清明|谷雨|立夏
 for (var i = 24; i--;) sTermMap[i] = parseInt(sTermMap[i], 36);
 
 function term(y, n) {
-    var d = new Date(31556925974.7 * (y - 1900) + sTermMap[n] * 60000 + Date.UTC(1900, 0, 6, 2, 5));
-    return { m: d.getUTCMonth(), d: d.getUTCDate() };
+	var d = new Date(31556925974.7 * (y - 1900) + sTermMap[n] * 60000 + Date.UTC(1900, 0, 6, 2, 5));
+	return { m: d.getUTCMonth(), d: d.getUTCDate() };
 }
 
 function getTerm(y, m, d) {
-    for (var i = sTermNames.length, x; i--;) {
-        x = term(y, i);
-        if (x.m == m && x.d == d) return sTermNames[i];
-    };
-    return '';
+	for (var i = sTermNames.length, x; i--;) {
+		x = term(y, i);
+		if (x.m == m && x.d == d) return sTermNames[i];
+	}
+	return '';
 }
 
 // 返回该月的节气信息
 var getMonthSolarTerms = function getMonthSolarTerms(year, month) {
-    if (year instanceof Date) {
-        month = year.getMonth();
-        year = year.getFullYear();
-    }
-    var ret = {},
-        index;
-    index = term(year, month * 2).d;
-    ret[index] = getTerm(year, month, index);
-    index = term(year, month * 2 + 1).d;
-    ret[index] = getTerm(year, month, index);
-    return ret;
+	if (year instanceof Date) {
+		month = year.getMonth();
+		year = year.getFullYear();
+	}
+	var ret = {},
+	    index;
+	index = term(year, month * 2).d;
+	ret[index] = getTerm(year, month, index);
+	index = term(year, month * 2 + 1).d;
+	ret[index] = getTerm(year, month, index);
+	return ret;
 };
 
 exports.getMonthSolarTerms = getMonthSolarTerms;
