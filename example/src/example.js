@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 var ReactDOM = require('react-dom')
 var Datepicker = require('react-datepicker-plus')
 var now = new Date('2016/10/15')
@@ -29,7 +29,7 @@ var dayHolidays = {
 	'20190405': '清明'
 }
 
-import { dateFormat } from '../../src/date-format'
+import {dateFormat} from '../../src/date-format'
 class App extends Component {
 	// propTypes:{
 	// 	date: React.PropTypes.object,
@@ -86,11 +86,11 @@ class App extends Component {
 		console.log(dateinfo, 'onChange')
 	}
 	linkageChange(dateInfo) {
-		this.setState({ linkageValue: dateInfo.date })
+		this.setState({linkageValue: dateInfo.date})
 	}
 	dayAddon(dayinfo) {
-		let { addonData, linkageValue } = this.state
-		let { date } = dayinfo
+		let {addonData, linkageValue} = this.state
+		let {date} = dayinfo
 		let dateStr = dateFormat(date, 'yyyy/MM/dd')
 		let resstr,
 			val,
@@ -109,7 +109,7 @@ class App extends Component {
 	}
 
 	render() {
-		let { addonData, linkageValue } = this.state
+		let {addonData, linkageValue} = this.state
 		return (
 			<div className="demo-list clearfix">
 				<pre className="demo-code">
@@ -276,10 +276,9 @@ date-hover:			当前hover的day
 					</pre>
 					<button
 						onClick={function() {
-							this.setState({ min: new Date('2016/10/12'), max: new Date('2016/10/18') })
+							this.setState({min: new Date('2016/10/12'), max: new Date('2016/10/18')})
 							console.log(this.state, 'state')
-						}.bind(this)}
-					>
+						}.bind(this)}>
 						设置范围 {`{min: new Date('2016/10/12'), max: new Date('2016/10/18')}`}
 					</button>
 					<Datepicker inline min={this.state.min} max={this.state.max} selected={now} />
@@ -318,12 +317,12 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 						max={new Date('2016-10-28 00:00:00')}
 						start={min}
 						end={max}
+						maxLimitDisable={true}
 						placeholder="departDate"
 						placeholderEnd="arrivalDate"
 						onChange={function(dateInfo) {
 							console.log(dateInfo, 'dateInfo')
-						}}
-					>
+						}}>
 						<div className="type_item">
 							<span className="ico_date">icon</span>
 							<input />
@@ -343,8 +342,7 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 						placeholderEnd="返回日期"
 						onChange={function(dateInfo) {
 							console.log(dateInfo, 'dateInfo')
-						}}
-					>
+						}}>
 						<div className="type_item">
 							<span className="ico_search_type ico_search_ddate" />
 							<input />
@@ -368,6 +366,21 @@ PLS CHECK CONSOLE about onChange callback to get dateInfo.status object about 's
 						}
 						`}
 					</style>
+				</div>
+
+				<div className="demo-item demo-full">
+					<h5>monthLimit limit the month switch range </h5>
+					<pre className="demo-code">
+						{`<Datepicker monthLimit={true} min={min} max={max} months={2}  isfill={true}/>`}
+					</pre>
+					<Datepicker
+						monthLimit={true}
+						min={min}
+						max={max}
+						selected="2016-10-15"
+						months={2}
+						isfill={true}
+					/>
 				</div>
 
 				<div className="demo-item demo-full">

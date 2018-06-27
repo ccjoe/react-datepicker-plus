@@ -383,8 +383,7 @@ var App = (function (_Component) {
 							onClick: (function () {
 								this.setState({ min: new Date('2016/10/12'), max: new Date('2016/10/18') });
 								console.log(this.state, 'state');
-							}).bind(this)
-						},
+							}).bind(this) },
 						'设置范围 ',
 						'{min: new Date(\'2016/10/12\'), max: new Date(\'2016/10/18\')}'
 					),
@@ -433,12 +432,12 @@ var App = (function (_Component) {
 							max: new Date('2016-10-28 00:00:00'),
 							start: min,
 							end: max,
+							maxLimitDisable: true,
 							placeholder: 'departDate',
 							placeholderEnd: 'arrivalDate',
 							onChange: function (dateInfo) {
 								console.log(dateInfo, 'dateInfo');
-							}
-						},
+							} },
 						_react2['default'].createElement(
 							'div',
 							{ className: 'type_item' },
@@ -466,8 +465,7 @@ var App = (function (_Component) {
 							placeholderEnd: '返回日期',
 							onChange: function (dateInfo) {
 								console.log(dateInfo, 'dateInfo');
-							}
-						},
+							} },
 						_react2['default'].createElement(
 							'div',
 							{ className: 'type_item' },
@@ -480,6 +478,28 @@ var App = (function (_Component) {
 						null,
 						'\n\t\t\t\t\t\t.type_item {\n\t\t\t\t\t\t\tdisplay: inline-block;\n\t\t\t\t\t\t\tposition: relative;\n\t\t\t\t\t\t}\n\t\t\t\t\t\t.type_item input{\n\t\t\t\t\t\t\tpadding-left: 36px;\n\t\t\t\t\t\t}\n\t\t\t\t\t\t.ico_date {\n\t\t\t\t\t\t\tposition:absolute;\n\t\t\t\t\t\t\tbackground-color: #dcc;\n\t\t\t\t\t\t\twidth: 30px; height:27px;line-height:27px;\n\t\t\t\t\t\t\tborder:1px solid #98e\n\t\t\t\t\t\t\ttext-aligh:center;\n\t\t\t\t\t\t}\n\t\t\t\t\t\t'
 					)
+				),
+				_react2['default'].createElement(
+					'div',
+					{ className: 'demo-item demo-full' },
+					_react2['default'].createElement(
+						'h5',
+						null,
+						'monthLimit limit the month switch range '
+					),
+					_react2['default'].createElement(
+						'pre',
+						{ className: 'demo-code' },
+						'<Datepicker monthLimit={true} min={min} max={max} months={2}  isfill={true}/>'
+					),
+					_react2['default'].createElement(Datepicker, {
+						monthLimit: true,
+						min: min,
+						max: max,
+						selected: '2016-10-15',
+						months: 2,
+						isfill: true
+					})
 				),
 				_react2['default'].createElement(
 					'div',

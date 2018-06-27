@@ -79,6 +79,8 @@ var ReactDatepickerPlus = (function (_Component) {
 	//  placeholder
 	//  placeholderEnd
 	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
+	//  monthLimit:boolean =>  Disable month render or not true:not render, false： render。
+	//	maxLimitDisable: boolean => 是否限制双联最大值的选择范围
 
 	// salarHolidays: null,  holiday by solar date mmdd
 	// lunarHolidays: null,  holiday by lunar date mmdd
@@ -178,20 +180,32 @@ var ReactDatepickerPlus = (function (_Component) {
 	}, {
 		key: 'updateMonth',
 		value: function updateMonth(num) {
-			var date = this.state.date;
+			var _state3 = this.state;
+			var date = _state3.date;
+			var min = _state3.min;
+			var max = _state3.max;
 
-			var cdate = this.numMonth(date, num);
+			var cdate = this.getMonthDate(date, num);
+			var cmax = this.getMonthDate(date, num, 'max');
+			var cmin = this.getMonthDate(date, num, 'min');
+			if (this.props.monthLimit && (+cmax < +min || +cmin > +max)) {
+				return false;
+			}
 			this.updateDate({ date: cdate }, true);
 		}
 	}, {
-		key: 'numMonth',
-		value: function numMonth(date, num) {
+		key: 'getMonthDate',
+		value: function getMonthDate(date, num, minmax) {
 			date = (0, _dateFormatJs.dateObject)(date) || _dateFormatJs.today;
 			var y = date.getFullYear(),
 			    m = date.getMonth() + num,
 			    d = date.getDate();
 			var maxd = new Date(y, m + 1, 0).getDate(); //判断某月为共多少天
-			return new Date(y, m, d > maxd ? maxd : d);
+			var mmMap = {
+				min: 1,
+				max: maxd
+			};
+			return new Date(y, m, minmax ? mmMap[minmax] : d > maxd ? maxd : d);
 		}
 	}, {
 		key: 'updateDay',
@@ -231,13 +245,13 @@ var ReactDatepickerPlus = (function (_Component) {
 			    dh = undefined,
 			    dc = undefined,
 			    idate = undefined;
-			var _state3 = this.state;
-			var date = _state3.date;
-			var start = _state3.start;
-			var end = _state3.end;
-			var min = _state3.min;
-			var max = _state3.max;
-			var offset = _state3.offset;
+			var _state4 = this.state;
+			var date = _state4.date;
+			var start = _state4.start;
+			var end = _state4.end;
+			var min = _state4.min;
+			var max = _state4.max;
+			var offset = _state4.offset;
 			var _props2 = this.props;
 			var inline = _props2.inline;
 			var months = _props2.months;
@@ -250,7 +264,7 @@ var ReactDatepickerPlus = (function (_Component) {
 			var pickerWidth = this.state.width || 215;
 			for (var i = 0; i < months; i++) {
 				offsets.push({ left: i * pickerWidth + offset.left, top: offset.top });
-				idate = this.numMonth(date, i);
+				idate = this.getMonthDate(date, i);
 				dh = _react2['default'].createElement(_dateHeaderJs2['default'], {
 					date: idate,
 					lang: haslunar ? 'cn' : lang,
@@ -278,8 +292,7 @@ var ReactDatepickerPlus = (function (_Component) {
 						onMouseDown: this.clickPane.bind(this),
 						className: classes,
 						style: offsets[i],
-						key: i
-					},
+						key: i },
 					dh,
 					dc
 				));
@@ -324,12 +337,12 @@ var ReactDatepickerPlus = (function (_Component) {
 		value: function render() {
 			var _this = this;
 
-			var _state4 = this.state;
-			var show = _state4.show;
-			var selected = _state4.selected;
-			var start = _state4.start;
-			var end = _state4.end;
-			var status = _state4.status;
+			var _state5 = this.state;
+			var show = _state5.show;
+			var selected = _state5.selected;
+			var start = _state5.start;
+			var end = _state5.end;
+			var status = _state5.status;
 			var _props3 = this.props;
 			var format = _props3.format;
 			var inline = _props3.inline;
@@ -369,8 +382,7 @@ var ReactDatepickerPlus = (function (_Component) {
 					{
 						onUpdate: this.updateSize.bind(this),
 						className: 'date-picker-wrapper',
-						ref: 'insDateInBody'
-					},
+						ref: 'insDateInBody' },
 					picker
 				);
 			}
@@ -530,6 +542,7 @@ var DateDay = (function (_Component) {
 			var selecting = _props.selecting;
 			var status = _props.status;
 			var dayAddon = _props.dayAddon;
+			var maxLimitDisable = _props.maxLimitDisable;
 			//selected date, render date, each date
 			selected = selected || now;
 
@@ -592,7 +605,7 @@ var DateDay = (function (_Component) {
 			    isEnd = status === 'end';
 
 			if (isStart) {
-				dayinfo.disabled = minmax(minNo, realMax);
+				dayinfo.disabled = minmax(minNo, maxLimitDisable ? null : realMax);
 			} else if (isEnd) {
 				dayinfo.disabled = minmax(realMin, maxNo);
 			} else if (min || max) {
@@ -676,8 +689,7 @@ var DateDay = (function (_Component) {
 				{
 					className: 'date-day' + (!currentMonth ? ' date-nocurrent ' : ' ') + (currentPoint ? ' date-point' : '') + (currentDay ? ' date-selected' : '') + (disabled ? ' date-disabled' : '') + (inrange ? ' date-range' : '') + (inselect ? ' date-hover' : ''),
 					onMouseDown: this.setDate.bind(this, info),
-					onMouseEnter: this.setMouseEnter.bind(this, info)
-				},
+					onMouseEnter: this.setMouseEnter.bind(this, info) },
 				festDom
 			);
 		}

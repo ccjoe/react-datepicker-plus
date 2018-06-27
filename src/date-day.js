@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { toLunarDate, toLunarDay } from './date-lunar'
-import { getMonthSolarTerms } from './date-term'
-import { salarHolidays, lunarHolidays, dayHolidays } from './date-holidays'
+import React, {Component} from 'react'
+import {toLunarDate, toLunarDay} from './date-lunar'
+import {getMonthSolarTerms} from './date-term'
+import {salarHolidays, lunarHolidays, dayHolidays} from './date-holidays'
 
 //render month
 //current month
@@ -17,7 +17,19 @@ class DateDay extends Component {
 	}
 	//获取某天的所有信息 m+1才是显示用的月分
 	getDayInfo() {
-		var { date, edate, min, max, start, end, selected, selecting, status, dayAddon } = this.props //selected date, render date, each date
+		var {
+			date,
+			edate,
+			min,
+			max,
+			start,
+			end,
+			selected,
+			selecting,
+			status,
+			dayAddon,
+			maxLimitDisable
+		} = this.props //selected date, render date, each date
 		selected = selected || now
 
 		var lastLunarHolidays = this.props.lunarHolidays || lunarHolidays
@@ -65,7 +77,7 @@ class DateDay extends Component {
 			isEnd = status === 'end'
 
 		if (isStart) {
-			dayinfo.disabled = minmax(minNo, realMax)
+			dayinfo.disabled = minmax(minNo, maxLimitDisable ? null : realMax)
 		} else if (isEnd) {
 			dayinfo.disabled = minmax(realMin, maxNo)
 		} else if (min || max) {
@@ -113,7 +125,7 @@ class DateDay extends Component {
 			addon
 		} = info
 
-		var { festival, haslunar } = this.props,
+		var {festival, haslunar} = this.props,
 			hasFest = festival && (salarfest || lunarfest)
 
 		var festDom = (
@@ -150,8 +162,7 @@ class DateDay extends Component {
 					(inselect ? ' date-hover' : '')
 				}
 				onMouseDown={this.setDate.bind(this, info)}
-				onMouseEnter={this.setMouseEnter.bind(this, info)}
-			>
+				onMouseEnter={this.setMouseEnter.bind(this, info)}>
 				{festDom}
 			</div>
 		)

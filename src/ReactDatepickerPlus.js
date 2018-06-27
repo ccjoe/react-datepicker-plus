@@ -1,11 +1,11 @@
 //@todo 解决切换月份时， 选择的值有变；2.外部值变化后，input值与ui没有变化 3 key input
 // import './datepicker.less'
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import DateHeader from './date-header.js'
 import DateCalendar from './date-calendar.js'
 import DateInput from './date-input.js'
 import DateInBody from './date-in-body.js'
-import { dateObject, today } from './date-format.js'
+import {dateObject, today} from './date-format.js'
 
 class ReactDatepickerPlus extends Component {
 	// propTypes: {
@@ -40,6 +40,8 @@ class ReactDatepickerPlus extends Component {
 	//  placeholder
 	//  placeholderEnd
 	//  support children to defined your input dom struct, pls search `defined your input dom` at this page
+	//  monthLimit:boolean =>  Disable month render or not true:not render, false： render。
+	//	maxLimitDisable: boolean => 是否限制双联最大值的选择范围
 
 	// salarHolidays: null,  holiday by solar date mmdd
 	// lunarHolidays: null,  holiday by lunar date mmdd
@@ -64,27 +66,27 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	onFocus(event, input) {
-		let { show, focus, selected } = this.state
+		let {show, focus, selected} = this.state
 		if ((show && !focus) || focus === 'blank') {
 			this.state.focus = true //just change state not trigger render
 			return
 		}
 		let status = input.props.status
 		selected = status ? this.state[status] : selected
-		let { left, top, height, width } = input.handlePosition()
+		let {left, top, height, width} = input.handlePosition()
 		top += height + (document.body.scrollTop || document.documentElement.scrollTop)
-		let { onFocus } = this.props
+		let {onFocus} = this.props
 		this.inputWidth = width
-		this.show(true, { left, top }, true, status)
+		this.show(true, {left, top}, true, status)
 
 		onFocus && onFocus(event, this)
 
-		this.setState({ date: selected })
+		this.setState({date: selected})
 	}
 
 	onBlur(event, input) {
-		const { show, focus } = this.state
-		const { inline, onBlur, autoHide } = this.props
+		const {show, focus} = this.state
+		const {inline, onBlur, autoHide} = this.props
 		if (autoHide) {
 			if (!focus) {
 				this.removePicker()
@@ -108,22 +110,31 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	show(show, offset, focus, status) {
-		this.setState({ show, offset, focus, status })
+		this.setState({show, offset, focus, status})
 	}
 
 	updateMonth(num) {
-		const { date } = this.state
-		const cdate = this.numMonth(date, num)
-		this.updateDate({ date: cdate }, true)
+		const {date, min, max} = this.state
+		const cdate = this.getMonthDate(date, num)
+		const cmax = this.getMonthDate(date, num, 'max')
+		const cmin = this.getMonthDate(date, num, 'min')
+		if (this.props.monthLimit && (+cmax < +min || +cmin > +max)) {
+			return false
+		}
+		this.updateDate({date: cdate}, true)
 	}
 
-	numMonth(date, num) {
+	getMonthDate(date, num, minmax) {
 		date = dateObject(date) || today
 		var y = date.getFullYear(),
 			m = date.getMonth() + num,
 			d = date.getDate()
 		var maxd = new Date(y, m + 1, 0).getDate() //判断某月为共多少天
-		return new Date(y, m, d > maxd ? maxd : d)
+		const mmMap = {
+			min: 1,
+			max: maxd
+		}
+		return new Date(y, m, minmax ? mmMap[minmax] : d > maxd ? maxd : d)
 	}
 
 	updateDay(dateinfo) {
@@ -131,11 +142,11 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	updateDate(dateinfo, isMonth) {
-		let { onChange } = this.props
-		let { status = 'selected' } = this.state
+		let {onChange} = this.props
+		let {status = 'selected'} = this.state
 		let getSelected = dateObject(!isMonth ? dateinfo.date : this.state[status])
 
-		this.setState({ show: true, date: dateinfo.date, selected: getSelected, [status]: getSelected })
+		this.setState({show: true, date: dateinfo.date, selected: getSelected, [status]: getSelected})
 
 		if (!isMonth) {
 			this.state.focus = false
@@ -157,16 +168,16 @@ class ReactDatepickerPlus extends Component {
 			dh,
 			dc,
 			idate
-		let { date, start, end, min, max, offset } = this.state
-		let { inline, months, lang, haslunar, className } = this.props
+		let {date, start, end, min, max, offset} = this.state
+		let {inline, months, lang, haslunar, className} = this.props
 		let selected = this.state[status ? status : 'selected']
 		let classes = `date-picker date-picker-${inline ? 'inline' : 'block'} ${
 			className ? className : ''
 		} ${haslunar ? 'date-picker-lunar' : ''}`
 		let pickerWidth = this.state.width || 215
 		for (var i = 0; i < months; i++) {
-			offsets.push({ left: i * pickerWidth + offset.left, top: offset.top })
-			idate = this.numMonth(date, i)
+			offsets.push({left: i * pickerWidth + offset.left, top: offset.top})
+			idate = this.getMonthDate(date, i)
 			dh = (
 				<DateHeader
 					date={idate}
@@ -199,8 +210,7 @@ class ReactDatepickerPlus extends Component {
 						onMouseDown={this.clickPane.bind(this)}
 						className={classes}
 						style={offsets[i]}
-						key={i}
-					>
+						key={i}>
 						{dh}
 						{dc}
 					</div>
@@ -211,13 +221,13 @@ class ReactDatepickerPlus extends Component {
 	}
 
 	updateSize(w) {
-		!this.props.inline && this.setState({ width: w })
+		!this.props.inline && this.setState({width: w})
 		var offset = this.state.offset
 		//右侧距离判断
 		var fullWidth = document.documentElement.clientWidth
 		if (2 * w + offset.left > fullWidth) {
 			this.setState({
-				offset: { left: offset.left + this.inputWidth - 2 * w, top: offset.top },
+				offset: {left: offset.left + this.inputWidth - 2 * w, top: offset.top},
 				width: w
 			})
 		}
@@ -225,25 +235,25 @@ class ReactDatepickerPlus extends Component {
 
 	componentWillReceiveProps(props) {
 		if (props.selected !== this.props.selected) {
-			this.setState({ selected: dateObject(props.selected) })
+			this.setState({selected: dateObject(props.selected)})
 		}
 		if (props.start !== this.props.start) {
-			this.setState({ start: dateObject(props.start) })
+			this.setState({start: dateObject(props.start)})
 		}
 		if (props.end !== this.props.end) {
-			this.setState({ end: dateObject(props.end) })
+			this.setState({end: dateObject(props.end)})
 		}
 		if (props.min !== this.props.min) {
-			this.setState({ min: dateObject(props.min) })
+			this.setState({min: dateObject(props.min)})
 		}
 		if (props.max !== this.props.max) {
-			this.setState({ max: dateObject(props.max) })
+			this.setState({max: dateObject(props.max)})
 		}
 	}
 
 	render() {
-		let { show, selected, start, end, status } = this.state
-		let { format, inline, months, disabled, placeholder, placeholderEnd, children } = this.props
+		let {show, selected, start, end, status} = this.state
+		let {format, inline, months, disabled, placeholder, placeholderEnd, children} = this.props
 		let picker, pickers, pickerInBody
 		let clsName = this.props.className || '',
 			clsWrapperName = clsName ? ' ' + clsName + '-panes' : ''
@@ -271,8 +281,7 @@ class ReactDatepickerPlus extends Component {
 				<DateInBody
 					onUpdate={this.updateSize.bind(this)}
 					className="date-picker-wrapper"
-					ref="insDateInBody"
-				>
+					ref="insDateInBody">
 					{picker}
 				</DateInBody>
 			)
